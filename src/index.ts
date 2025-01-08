@@ -3,16 +3,19 @@ import {
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
 
-/**
- * Initialization data for the package-manager extension.
- */
-const plugin: JupyterFrontEndPlugin<void> = {
+import { createPackageManagerSidebar} from './packageManagerSidebar';
+
+
+const leftTab: JupyterFrontEndPlugin<void> = {
   id: 'package-manager:plugin',
   description: 'A JupyterLab extension to list, remove and install python packages from pip.',
   autoStart: true,
-  activate: (app: JupyterFrontEnd) => {
-    console.log('JupyterLab extension package-manager is activated!');
+  activate: async (app: JupyterFrontEnd) => {
+
+    let widget = createPackageManagerSidebar();
+
+    app.shell.add(widget, 'left',{rank: 4000});
   }
 };
 
-export default plugin;
+export default leftTab;
