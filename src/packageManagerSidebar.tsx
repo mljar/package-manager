@@ -1,11 +1,11 @@
 import React from 'react';
 import { ReactWidget } from '@jupyterlab/ui-components';
 import { myPluginIcon } from './icons/pluginIcon';
-import { HelloWorldComponent } from './components/testComponenet';
 import { NotebookWatcher } from './watchers/notebookWatcher';
-import { NotebookNameComponent } from './components/notebookNameComponent';
 import { NotebookPanelContextProvider } from './contexts/notebookPanelContext';
 import { NotebookKernelContextProvider } from './contexts/notebookKernelContext';
+import { PackageListComponent } from './components/packageList';
+//import { NotebookNameComponent } from './components/notebookNameComponent';
 
 class PackageManagerSidebarWidget extends ReactWidget {
   private notebookWatcher: NotebookWatcher;
@@ -30,8 +30,7 @@ class PackageManagerSidebarWidget extends ReactWidget {
       >
         <NotebookPanelContextProvider notebookWatcher={this.notebookWatcher}>
           <NotebookKernelContextProvider notebookWatcher={this.notebookWatcher}>
-          <NotebookNameComponent />
-          <HelloWorldComponent/>
+            <PackageListComponent/>
           </NotebookKernelContextProvider>
         </NotebookPanelContextProvider>
       </div>

@@ -16,7 +16,7 @@ export const NotebookNameComponent: React.FC = () => {
         <h2>Brak otwartego notatnika</h2>
       )}
       { notebookPanel?.sessionContext.kernelDisplayName  ?(
-        <h2>Aktualny kernell {kernelInfo?.name}</h2>
+        <h2>Aktualny kernell {kernelInfo?.id}</h2>
       ) : (
       <h2>Brak kernela</h2>
       )}

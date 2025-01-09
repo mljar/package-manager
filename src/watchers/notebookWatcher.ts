@@ -73,7 +73,6 @@ export class NotebookWatcher {
     });
 
 
-    setInterval(this._poll.bind(this), 200);
   }
 
   get selection(): NotebookSelections {
@@ -96,23 +95,23 @@ export class NotebookWatcher {
     return this._kernelChanged;
   }
 
-  protected _poll(): void {
-    const notebook = getNotebook(this._mainAreaWidget);
-    const currSelections = notebook ? getNotebookSelections(notebook) : [];
-
-    if (JSON.stringify(this._selections) === JSON.stringify(currSelections)) {
-      return;
-    }
-
-    this._selections = currSelections;
-    this._selectionChanged.emit(currSelections);
-
-    const newNotebookPanel = this.notebookPanel();
-    if (this._notebookPanel !== newNotebookPanel) {
-      this._notebookPanel = newNotebookPanel;
-      this._notebookPanelChanged.emit(this._notebookPanel);
-    }
-  }
+  // protected _poll(): void {
+  //   const notebook = getNotebook(this._mainAreaWidget);
+  //   const currSelections = notebook ? getNotebookSelections(notebook) : [];
+  //
+  //   if (JSON.stringify(this._selections) === JSON.stringify(currSelections)) {
+  //     return;
+  //   }
+  //
+  //   this._selections = currSelections;
+  //   this._selectionChanged.emit(currSelections);
+  //
+  //   const newNotebookPanel = this.notebookPanel();
+  //   if (this._notebookPanel !== newNotebookPanel) {
+  //     this._notebookPanel = newNotebookPanel;
+  //     this._notebookPanelChanged.emit(this._notebookPanel);
+  //   }
+  // }
 
   notebookPanel(): NotebookPanel | null {
     const notebook = getNotebook(this._mainAreaWidget);
