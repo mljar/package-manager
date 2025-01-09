@@ -4,7 +4,7 @@ import {
 } from '@jupyterlab/application';
 
 import { createPackageManagerSidebar} from './packageManagerSidebar';
-
+import { NotebookWatcher } from './watchers/notebookWatcher';
 
 const leftTab: JupyterFrontEndPlugin<void> = {
   id: 'package-manager:plugin',
@@ -12,7 +12,11 @@ const leftTab: JupyterFrontEndPlugin<void> = {
   autoStart: true,
   activate: async (app: JupyterFrontEnd) => {
 
-    let widget = createPackageManagerSidebar();
+    const notebookWatcher = new NotebookWatcher(app.shell);
+
+    notebookWatcher.selectionChanged.connect((sender, selections) => {});
+
+    let widget = createPackageManagerSidebar(notebookWatcher);
 
     app.shell.add(widget, 'left',{rank: 4000});
   }
