@@ -4,6 +4,12 @@
     https://jupyterlab.readthedocs.io/en/stable/developer/css.html
 */
 
+/*
+    See the JupyterLab Developer Guide for useful CSS Patterns:
+
+    https://jupyterlab.readthedocs.io/en/stable/developer/css.html
+*/
+
 .sidebar-container {
   display: flex;
   flex-direction: column;
@@ -23,13 +29,6 @@
   background-color: yellow;
 }
 
-
-.search-bar-input {
-  width: 100%;
-  padding: 8px;
-  box-sizing: border-box;
-}
-
 .package-container {
   display: flex;
   flex-direction: column;
@@ -37,13 +36,70 @@
 }
 
 .package-header {
+  margin-bottom: 20px; /* Zwiększenie odstępu poniżej nagłówka */
+  text-align: center;   /* Wyśrodkowanie tekstu */
+  font-size: 1.5em;     /* Zwiększenie rozmiaru czcionki */
+  color: #333;          /* Ustawienie koloru tekstu */
+  font-weight: bold;    /* Pogrubienie tekstu */
+  padding: 10px 0;      /* Dodanie paddingu góra-dół */
+  border-bottom: 2px solid #ddd; /* Dodanie linii pod nagłówkiem */
+  background-color: #f0f8ff; /* Delikatne tło */
+  border-radius: 8px;   /* Zaokrąglenie rogów */
+}
+
+.actions-container {
+  display: flex;
+  gap: 10px;
   margin-bottom: 10px;
+}
+
+.refresh-button,
+.install-button,
+.back-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #007acc;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.3s ease;
+}
+
+.refresh-button:disabled,
+.install-button:disabled,
+.back-button:disabled {
+  background-color: #a0c4e3;
+  cursor: not-allowed;
+}
+
+.refresh-button:hover:not(:disabled),
+.install-button:hover:not(:disabled),
+.back-button:hover:not(:disabled) {
+  background-color: #005fa3;
+}
+
+.refresh-icon,
+.install-icon,
+.back-icon {
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
 }
 
 .package-list-container {
   flex: 1;
   overflow-y: auto;
   padding-right: 10px;
+}
+
+.package-list {
+  list-style: none; /* Usunięcie punktów */
+  padding: 0;       /* Resetowanie paddingu */
+  margin: 0;        /* Resetowanie marginesu */
 }
 
 .package-item {
@@ -56,22 +112,100 @@
   background-color: #f9f9f9;
 }
 
-.sidebar-container::-webkit-scrollbar {
+.package-list-container::-webkit-scrollbar {
   width: 8px;
 }
 
-.sidebar-container::-webkit-scrollbar-thumb {
+.package-list-container::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.2);
   border-radius: 4px;
 }
 
-.sidebar-container::-webkit-scrollbar-track {
+.package-list-container::-webkit-scrollbar-track {
   background-color: rgba(0, 0, 0, 0.05);
 }
 
-.package-list {
-  list-style-type: disc;
-  padding-left: 20px; /* Dodaje odstęp od lewej strony */
+.my-plugin-sidebar-widget {
+  /* Opcjonalne style */
+  background-color: #ffffff;
+  padding: 10px;
 }
 
+/* Install Form */
+.install-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+}
 
+.install-input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.install-submit-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.3s ease;
+}
+
+.install-submit-button:disabled {
+  background-color: #94d3a2;
+  cursor: not-allowed;
+}
+
+.install-submit-button:hover:not(:disabled) {
+  background-color: #1e7e34;
+}
+
+.install-message {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.install-message.error {
+  color: #dc3545;
+}
+
+.error-message {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.install-status {
+  margin-top: 10px;
+}
+
+.install-status.success {
+  color: #28a745;
+}
+
+.install-status.error {
+  color: #dc3545;
+}
+
+/* Spinner */
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border-left-color: #ffffff;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

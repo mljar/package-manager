@@ -11,12 +11,14 @@ export const PackageList: React.FC = () => {
   );
 
   if (filteredPackages.length === 0) {
-    return <p>Nie znaleziono pakietów spełniających kryteria.</p>;
+    return <p>Any packages found or notebook is closed.</p>;
   }
 
   return (
     <ul className='package-list'>
-      {filteredPackages.map(pkg => (
+      {filteredPackages
+        .sort((a,b) => a.name.localeCompare(b.name))
+        .map(pkg => (
         <PackageItem key={pkg.name} pkg={pkg} />
       ))}
     </ul>

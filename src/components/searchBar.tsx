@@ -18,7 +18,7 @@ export const SearchBar: React.FC = () => {
         type="text"
         value={searchTerm}
         onChange={handleChange}
-        placeholder="Wyszukaj pakiet..."
+        placeholder="Search Package..."
         className='search-bar-input'
       />
     </div>

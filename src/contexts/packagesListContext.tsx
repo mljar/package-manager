@@ -1,5 +1,5 @@
 // src/contexts/PackageContext.tsx
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useNotebookPanelContext } from './notebookPanelContext';
 import { useNotebookKernelContext } from './notebookKernelContext';
 import { listPackagesCode } from '../pcode/utils';
@@ -16,6 +16,7 @@ interface PackageContextProps {
   error: string | null;
   searchTerm: string;
   setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
+  refreshPackages: () => void;
 }
 
 const PackageContext = createContext<PackageContextProps | undefined>(undefined);
@@ -28,80 +29,79 @@ export const PackageContextProvider: React.FC<{ children: React.ReactNode }> = (
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
 
-  useEffect(() => {
+  const executeCode = useCallback(async () => {
     setPackages([]);
-    setLoading(false);
+    setLoading(true);
     setError(null);
 
     if (!notebookPanel || !kernel) {
+      setLoading(false);
       return;
     }
 
-    const executeCode = async () => {
-      setLoading(true);
-      setError(null);
+    try {
+      const future = notebookPanel.sessionContext?.session?.kernel?.requestExecute({
+        code: listPackagesCode,
+        store_history: false,
+      });
 
-      try {
-        const future = notebookPanel.sessionContext?.session?.kernel?.requestExecute({
-          code: listPackagesCode,
-          store_history: false,
-        });
+      if (future) {
+        future.onIOPub = (msg: KernelMessage.IIOPubMessage) => {
+          const msgType = msg.header.msg_type;
 
-        if (future) {
-          future.onIOPub = (msg: KernelMessage.IIOPubMessage) => {
-            const msgType = msg.header.msg_type;
+          if (
+            msgType === 'execute_result' ||
+            msgType === 'display_data' ||
+            msgType === 'update_display_data'
+          ) {
+            const content = msg.content as any;
 
-            if (
-              msgType === 'execute_result' ||
-              msgType === 'display_data' ||
-              msgType === 'update_display_data'
-            ) {
-              const content = msg.content as any;
+            const jsonData = content.data['application/json'];
+            const textData = content.data['text/plain'];
 
-              const jsonData = content.data['application/json'];
-              const textData = content.data['text/plain'];
+            if (jsonData) {
+              if (Array.isArray(jsonData)) {
+                setPackages(jsonData);
+              } else {
+                console.warn('Odebrane dane JSON nie są tablicą:', jsonData);
+              }
+              setLoading(false);
+            } else if (textData) {
+              try {
+                const cleanedData = textData.replace(/^['"]|['"]$/g, '');
+                const doubleQuotedData = cleanedData.replace(/'/g, '"');
+                const parsedData: PackageInfo[] = JSON.parse(doubleQuotedData);
 
-              if (jsonData) {
-                if (Array.isArray(jsonData)) {
-                  setPackages(jsonData);
+                if (Array.isArray(parsedData)) {
+                  setPackages(parsedData);
                 } else {
-                  console.warn('Odebrane dane JSON nie są tablicą:', jsonData);
+                  throw new Error('Error during parsing.');
                 }
                 setLoading(false);
-              } else if (textData) {
-                try {
-                  const cleanedData = textData.replace(/^['"]|['"]$/g, '');
-                  const doubleQuotedData = cleanedData.replace(/'/g, '"');
-                  const parsedData: PackageInfo[] = JSON.parse(doubleQuotedData);
-
-                  if (Array.isArray(parsedData)) {
-                    setPackages(parsedData);
-                  } else {
-                    throw new Error('Error during parsing.');
-                  }
-                  setLoading(false);
-                } catch (err) {
-                  console.error('Błąd podczas parsowania JSON z text/plain:', err);
-                  setError('Błąd podczas parsowania danych pakietów.');
-                  setLoading(false);
-                }
+              } catch (err) {
+                console.error('Błąd podczas parsowania JSON z text/plain:', err);
+                setError('Błąd podczas parsowania danych pakietów.');
+                setLoading(false);
               }
             }
-          };
-
-        }
-      } catch (err) {
-        console.error('Unexpected error:', err);
-        setError('Unexpected erro.');
-        setLoading(false);
+          }
+        };
       }
-    };
-
-    executeCode();
+    } catch (err) {
+      console.error('Unexpected error:', err);
+      setError('Unexpected error.');
+      setLoading(false);
+    }
   }, [notebookPanel, kernel]);
 
+  useEffect(() => {
+    executeCode();
+  }, [executeCode]);
+
   return (
-    <PackageContext.Provider value={{ packages, loading, error, searchTerm, setSearchTerm }}>
+    <PackageContext.Provider
+      value={{ packages, loading, error, searchTerm, setSearchTerm, refreshPackages: executeCode }}
+    >
       {children}
     </PackageContext.Provider>
   );
