@@ -4,8 +4,7 @@ import { myPluginIcon } from './icons/pluginIcon';
 import { NotebookWatcher } from './watchers/notebookWatcher';
 import { NotebookPanelContextProvider } from './contexts/notebookPanelContext';
 import { NotebookKernelContextProvider } from './contexts/notebookKernelContext';
-import { PackageListComponent } from './components/packageList';
-//import { NotebookNameComponent } from './components/notebookNameComponent';
+import { PackageListComponent } from './components/packageListComponent';
 
 class PackageManagerSidebarWidget extends ReactWidget {
   private notebookWatcher: NotebookWatcher;
@@ -21,12 +20,7 @@ class PackageManagerSidebarWidget extends ReactWidget {
   render(): JSX.Element {
     return (
       <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '100%'
-        }}
+        className='sidebar-container'
       >
         <NotebookPanelContextProvider notebookWatcher={this.notebookWatcher}>
           <NotebookKernelContextProvider notebookWatcher={this.notebookWatcher}>
