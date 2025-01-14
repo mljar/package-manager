@@ -1,35 +1,97 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
+import { useNotebookPanelContext } from '../contexts/notebookPanelContext'
+import { checkIfPackageInstalled, installPackagePip } from '../pcode/utils'
+import { KernelMessage } from '@jupyterlab/services'
+import { usePackageContext } from '../contexts/packagesListContext'
 
 
-interface InstallFormProps {
-  onBack: () => void;
-  onInstallSuccess: (packageName: string) => void;
-  onInstallError: (error: string) => void;
+const isSuccess = (message: string | null): boolean => {
+  return message?.toLowerCase().includes('success') || message?.toLowerCase().includes('already') || false
 }
 
-export const InstallForm: React.FC<InstallFormProps> = ({ onInstallSuccess, onInstallError }) => {
-  const [packageName, setPackageName] = useState<string>('');
-  const [installing, setInstalling] = useState<boolean>(false);
-  const [message, setMessage] = useState<string | null>(null);
+export const InstallForm: React.FC = () => {
+  const [packageName, setPackageName] = useState<string>('')
+  const [installing, setInstalling] = useState<boolean>(false)
+  const [message, setMessage] = useState<string | null>(null)
+  const notebookPanel = useNotebookPanelContext()
+  const { refreshPackages } = usePackageContext()
 
-  const handleInstall = () => {
-    setInstalling(true);
-    setMessage(null);
+  const handleCheckAndInstall = () => {
+    setInstalling(true)
+    setMessage(null)
 
-    setTimeout(() => {
-      const isSuccess = Math.random() > 0.8;
-      if (isSuccess) {
-        setInstalling(false);
-        setMessage(`Package "${packageName}" installed successfully!`);
-        onInstallSuccess(packageName);
-        setPackageName('');
-      } else {
-        setInstalling(false);
-        setMessage(`Failed to install package "${packageName}".`);
-        onInstallError(`Failed to install package "${packageName}".`);
+    const code = checkIfPackageInstalled(packageName)
+    const future = notebookPanel?.sessionContext.session?.kernel?.requestExecute({
+      code,
+      store_history: false
+    })
+
+    if (!future) {
+      setInstalling(false)
+      setMessage('No kernel available.')
+      return
+    }
+    future.onIOPub = (msg: KernelMessage.IIOPubMessage) => {
+      const msgType = msg.header.msg_type
+      if (msgType === 'stream' || msgType === 'execute_result' || msgType === 'display_data' || msgType === 'update_display_data') {
+        interface ContentData {
+          name: string
+          text: string
+        }
+        const content = msg.content as ContentData
+
+        if (content.text.includes('NOT_INSTALLED')) {
+          proceedWithInstall()
+        }
+        else if (content.text.includes('INSTALLED')) {
+          setInstalling(false)
+          setMessage('Package is already installed.')
+        }
+      } else if (msgType === 'error') {
+        setInstalling(false)
+        setMessage('An error occurred while checking installation.')
       }
-    }, 2000);
-  };
+    }
+  }
+
+  const proceedWithInstall = () => {
+    const code = installPackagePip(packageName)
+    const future = notebookPanel?.sessionContext.session?.kernel?.requestExecute({
+      code,
+      store_history: false
+    })
+    if (!future) {
+      setMessage('No kernel available.')
+      setInstalling(false)
+      return
+    }
+    future.onIOPub = (msg: KernelMessage.IIOPubMessage) => {
+      const msgType = msg.header.msg_type
+      if (
+        msgType === 'stream' ||
+        msgType === 'execute_result' ||
+        msgType === 'display_data' ||
+        msgType === 'update_display_data'
+      ) {
+        interface ContentData {
+          name: string
+          text: string
+        }
+        const content = msg.content as ContentData
+        if (content.text.includes('ERROR')) {
+          setMessage('Error installing the package.')
+          setInstalling(false)
+        } else if (content.text.includes('Successfully installed')) {
+          setMessage('Package installed successfully.')
+          setInstalling(false)
+          refreshPackages()
+        }
+      } else if (msgType === 'error') {
+        setMessage('An error occurred during installation.')
+        setInstalling(false)
+      }
+    }
+  }
 
   return (
     <div className="install-form">
@@ -41,19 +103,21 @@ export const InstallForm: React.FC<InstallFormProps> = ({ onInstallSuccess, onIn
         placeholder="Enter package name"
         className="install-input"
       />
-      <button
-        className="install-submit-button"
-        onClick={handleInstall}
-        disabled={installing || packageName.trim() === ''}
-      >
-        {installing ? 'Installing...' : 'Install'}
-      </button>
-      {message && <p className={`install-message ${isSuccess(message) ? 'success' : 'error'}`}>{message}</p>}
+      <div className="install-form-buttons">
+        <button
+          className="install-submit-button"
+          onClick={handleCheckAndInstall}
+          disabled={installing || packageName.trim() === ''}
+        >
+          {installing ? 'Processing...' : 'Install'}
+        </button>
+      </div>
+      {message && (
+        <p className={`install-message ${isSuccess(message) ? 'success' : 'error'}`}>
+          {message}
+        </p>
+      )}
     </div>
-  );
-};
-
-const isSuccess = (message: string | null): boolean => {
-  return message?.includes('successfully') || false;
-};
+  )
+}
 

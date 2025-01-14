@@ -10,25 +10,13 @@ import { InstallForm } from './installFrom';
 
 export const PackageListComponent: React.FC = () => {
   const [view, setView] = useState<'list' | 'install'>('list');
-  const [installStatus, setInstallStatus] = useState<{ success: boolean; message: string } | null>(null);
-  console.log(installStatus);
 
   const handleStartInstall = () => {
     setView('install');
-    setInstallStatus(null);
   };
 
   const handleBack = () => {
     setView('list');
-    setInstallStatus(null);
-  };
-
-  const handleInstallSuccess = (packageName: string) => {
-    setInstallStatus({ success: true, message: `Package "${packageName}" installed successfully!` });
-  };
-
-  const handleInstallError = (error: string) => {
-    setInstallStatus({ success: false, message: error });
   };
 
   return (
@@ -46,11 +34,7 @@ export const PackageListComponent: React.FC = () => {
           <PackageListContent />
           </div>
         ) : (
-          <InstallForm
-            onBack={handleBack}
-            onInstallSuccess={handleInstallSuccess}
-            onInstallError={handleInstallError}
-          />
+          <InstallForm/>
         )}
       </div>
     </PackageContextProvider>

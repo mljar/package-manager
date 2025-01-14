@@ -5,8 +5,6 @@ import { usePackageContext } from '../contexts/packagesListContext';
 export const SearchBar: React.FC = () => {
   const { searchTerm, setSearchTerm } = usePackageContext();
 
-    console.log("Rendering SearchBar", { searchTerm, setSearchTerm });
-
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
