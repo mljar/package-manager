@@ -34,6 +34,7 @@ export const PackageContextProvider: React.FC<{ children: React.ReactNode }> = (
     setLoading(true);
     setError(null);
 
+
     if (!notebookPanel || !kernel) {
       setLoading(false);
       return;
@@ -71,6 +72,7 @@ export const PackageContextProvider: React.FC<{ children: React.ReactNode }> = (
                 const cleanedData = textData.replace(/^['"]|['"]$/g, '');
                 const doubleQuotedData = cleanedData.replace(/'/g, '"');
                 const parsedData: PackageInfo[] = JSON.parse(doubleQuotedData);
+                console.log(parsedData);
 
                 if (Array.isArray(parsedData)) {
                   setPackages(parsedData);
@@ -79,8 +81,8 @@ export const PackageContextProvider: React.FC<{ children: React.ReactNode }> = (
                 }
                 setLoading(false);
               } catch (err) {
-                console.error('Błąd podczas parsowania JSON z text/plain:', err);
-                setError('Błąd podczas parsowania danych pakietów.');
+                console.error('Error during export JSON from text/plain:', err);
+                setError('Error during export JSON.');
                 setLoading(false);
               }
             }

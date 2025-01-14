@@ -32,7 +32,6 @@ export function NotebookKernelContextProvider({
 
     notebookWatcher.kernelChanged.connect(onKernelChanged);
 
-    // Ustawienie początkowego stanu kernela
     setKernelInfo(notebookWatcher.kernelInfo);
 
     return () => {

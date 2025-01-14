@@ -14,6 +14,9 @@ export const PackageList: React.FC = () => {
     return <p>Any packages found or notebook is closed.</p>;
   }
 
+  console.log(filteredPackages);
+  console.log(searchTerm);
+
   return (
     <ul className='package-list'>
       {filteredPackages
