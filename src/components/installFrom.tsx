@@ -3,7 +3,7 @@ import { useNotebookPanelContext } from '../contexts/notebookPanelContext'
 import { checkIfPackageInstalled, installPackagePip } from '../pcode/utils'
 import { KernelMessage } from '@jupyterlab/services'
 import { usePackageContext } from '../contexts/packagesListContext'
-
+// import { infoIcon } from '../icons/infoIcon'
 
 const isSuccess = (message: string | null): boolean => {
   return message?.toLowerCase().includes('success') || message?.toLowerCase().includes('already') || false
@@ -49,7 +49,7 @@ export const InstallForm: React.FC = () => {
         }
       } else if (msgType === 'error') {
         setInstalling(false)
-        setMessage('An error occurred while checking installation.')
+        setMessage('An error occurred while checking installation. Check the correctness of the package name.')
       }
     }
   }
@@ -87,7 +87,7 @@ export const InstallForm: React.FC = () => {
           refreshPackages()
         }
       } else if (msgType === 'error') {
-        setMessage('An error occurred during installation.')
+        setMessage('An error occurred during installation. Check the correctness of the package name.')
         setInstalling(false)
       }
     }
@@ -95,12 +95,25 @@ export const InstallForm: React.FC = () => {
 
   return (
     <div className="install-form">
-      <h4>Install New Package</h4>
+      <div className="install-form-header">
+        <h4>Install New Package</h4>
+         { /* <div className="info-icon-container">
+            <span dangerouslySetInnerHTML={{ __html: infoIcon.svgstr }} />
+            <span className="tooltip">
+              Usage:
+              Enter package name like:
+              pandas
+              or package name with version:
+              pandas==2.2.2
+          </span>
+        </div> */} 
+      </div>
+      <span className='usage-span'>Usage: Enter package_name or package_name==version.</span>
       <input
         type="text"
         value={packageName}
         onChange={(e) => setPackageName(e.target.value)}
-        placeholder="Enter package name"
+        placeholder="Enter package name..."
         className="install-input"
       />
       <div className="install-form-buttons">

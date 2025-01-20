@@ -11,14 +11,17 @@ export const PackageList: React.FC = () => {
   );
 
   if (filteredPackages.length === 0) {
-    return <p>Any packages found or notebook is closed.</p>;
+    return <p>Any packages found or notebook is closed. Try refresh page or change kernel.</p>;
   }
 
-  console.log(filteredPackages);
-  console.log(searchTerm);
 
   return (
     <ul className='package-list'>
+        <li className='package-header-list'>
+          <span className='package-header-name'>Name</span>
+          <span className='package-header-version'>Version</span>
+          <span className='package-header-blank'>&nbsp;</span>
+        </li>
       {filteredPackages
         .sort((a,b) => a.name.localeCompare(b.name))
         .map(pkg => (
@@ -27,4 +30,3 @@ export const PackageList: React.FC = () => {
     </ul>
   );
 };
-

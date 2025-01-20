@@ -7,7 +7,11 @@ export const PackageListContent: React.FC = () => {
 
   return (
     <div className="package-list-container">
-      {loading && <p>Loading packages...</p>}
+      {loading && (
+        <div className="spinner-container">
+            <div className="spinner big-spinner" role="status" aria-label="Loading"></div>
+        </div>
+      )}
       {error && <p className="error-message">{error}</p>}
       {!loading && !error && <PackageList />}
     </div>

@@ -10,6 +10,8 @@
     https://jupyterlab.readthedocs.io/en/stable/developer/css.html
 */
 
+/* containers */
+
 .sidebar-container {
   display: flex;
   flex-direction: column;
@@ -19,14 +21,15 @@
 
 .search-bar-container {
   margin-bottom: 10px;
-  background-color: lightblue; 
+  background-color: lightblue;
+  margin-right: 10px;
 }
 
 .search-bar-input {
   width: 100%;
   padding: 8px;
   box-sizing: border-box;
-  background-color: yellow;
+  background-color: white;
 }
 
 .package-container {
@@ -35,82 +38,53 @@
   height: 100%;
 }
 
+.package-header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 8px;
+  margin-right: 8px;
+  border-bottom: 2px solid #ddd;
+}
+
 .package-header {
-  margin-bottom: 20px; /* Zwiększenie odstępu poniżej nagłówka */
-  text-align: center;   /* Wyśrodkowanie tekstu */
-  font-size: 1.5em;     /* Zwiększenie rozmiaru czcionki */
-  color: #333;          /* Ustawienie koloru tekstu */
-  font-weight: bold;    /* Pogrubienie tekstu */
-  padding: 10px 0;      /* Dodanie paddingu góra-dół */
-  border-bottom: 2px solid #ddd; /* Dodanie linii pod nagłówkiem */
-  background-color: #f0f8ff; /* Delikatne tło */
-  border-radius: 8px;   /* Zaokrąglenie rogów */
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #000;
+  text-align: left;
+  padding-bottom: 8px;
+  margin: 0;
+}
+
+.logo-container {
+  display: flex;
+  align-items: flex-end;
+}
+
+.logo-container img {
+  max-height: 30px;
+  width: auto;
 }
 
 .actions-container {
   display: flex;
   gap: 10px;
   margin-bottom: 10px;
-}
-
-.refresh-button,
-.install-button,
-.back-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #007acc;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 8px 12px;
-  cursor: pointer;
-  font-size: 0.9em;
-  transition: background-color 0.3s ease;
-}
-
-.refresh-button:disabled,
-.install-button:disabled,
-.back-button:disabled {
-  background-color: #a0c4e3;
-  cursor: not-allowed;
-}
-
-.refresh-button:hover:not(:disabled),
-.install-button:hover:not(:disabled),
-.back-button:hover:not(:disabled) {
-  background-color: #005fa3;
-}
-
-.refresh-icon,
-.install-icon,
-.back-icon {
-  margin-right: 8px;
-  display: flex;
-  align-items: center;
+  margin-right: 10px;
 }
 
 .package-list-container {
   flex: 1;
-  overflow-y: auto;
+  overflow-y: hidden;
   padding-right: 10px;
 }
 
 .package-list {
-  list-style: none; /* Usunięcie punktów */
-  padding: 0;       /* Resetowanie paddingu */
-  margin: 0;        /* Resetowanie marginesu */
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-.package-item {
-  padding: 10px;
-  border: 1px solid #eee; 
-  border-radius: 4px; 
-  margin-bottom: 5px;
-  width: 100%;
-  box-sizing: border-box;
-  background-color: #f9f9f9;
-}
 
 .package-list-container::-webkit-scrollbar {
   width: 8px;
@@ -126,23 +100,82 @@
 }
 
 .my-plugin-sidebar-widget {
-  /* Opcjonalne style */
   background-color: #ffffff;
   padding: 10px;
 }
 
-/* Install Form */
-.install-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 10px;
+
+.package-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-.install-input {
-  padding: 8px;
-  border: 1px solid #ccc;
+/* containers */
+
+/* buttons */
+
+.refresh-button,
+.install-button,
+.back-button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0099cc;
+  gap: 8px;
+  color: white;
+  border: none;
   border-radius: 4px;
+  padding: 8px 0px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: background-color 0.3s ease;
+}
+
+.delete-button {
+  visibility: hidden;
+  background: none; 
+  position: relative;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #dc3545;
+  transition: color 0.3s ease;
+}
+
+.delete-button[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 110%;
+  left: -110%;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  padding: 5px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  font-size: 0.8em;
+  z-index: 10;
+  opacity: 0.9;
+}
+
+
+.refresh-button:disabled,
+.install-button:disabled,
+.back-button:disabled {
+  background-color: #a0c4e3;
+  cursor: not-allowed;
+}
+
+.refresh-button:hover:not(:disabled),
+.install-button:hover:not(:disabled),
+.back-button:hover:not(:disabled) {
+  background-color: #005fa3;
 }
 
 .install-submit-button {
@@ -155,7 +188,7 @@
   border-radius: 4px;
   padding: 8px 12px;
   cursor: pointer;
-  font-size: 0.9em;
+  font-size: 0.75rem;
   transition: background-color 0.3s ease;
 }
 
@@ -166,6 +199,102 @@
 
 .install-submit-button:hover:not(:disabled) {
   background-color: #1e7e34;
+}
+
+.delete-button:hover {
+  color: #a71d2a;
+}
+
+.package-item:hover .delete-button {
+  visibility: visible;
+}
+/* buttons */
+
+/* icons */
+
+.refresh-icon,
+.install-icon,
+.back-icon {
+  display: flex;
+  align-items: center;
+  width: 15px;
+  height: 15px;
+}
+
+.delete-icon {
+  width: 15px;
+  height: 15px;
+}
+
+.error-icon {
+  color: #dc3545;
+  width: 15px;
+  height: 15px;
+}
+
+
+.info-icon-container {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.info-icon-container span:first-child {
+  display: inline-flex;
+  align-items: center;
+  color: #0099cc;
+  margin: 0px;
+  width: 18px;
+  height: 18px;
+}
+
+.info-icon-container .tooltip {
+  visibility: hidden;
+  width: 150px;
+  background-color: #28a745;
+  color: white;
+  text-align: center;
+  border-radius: 4px;
+  padding: 5px;
+  position: absolute;
+  left: -160px;
+  top: 100%;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.3s;
+  white-space: pre-line;
+}
+
+.info-icon-container:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* icons */
+
+.install-form {
+  display: flex;
+  flex-direction: column;
+  margin-right: 8px;
+}
+
+.install-form h4 {
+  margin-top: 0px;
+  margin-bottom: 4px;
+  padding: 0;
+}
+
+.usage-span {
+  margin-bottom: 4px;
+  font-size: 0.55rem;
+}
+
+
+.install-input {
+  padding: 8px;
+  box-sizing: border-box;
+  background-color: white;
+  margin-bottom: 8px;
 }
 
 .install-message {
@@ -194,11 +323,31 @@
   color: #dc3545;
 }
 
-/* Spinner */
+/* spinner */
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 20px;
+}
+
+.big-spinner {
+  width: 64px;
+  height: 64px;
+  border-width: 6px;
+  border-left-color: #007acc;
+}
+
+.big-spinner-container {
+  padding-top: 30vh;
+}
+
 .spinner {
   border: 4px solid rgba(0, 0, 0, 0.1);
-  width: 24px;
-  height: 24px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   border-left-color: #ffffff;
   animation: spin 1s linear infinite;
@@ -209,3 +358,99 @@
     transform: rotate(360deg);
   }
 }
+
+/* spinner */
+
+/* list */
+
+.package-item {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr 2rem;
+  align-items: center;
+  column-gap: 1rem;
+  padding-left: 8px;
+  padding-right: 8px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  margin-bottom: 0px;
+  margin-right: 0px;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #f9f9f9;
+  font-size: 0.7rem;
+}
+
+.package-name,
+.package-version {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.package-header-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr 2rem;
+  align-items: center;
+  font-size: 0.85rem;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #ddd;
+  background-color: #0099cc;
+  color: #fff;
+}
+
+.package-item {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.package-item.active .package-name,
+.package-item.active .package-version {
+  color: #fff;
+}
+
+
+.package-item:hover {
+  background-color: #e6f7ff;
+  cursor: pointer;
+}
+
+.package-item.active {
+  background-color: #0099cc;
+  color: #fff;
+}
+
+
+/* list */
+
+
+
+/* scrollbar */
+
+.sidebar-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.sidebar-container::-webkit-scrollbar-track {
+  background: #d3d3d3;
+  border-radius: 8px;
+}
+
+.sidebar-container::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.6); 
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.install-form-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+}
+
+

@@ -156,17 +156,13 @@ export class NotebookWatcher {
     }
   }
 
-
   private _updateKernelInfo(kernel: any): void {
-    console.log(kernel.name, "aha");
     this._kernelInfo = {
       name: kernel.name,
       id: kernel.id
     };
     this._kernelChanged.emit(this._kernelInfo);
   }
-
-
 
   protected _kernelInfo: KernelInfo | null = null;
   protected _kernelChanged = new Signal<this, KernelInfo | null>(this);
@@ -182,5 +178,3 @@ export type KernelInfo = {
   name: string;
   id: string;
 };
-
-
