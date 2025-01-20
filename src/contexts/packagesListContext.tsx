@@ -72,8 +72,6 @@ export const PackageContextProvider: React.FC<{ children: React.ReactNode }> = (
                 const cleanedData = textData.replace(/^['"]|['"]$/g, '');
                 const doubleQuotedData = cleanedData.replace(/'/g, '"');
                 const parsedData: PackageInfo[] = JSON.parse(doubleQuotedData);
-                console.log("sparsowane dane");
-                console.log(parsedData);
 
                 if (Array.isArray(parsedData)) {
                   setPackages([]);
