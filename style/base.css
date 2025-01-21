@@ -29,7 +29,13 @@
   width: 100%;
   padding: 8px;
   box-sizing: border-box;
-  background-color: white;
+  background-color: var(--jp-layout-color1);
+  color: var(--jp-ui-font-color1);
+  border: 1px solid var(--jp-border-color2);
+}
+
+.search-bar-input::placeholder {
+  color: var(--jp-ui-font-color2);
 }
 
 .package-container {
@@ -50,7 +56,7 @@
 .package-header {
   font-size: 0.85rem;
   font-weight: 700;
-  color: #000;
+  color: var(--jp-ui-font-color1);
   text-align: left;
   padding-bottom: 8px;
   margin: 0;
@@ -291,10 +297,17 @@
 
 
 .install-input {
+  width: 100%;
   padding: 8px;
   box-sizing: border-box;
-  background-color: white;
+  background-color: var(--jp-layout-color1);
+  color: var(--jp-ui-font-color1);
+  border: 1px solid var(--jp-border-color2);
   margin-bottom: 8px;
+}
+
+.install-input::placeholder {
+  color: var(--jp-ui-font-color2);
 }
 
 .install-message {
@@ -371,13 +384,12 @@
   column-gap: 1rem;
   padding-left: 8px;
   padding-right: 8px;
-  border: 1px solid #eee;
-  border-radius: 4px;
+  border: 1px solid var(--jp-border-color2);
   margin-bottom: 0px;
   margin-right: 0px;
   width: 100%;
   box-sizing: border-box;
-  background-color: #f9f9f9;
+  background-color: var(--jp-layout-color0);
   font-size: 0.7rem;
 }
 
@@ -397,7 +409,7 @@
   padding-right: 8px;
   padding-top: 10px;
   padding-bottom: 10px;
-  border-bottom: 2px solid #ddd;
+  border-bottom: 2px solid var(--jp-layout-color0);
   background-color: #0099cc;
   color: #fff;
 }
@@ -413,13 +425,13 @@
 
 
 .package-item:hover {
-  background-color: #e6f7ff;
+  background-color: var(--jp-layout-color2);
   cursor: pointer;
 }
 
 .package-item.active {
-  background-color: #0099cc;
-  color: #fff;
+  background-color: var(--jp-brand-color1);
+  color: var(--jp-ui-inverse-font-color1);
 }
 
 
