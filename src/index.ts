@@ -18,7 +18,7 @@ const leftTab: JupyterFrontEndPlugin<void> = {
 
     let widget = createPackageManagerSidebar(notebookWatcher);
 
-    app.shell.add(widget, 'left',{rank: 4000});
+    app.shell.add(widget, 'left',{rank: 1999});
   }
 };
 
