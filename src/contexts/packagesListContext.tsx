@@ -64,7 +64,7 @@ export const PackageContextProvider: React.FC<{ children: React.ReactNode }> = (
               if (Array.isArray(jsonData)) {
                 setPackages(jsonData);
               } else {
-                console.warn('Odebrane dane JSON nie są tablicą:', jsonData);
+                console.warn('Data is not JSON:', jsonData);
               }
               setLoading(false);
             } else if (textData) {
