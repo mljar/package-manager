@@ -68,20 +68,20 @@ export const PackageItem: React.FC<PackageItemProps> = ({ pkg }) => {
   }
 
   return (
-    <li className='package-item'>
-      <span className='package-name'> {pkg.name}</span>
-      <span className='package-version'>{pkg.version}</span>
+    <li className='mljar-package-item'>
+      <span className='mljar-package-name'> {pkg.name}</span>
+      <span className='mljar-package-version'>{pkg.version}</span>
       <button
-        className='delete-button'
+        className='mljar-delete-button'
         onClick={handleDelete}
         aria-label={error ? `Error during uninstalling ${pkg.name}` : `Uninstall ${pkg.name}`}
       >
         {loading ? (
-          <span className='spinner' />
+          <span className='mljar-spinner' />
         ) : error ? (
-          <errorIcon.react className='delete-icon error-icon' />
+          <errorIcon.react className='mljar-error-icon' />
         ) : (
-          <myDeleteIcon.react className='delete-icon' />
+          <myDeleteIcon.react className='mljar-delete-icon' />
         )}
 
       </button>

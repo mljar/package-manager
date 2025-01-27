@@ -7,8 +7,8 @@ interface BackButtonProps {
 
 export const BackButton: React.FC<BackButtonProps> = ({ onBack }) => {
   return (
-    <button className="back-button" onClick={onBack} title="Go Back">
-      <backIcon.react className="back-icon" />
+    <button className="mljar-back-button" onClick={onBack} title="Go Back">
+      <backIcon.react className="mljar-back-icon" />
       Back
     </button>
   );

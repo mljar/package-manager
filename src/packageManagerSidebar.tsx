@@ -14,13 +14,13 @@ class PackageManagerSidebarWidget extends ReactWidget {
     this.id = 'my-plugin::empty-sidebar';
     this.title.icon = myPluginIcon;
     this.title.caption = 'My Plugin';
-    this.addClass('my-plugin-sidebar-widget');
+    this.addClass('mljar-plugin-sidebar-widget');
   }
 
   render(): JSX.Element {
     return (
       <div
-        className='sidebar-container'
+        className='mljar-sidebar-container'
       >
         <NotebookPanelContextProvider notebookWatcher={this.notebookWatcher}>
           <NotebookKernelContextProvider notebookWatcher={this.notebookWatcher}>

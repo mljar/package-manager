@@ -12,20 +12,20 @@
 
 /* containers */
 
-.sidebar-container {
+.mljar-sidebar-container {
   display: flex;
   flex-direction: column;
   height: 100%;
   overflow-y: auto;
 }
 
-.search-bar-container {
+.mljar-search-bar-container {
   margin-bottom: 10px;
   background-color: lightblue;
   margin-right: 10px;
 }
 
-.search-bar-input {
+.mljar-search-bar-input {
   width: 100%;
   padding: 8px;
   box-sizing: border-box;
@@ -34,17 +34,17 @@
   border: 1px solid var(--jp-border-color2);
 }
 
-.search-bar-input::placeholder {
+.mljar-search-bar-input::placeholder {
   color: var(--jp-ui-font-color2);
 }
 
-.package-container {
+.mljar-package-container {
   display: flex;
   flex-direction: column;
   height: 100%;
 }
 
-.package-header-container {
+.mljar-package-header-container {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -53,7 +53,7 @@
   border-bottom: 2px solid #ddd;
 }
 
-.package-header {
+.mljar-package-header {
   font-size: 0.85rem;
   font-weight: 700;
   color: var(--jp-ui-font-color1);
@@ -62,68 +62,63 @@
   margin: 0;
 }
 
-.logo-container {
+.mljar-logo-container {
   display: flex;
   align-items: flex-end;
 }
 
-.logo-container img {
+.mljar-logo-container img {
   max-height: 30px;
   width: auto;
 }
 
-.actions-container {
+.mljar-actions-container {
   display: flex;
   gap: 10px;
   margin-bottom: 10px;
   margin-right: 10px;
 }
 
-.package-list-container {
+.mljar-package-list-container {
   flex: 1;
   overflow-y: hidden;
   padding-right: 10px;
 }
 
-.package-list {
+.mljar-package-list {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
 
-.package-list-container::-webkit-scrollbar {
+.mljar-package-list-container::-webkit-scrollbar {
   width: 8px;
 }
 
-.package-list-container::-webkit-scrollbar-thumb {
+.mljar-package-list-container::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.2);
   border-radius: 4px;
 }
 
-.package-list-container::-webkit-scrollbar-track {
+.mljar-package-list-container::-webkit-scrollbar-track {
   background-color: rgba(0, 0, 0, 0.05);
 }
 
-.my-plugin-sidebar-widget {
+.mljar-plugin-sidebar-widget {
   background-color: #ffffff;
   padding: 10px;
 }
 
 
-.package-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
 
 /* containers */
 
 /* buttons */
 
-.refresh-button,
-.install-button,
-.back-button {
+.mljar-refresh-button,
+.mljar-install-button,
+.mljar-back-button {
   flex: 1;
   display: flex;
   align-items: center;
@@ -139,7 +134,7 @@
   transition: background-color 0.3s ease;
 }
 
-.delete-button {
+.mljar-delete-button {
   visibility: hidden;
   background: none; 
   position: relative;
@@ -154,7 +149,7 @@
   transition: color 0.3s ease;
 }
 
-.delete-button[data-tooltip]:hover::after {
+.mljar-delete-button[data-tooltip]:hover::after {
   content: attr(data-tooltip);
   position: absolute;
   bottom: 110%;
@@ -171,20 +166,20 @@
 }
 
 
-.refresh-button:disabled,
-.install-button:disabled,
-.back-button:disabled {
+.mljar-refresh-button:disabled,
+.mljar-install-button:disabled,
+.mljar-back-button:disabled {
   background-color: #a0c4e3;
   cursor: not-allowed;
 }
 
-.refresh-button:hover:not(:disabled),
-.install-button:hover:not(:disabled),
-.back-button:hover:not(:disabled) {
+.mljar-refresh-button:hover:not(:disabled),
+.mljar-install-button:hover:not(:disabled),
+.mljar-back-button:hover:not(:disabled) {
   background-color: #005fa3;
 }
 
-.install-submit-button {
+.mljar-install-submit-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -198,54 +193,54 @@
   transition: background-color 0.3s ease;
 }
 
-.install-submit-button:disabled {
+.mljar-install-submit-button:disabled {
   background-color: #94d3a2;
   cursor: not-allowed;
 }
 
-.install-submit-button:hover:not(:disabled) {
+.mljar-install-submit-button:hover:not(:disabled) {
   background-color: #1e7e34;
 }
 
-.delete-button:hover {
+.mljar-delete-button:hover {
   color: #a71d2a;
 }
 
-.package-item:hover .delete-button {
+.mljar-package-item:hover .mljar-delete-button {
   visibility: visible;
 }
 /* buttons */
 
 /* icons */
 
-.refresh-icon,
-.install-icon,
-.back-icon {
+.mljar-refresh-icon,
+.mljar-install-icon,
+.mljar-back-icon {
   display: flex;
   align-items: center;
   width: 15px;
   height: 15px;
 }
 
-.delete-icon {
+.mljar-delete-icon {
   width: 15px;
   height: 15px;
 }
 
-.error-icon {
+.mljar-error-icon {
   color: #dc3545;
   width: 15px;
   height: 15px;
 }
 
 
-.info-icon-container {
+.mljar-info-icon-container {
   position: relative;
   display: inline-block;
   cursor: pointer;
 }
 
-.info-icon-container span:first-child {
+.mljar-info-icon-container span:first-child {
   display: inline-flex;
   align-items: center;
   color: #0099cc;
@@ -254,7 +249,7 @@
   height: 18px;
 }
 
-.info-icon-container .tooltip {
+.mljar-info-icon-container .mljar-tooltip {
   visibility: hidden;
   width: 150px;
   background-color: #28a745;
@@ -271,32 +266,32 @@
   white-space: pre-line;
 }
 
-.info-icon-container:hover .tooltip {
+.mljar-info-icon-container:hover .mljar-tooltip {
   visibility: visible;
   opacity: 1;
 }
 
 /* icons */
 
-.install-form {
+.mljar-install-form {
   display: flex;
   flex-direction: column;
   margin-right: 8px;
 }
 
-.install-form h4 {
+.mljar-install-form h4 {
   margin-top: 0px;
   margin-bottom: 4px;
   padding: 0;
 }
 
-.usage-span {
+.mljar-usage-span {
   margin-bottom: 4px;
   font-size: 0.55rem;
 }
 
 
-.install-input {
+.mljar-install-input {
   width: 100%;
   padding: 8px;
   box-sizing: border-box;
@@ -306,39 +301,28 @@
   margin-bottom: 8px;
 }
 
-.install-input::placeholder {
+.mljar-install-input::placeholder {
   color: var(--jp-ui-font-color2);
 }
 
-.install-message {
+.mljar-install-message {
   color: #28a745;
   font-weight: bold;
 }
 
-.install-message.error {
+.mljar-install-message.error {
   color: #dc3545;
 }
 
-.error-message {
+.mljar-error-message {
   color: #dc3545;
   font-weight: bold;
 }
 
-.install-status {
-  margin-top: 10px;
-}
-
-.install-status.success {
-  color: #28a745;
-}
-
-.install-status.error {
-  color: #dc3545;
-}
 
 /* spinner */
 
-.spinner-container {
+.mljar-spinner-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -346,18 +330,8 @@
   padding: 20px;
 }
 
-.big-spinner {
-  width: 64px;
-  height: 64px;
-  border-width: 6px;
-  border-left-color: #007acc;
-}
 
-.big-spinner-container {
-  padding-top: 30vh;
-}
-
-.spinner {
+.mljar-spinner {
   border: 4px solid rgba(0, 0, 0, 0.1);
   width: 10px;
   height: 10px;
@@ -376,7 +350,7 @@
 
 /* list */
 
-.package-item {
+.mljar-package-item {
   flex: 1;
   display: grid;
   grid-template-columns: 1fr 1fr 2rem;
@@ -391,16 +365,17 @@
   box-sizing: border-box;
   background-color: var(--jp-layout-color0);
   font-size: 0.7rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.package-name,
-.package-version {
+.mljar-package-name,
+.mljar-package-version {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.package-header-list {
+.mljar-package-header-list {
   display: grid;
   grid-template-columns: 1fr 1fr 2rem;
   align-items: center;
@@ -414,22 +389,19 @@
   color: #fff;
 }
 
-.package-item {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
 
-.package-item.active .package-name,
-.package-item.active .package-version {
+.mljar-package-item.active .mljar-package-name,
+.mljar-package-item.active .mljar-package-version {
   color: #fff;
 }
 
 
-.package-item:hover {
+.mljar-package-item:hover {
   background-color: var(--jp-layout-color2);
   cursor: pointer;
 }
 
-.package-item.active {
+.mljar-package-item.active {
   background-color: var(--jp-brand-color1);
   color: var(--jp-ui-inverse-font-color1);
 }
@@ -441,24 +413,24 @@
 
 /* scrollbar */
 
-.sidebar-container::-webkit-scrollbar {
+.mljar-sidebar-container::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
-.sidebar-container::-webkit-scrollbar-track {
+.mljar-sidebar-container::-webkit-scrollbar-track {
   background: #d3d3d3;
   border-radius: 8px;
 }
 
-.sidebar-container::-webkit-scrollbar-thumb {
+.mljar-sidebar-container::-webkit-scrollbar-thumb {
   background-color: rgba(255, 255, 255, 0.6); 
   border-radius: 8px;
   border: 2px solid transparent;
   background-clip: padding-box;
 }
 
-.install-form-header {
+.mljar-install-form-header {
   display: flex;
   align-items: center;
   justify-content: space-between;

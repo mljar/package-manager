@@ -21,14 +21,14 @@ export const PackageListComponent: React.FC = () => {
 
   return (
     <PackageContextProvider>
-      <div className="package-container">
-        <div className="package-header-container">
-          <h3 className="package-header">Packages Manager</h3>
-        {/*  <div className="logo-container">
+      <div className="mljar-package-container">
+        <div className="mljar-package-header-container">
+          <h3 className="mljar-package-header">Packages Manager</h3>
+        {/*  <div className="mljar-logo-container">
             <img src="https://mljar.com/images/logo/logo_blue_white.svg" alt="mljar logo" />
           </div> */}
         </div>
-        <div className="actions-container">
+        <div className="mljar-actions-container">
           {view === 'list' && <RefreshButton />}
           {view === 'list' && <InstallButton onStartInstall={handleStartInstall} />}
           {view === 'install' && <BackButton onBack={handleBack} />}
