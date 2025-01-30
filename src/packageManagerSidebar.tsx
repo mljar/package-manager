@@ -1,6 +1,6 @@
 import React from 'react';
 import { ReactWidget } from '@jupyterlab/ui-components';
-import { myPluginIcon } from './icons/pluginIcon';
+import { packageManagerIcon } from './icons/pluginIcon';
 import { NotebookWatcher } from './watchers/notebookWatcher';
 import { NotebookPanelContextProvider } from './contexts/notebookPanelContext';
 import { NotebookKernelContextProvider } from './contexts/notebookKernelContext';
@@ -11,9 +11,9 @@ class PackageManagerSidebarWidget extends ReactWidget {
   constructor(notebookWatcher:NotebookWatcher) {
     super();
     this.notebookWatcher = notebookWatcher;
-    this.id = 'my-plugin::empty-sidebar';
-    this.title.icon = myPluginIcon;
-    this.title.caption = 'My Plugin';
+    this.id = 'package-manager::empty-sidebar';
+    this.title.icon = packageManagerIcon;
+    this.title.caption = 'Package Manager';
     this.addClass('mljar-plugin-sidebar-widget');
   }
 

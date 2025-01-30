@@ -12,8 +12,8 @@ const svgStr = `
 </svg>
 `;
 
-export const myPluginIcon = new LabIcon({
-  name: 'my-plugin-icon',
+export const packageManagerIcon = new LabIcon({
+  name: 'package-manager-icon',
   svgstr: svgStr,
 });
 
