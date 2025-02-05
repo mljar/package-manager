@@ -13,7 +13,7 @@ class PackageManagerSidebarWidget extends ReactWidget {
     this.notebookWatcher = notebookWatcher;
     this.id = 'my-plugin::empty-sidebar';
     this.title.icon = myPluginIcon;
-    this.title.caption = 'My Plugin';
+    this.title.caption = 'Package Manager';
     this.addClass('mljar-plugin-sidebar-widget');
   }
 
