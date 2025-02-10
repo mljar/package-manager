@@ -17,7 +17,6 @@ export const InstallButton: React.FC<InstallButtonProps> = ({ onStartInstall }) 
       title="Install Package"
     >
       <installIcon.react className="mljar-install-icon" />
-      Install
     </button>
   );
 };

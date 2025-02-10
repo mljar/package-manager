@@ -15,7 +15,7 @@ export const RefreshButton: React.FC = () => {
       title="Refresh Packages"
     >
       <refreshIcon.react className="mljar-refresh-icon" />
-      {loading ? 'Loading...' : 'Refresh'}
+      {/* {loading ? 'Loading...' : 'Refresh'} */}
     </button>
   );
 };

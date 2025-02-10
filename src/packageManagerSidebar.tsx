@@ -1,6 +1,6 @@
 import React from 'react';
 import { ReactWidget } from '@jupyterlab/ui-components';
-import { packageManagerIcon } from './icons/pluginIcon';
+import { packageManagerIcon } from './icons/packageManagerIcon';
 import { NotebookWatcher } from './watchers/notebookWatcher';
 import { NotebookPanelContextProvider } from './contexts/notebookPanelContext';
 import { NotebookKernelContextProvider } from './contexts/notebookKernelContext';

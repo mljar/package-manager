@@ -54,6 +54,7 @@
 }
 
 .mljar-package-header {
+  flex:4;
   font-size: 0.85rem;
   font-weight: 700;
   color: var(--jp-ui-font-color1);
@@ -115,9 +116,33 @@
 /* containers */
 
 /* buttons */
-
-.mljar-refresh-button,
 .mljar-install-button,
+.mljar-refresh-button {
+  flex: 1;
+  text-align: right;
+  max-width: 30px;
+  display: flex;
+  margin-right: 1px;
+  align-items: center;
+  justify-content: center;
+  /* background-color: #0099cc; */
+  gap: 8px;
+  color: #0099cc;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 0px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: background-color 0.3s ease;
+}
+
+.mljar-refresh-button:hover:not(:disabled),
+.mljar-install-button:hover:not(:disabled) {
+  background-color: #0099cc;
+  color: #ffffff;
+}
+
+
 .mljar-back-button {
   flex: 1;
   display: flex;
@@ -173,8 +198,6 @@
   cursor: not-allowed;
 }
 
-.mljar-refresh-button:hover:not(:disabled),
-.mljar-install-button:hover:not(:disabled),
 .mljar-back-button:hover:not(:disabled) {
   background-color: #005fa3;
 }
