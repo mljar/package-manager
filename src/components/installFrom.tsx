@@ -94,10 +94,10 @@ export const InstallForm: React.FC = () => {
   }
 
   return (
-    <div className="mljar-install-form">
-      <div className="mljar-install-form-header">
+    <div className="mljar-packages-manager-install-form">
+      <div className="mljar-packages-manager-install-form-header">
         <h4>Install New Package</h4>
-         { /* <div className="mljar-info-icon-container">
+         { /* <div className="mljar-packages-manager-info-icon-container">
             <span dangerouslySetInnerHTML={{ __html: infoIcon.svgstr }} />
             <span className="mljar-tooltip">
               Usage:
@@ -108,17 +108,17 @@ export const InstallForm: React.FC = () => {
           </span>
         </div> */} 
       </div>
-      <span className='mljar-usage-span'>Usage: Enter package_name or package_name==version.</span>
+      <span className='mljar-packages-manager-usage-span'>Usage: Enter package_name or package_name==version.</span>
       <input
         type="text"
         value={packageName}
         onChange={(e) => setPackageName(e.target.value)}
         placeholder="Enter package name..."
-        className="mljar-install-input"
+        className="mljar-packages-manager-install-input"
       />
-      <div className="mljar-install-form-buttons">
+      <div className="mljar-packages-manager-install-form-buttons">
         <button
-          className="mljar-install-submit-button"
+          className="mljar-packages-manager-install-submit-button"
           onClick={handleCheckAndInstall}
           disabled={installing || packageName.trim() === ''}
         >
@@ -126,7 +126,7 @@ export const InstallForm: React.FC = () => {
         </button>
       </div>
       {message && (
-        <p className={`mljar-install-message ${isSuccess(message) ? 'success' : 'error'}`}>
+        <p className={`mljar-packages-manager-install-message ${isSuccess(message) ? 'success' : 'error'}`}>
           {message}
         </p>
       )}

@@ -81,11 +81,11 @@ export const PackageItem: React.FC<PackageItemProps> = ({ pkg }) => {
   };
 
   return (
-    <li className="mljar-package-item">
-      <span className="mljar-package-name"> {pkg.name}</span>
-      <span className="mljar-package-version">{pkg.version}</span>
+    <li className="mljar-packages-manager-package-item">
+      <span className="mljar-packages-manager-package-name"> {pkg.name}</span>
+      <span className="mljar-packages-manager-package-version">{pkg.version}</span>
       <button
-        className="mljar-delete-button"
+        className="mljar-packages-manager-delete-button"
         onClick={handleDelete}
         aria-label={
           error
@@ -95,11 +95,11 @@ export const PackageItem: React.FC<PackageItemProps> = ({ pkg }) => {
         title={`Delete ${pkg.name}`}
       >
         {loading ? (
-          <span className="mljar-spinner" />
+          <span className="mljar-packages-manager-spinner" />
         ) : error ? (
-          <errorIcon.react className="mljar-error-icon" />
+          <errorIcon.react className="mljar-packages-manager-error-icon" />
         ) : (
-          <myDeleteIcon.react className="mljar-delete-icon" />
+          <myDeleteIcon.react className="mljar-packages-manager-delete-icon" />
         )}
       </button>
     </li>

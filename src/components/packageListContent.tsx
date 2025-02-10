@@ -6,13 +6,13 @@ export const PackageListContent: React.FC = () => {
   const { loading, error } = usePackageContext();
 
   return (
-    <div className="mljar-package-list-container">
+    <div className="mljar-packages-manager-package-list-container">
       {loading && (
-        <div className="mljar-spinner-container">
-            <div className="mljar-spinner" role="status" aria-label="Loading"></div>
+        <div className="mljar-packages-manager-spinner-container">
+            <div className="mljar-packages-manager-spinner" role="status" aria-label="Loading"></div>
         </div>
       )}
-      {error && <p className="mljar-error-message">{error}</p>}
+      {error && <p className="mljar-packages-manager-error-message">{error}</p>}
       {!loading && !error && <PackageList />}
     </div>
   );

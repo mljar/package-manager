@@ -11,12 +11,12 @@ export const InstallButton: React.FC<InstallButtonProps> = ({ onStartInstall }) 
 
   return (
     <button
-      className="mljar-install-button"
+      className="mljar-packages-manager-install-button"
       onClick={onStartInstall}
       disabled={loading}
       title="Install Package"
     >
-      <installIcon.react className="mljar-install-icon" />
+      <installIcon.react className="mljar-packages-manager-install-icon" />
     </button>
   );
 };

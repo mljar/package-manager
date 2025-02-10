@@ -9,12 +9,12 @@ export const RefreshButton: React.FC = () => {
 
   return (
     <button
-      className="mljar-refresh-button"
+      className="mljar-packages-manager-refresh-button"
       onClick={refreshPackages}
       disabled={loading}
       title="Refresh Packages"
     >
-      <refreshIcon.react className="mljar-refresh-icon" />
+      <refreshIcon.react className="mljar-packages-manager-refresh-icon" />
       {/* {loading ? 'Loading...' : 'Refresh'} */}
     </button>
   );
