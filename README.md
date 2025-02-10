@@ -1,8 +1,18 @@
 # package_manager
 
-[![Github Actions Status](https://github.com/mljar/package-manager/workflows/Build/badge.svg)](https://github.com/mljar/package-manager/actions/workflows/build.yml)
 
+what is package manager?
 A JupyterLab extension to list, remove and install python packages from pip.
+
+
+features of package manager
+- list available packages
+- install new package
+- remove package
+
+The extenstion is available in MLJAR Studio. It can also be installed in JupyterLab > 4.
+
+development install
 
 ## Requirements
 
