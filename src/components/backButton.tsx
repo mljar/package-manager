@@ -9,7 +9,7 @@ export const BackButton: React.FC<BackButtonProps> = ({ onBack }) => {
   return (
     <button className="mljar-back-button" onClick={onBack} title="Go Back">
       <backIcon.react className="mljar-back-icon" />
-      Back
+    Back 
     </button>
   );
 };

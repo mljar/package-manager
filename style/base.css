@@ -116,6 +116,7 @@
 /* containers */
 
 /* buttons */
+.mljar-back-button,
 .mljar-install-button,
 .mljar-refresh-button {
   flex: 1;
@@ -136,6 +137,13 @@
   transition: background-color 0.3s ease;
 }
 
+.mljar-back-button {
+  max-width: 70px !important;
+  text-align: center;
+  padding-right: 4px;
+}
+
+.mljar-back-button:hover:not(:disabled),
 .mljar-refresh-button:hover:not(:disabled),
 .mljar-install-button:hover:not(:disabled) {
   background-color: #0099cc;
@@ -143,7 +151,7 @@
 }
 
 
-.mljar-back-button {
+/* .mljar-back-button {
   flex: 1;
   display: flex;
   align-items: center;
@@ -157,7 +165,7 @@
   cursor: pointer;
   font-size: 0.75rem;
   transition: background-color 0.3s ease;
-}
+} */
 
 .mljar-delete-button {
   visibility: hidden;
@@ -198,9 +206,9 @@
   cursor: not-allowed;
 }
 
-.mljar-back-button:hover:not(:disabled) {
+/* .mljar-back-button:hover:not(:disabled) {
   background-color: #005fa3;
-}
+} */
 
 .mljar-install-submit-button {
   display: flex;
