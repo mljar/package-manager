@@ -26,11 +26,16 @@ export const PackageItem: React.FC<PackageItemProps> = ({ pkg }) => {
   const handleDelete = async () => {
     let confirm = false;
     if ((window as any).electron) {
-      confirm = await (window as any).electron.invoke("show-confirm-dialog", `Are you sure you want to delete ${pkg.name}?`);
+      confirm = await (window as any).electron.invoke(
+        'show-confirm-dialog',
+        `Click "Ok" to confirm the deletion of ${pkg.name}.`
+      );
     } else {
-      confirm = window.confirm(`Click "OK" to confirm the deletion of ${pkg.name}.`);
+      confirm = window.confirm(
+        `Click "Ok" to confirm the deletion of ${pkg.name}.`
+      );
     }
-    
+
     if (confirm) {
       setLoading(true);
       setError(false);
@@ -87,6 +92,7 @@ export const PackageItem: React.FC<PackageItemProps> = ({ pkg }) => {
             ? `Error during uninstalling ${pkg.name}`
             : `Uninstall ${pkg.name}`
         }
+        title={`Delete ${pkg.name}`}
       >
         {loading ? (
           <span className="mljar-spinner" />
