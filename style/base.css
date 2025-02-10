@@ -391,6 +391,22 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.mljar-package-item.active .mljar-package-name,
+.mljar-package-item.active .mljar-package-version {
+  color: #fff;
+}
+
+
+.mljar-package-item:hover {
+  background-color: var(--jp-layout-color2);
+  cursor: pointer;
+}
+
+.mljar-package-item.active {
+  background-color: var(--jp-brand-color1);
+  color: var(--jp-ui-inverse-font-color1);
+}
+
 .mljar-package-name,
 .mljar-package-version {
   overflow: hidden;
@@ -413,21 +429,6 @@
 }
 
 
-.mljar-package-item.active .mljar-package-name,
-.mljar-package-item.active .mljar-package-version {
-  color: #fff;
-}
-
-
-.mljar-package-item:hover {
-  background-color: var(--jp-layout-color2);
-  cursor: pointer;
-}
-
-.mljar-package-item.active {
-  background-color: var(--jp-brand-color1);
-  color: var(--jp-ui-inverse-font-color1);
-}
 
 
 /* list */
