@@ -20,7 +20,7 @@
 }
 
 .mljar-packages-manager-search-bar-container {
-  margin: 0px 10px 10px 0px;  
+  margin: 0px 10px 10px 0px;
 }
 
 .mljar-packages-manager-search-bar-input {
@@ -97,7 +97,7 @@
   padding: 10px;
 }
 
-/* containers */
+/* containers end */
 
 /* buttons */
 .mljar-packages-manager-back-button,
@@ -110,7 +110,6 @@
   margin-right: 1px;
   align-items: center;
   justify-content: center;
-  /* background-color: #0099cc; */
   gap: 8px;
   color: #0099cc;
   border: none;
@@ -186,10 +185,11 @@
   transition: background-color 0.3s ease;
 }
 
-.mljar-packages-manager-package-item:hover .mljar-packages-manager-delete-button {
+.mljar-packages-manager-package-item:hover
+  .mljar-packages-manager-delete-button {
   visibility: visible;
 }
-/* buttons */
+/* buttons end */
 
 /* icons */
 
@@ -252,7 +252,7 @@
   opacity: 1;
 }
 
-/* icons */
+/* icons end */
 
 .mljar-packages-manager-install-form {
   display: flex;
@@ -324,7 +324,7 @@
   }
 }
 
-/* spinner */
+/* spinner end */
 
 /* list */
 
@@ -348,8 +348,10 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.mljar-packages-manager-package-item.active .mljar-packages-manager-package-name,
-.mljar-packages-manager-package-item.active .mljar-packages-manager-package-version {
+.mljar-packages-manager-package-item.active
+  .mljar-packages-manager-package-name,
+.mljar-packages-manager-package-item.active
+  .mljar-packages-manager-package-version {
   color: #fff;
 }
 
@@ -384,9 +386,6 @@
   padding-right: 8px;
   padding-top: 10px;
   padding-bottom: 10px;
-  /* border-bottom: 2px solid var(--jp-layout-color0);
-  background-color: #0099cc;
-  color: #fff; */
   background-color: var(--jp-layout-color0);
   color: #0099cc;
   border: 1px solid #0099cc;
@@ -395,7 +394,7 @@
   font-weight: 800;
 }
 
-/* list */
+/* list end */
 
 /* scrollbar */
 
@@ -422,3 +421,5 @@
   justify-content: space-between;
   padding: 0;
 }
+
+/* scrollbar end */
