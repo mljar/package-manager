@@ -20,9 +20,7 @@
 }
 
 .mljar-search-bar-container {
-  margin-bottom: 10px;
-  background-color: lightblue;
-  margin-right: 10px;
+  margin: 0px 10px 10px 0px;  
 }
 
 .mljar-search-bar-input {
@@ -32,6 +30,12 @@
   background-color: var(--jp-layout-color1);
   color: var(--jp-ui-font-color1);
   border: 1px solid var(--jp-border-color2);
+  border-radius: 5px;
+}
+
+.mljar-search-bar-input:focus {
+  outline: none;
+  border: 2px solid var(--jp-ui-font-color1);
 }
 
 .mljar-search-bar-input::placeholder {
