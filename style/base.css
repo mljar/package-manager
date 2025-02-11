@@ -96,9 +96,7 @@
 .mljar-packages-manager-back-button,
 .mljar-packages-manager-install-button,
 .mljar-packages-manager-refresh-button {
-  flex: 1;
-  text-align: right;
-  max-width: 30px;
+  width: 30px;
   display: flex;
   margin: 1px 0px 2px 0px;
   align-items: center;
@@ -114,7 +112,7 @@
 }
 
 .mljar-packages-manager-back-button {
-  max-width: 70px !important;
+  width: 70px !important;
   text-align: center;
   padding-right: 4px;
 }
@@ -145,7 +143,6 @@
 .mljar-packages-manager-refresh-button:disabled,
 .mljar-packages-manager-install-button:disabled,
 .mljar-packages-manager-back-button:disabled {
-  background-color: #a0c4e3;
   cursor: not-allowed;
 }
 
