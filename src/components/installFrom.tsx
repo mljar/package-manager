@@ -95,20 +95,10 @@ export const InstallForm: React.FC = () => {
 
   return (
     <div className="mljar-packages-manager-install-form">
-      <div className="mljar-packages-manager-install-form-header">
+      {/* <div className="mljar-packages-manager-install-form-header">
         <h4>Install New Package</h4>
-         { /* <div className="mljar-packages-manager-info-icon-container">
-            <span dangerouslySetInnerHTML={{ __html: infoIcon.svgstr }} />
-            <span className="mljar-tooltip">
-              Usage:
-              Enter package name like:
-              pandas
-              or package name with version:
-              pandas==2.2.2
-          </span>
-        </div> */} 
-      </div>
-      <span className='mljar-packages-manager-usage-span'>Usage: Enter package_name or package_name==version.</span>
+      </div> 0099cc*/} 
+      <span className='mljar-packages-manager-usage-span'><span style={{ fontWeight: 600 }}>Usage: </span>Enter <span style={{ fontWeight: 600, color: '#0099cc' }}>package_name</span> or <span style={{ fontWeight: 600, color: '#0099cc' }}>package_name==version</span></span>
       <input
         type="text"
         value={packageName}
