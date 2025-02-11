@@ -263,18 +263,16 @@
   padding: 5px 2px;
 }
 
-
-
 .mljar-packages-manager-install-message {
   color: #28a745;
   font-weight: bold;
+  margin-top: 10px;
+  text-align: left;
+  padding: 5px 2px;
 }
 
 .mljar-packages-manager-install-message.error {
   color: #dc3545;
-  margin-top: 10px;
-  text-align: left;
-  padding: 5px 2px;
 }
 
 .mljar-packages-manager-error-message {
