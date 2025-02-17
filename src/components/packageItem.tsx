@@ -81,7 +81,7 @@ export const PackageItem: React.FC<PackageItemProps> = ({ pkg }) => {
   };
 
   return (
-    <li className="mljar-packages-manager-package-item">
+    <li className="mljar-packages-manager-list-item">
       <span className="mljar-packages-manager-package-name"> {pkg.name}</span>
       <span className="mljar-packages-manager-package-version">{pkg.version}</span>
       <button

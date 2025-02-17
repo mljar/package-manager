@@ -6,7 +6,7 @@ export const PackageListContent: React.FC = () => {
   const { loading, error } = usePackageContext();
 
   return (
-    <div className="mljar-packages-manager-package-list-container">
+    <div className="mljar-packages-manager-list-container">
       {loading && (
         <div className="mljar-packages-manager-spinner-container">
             <div className="mljar-packages-manager-spinner" role="status" aria-label="Loading"></div>

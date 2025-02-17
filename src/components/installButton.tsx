@@ -6,7 +6,9 @@ interface InstallButtonProps {
   onStartInstall: () => void;
 }
 
-export const InstallButton: React.FC<InstallButtonProps> = ({ onStartInstall }) => {
+export const InstallButton: React.FC<InstallButtonProps> = ({
+  onStartInstall
+}) => {
   const { loading } = usePackageContext();
 
   return (
@@ -20,4 +22,3 @@ export const InstallButton: React.FC<InstallButtonProps> = ({ onStartInstall }) 
     </button>
   );
 };
-

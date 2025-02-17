@@ -1,5 +1,3 @@
-/* containers */
-
 .mljar-packages-manager-sidebar-container {
   display: flex;
   flex-direction: column;
@@ -35,13 +33,13 @@
   color: var(--jp-ui-font-color2);
 }
 
-.mljar-packages-manager-package-container {
+.mljar-packages-manager-container {
   display: flex;
   flex-direction: column;
   height: 100%;
 }
 
-.mljar-packages-manager-package-header-container {
+.mljar-packages-manager-header-container {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -50,7 +48,7 @@
   border-bottom: 2px solid #ddd;
 }
 
-.mljar-packages-manager-package-header {
+.mljar-packages-manager-header {
   flex: 4;
   font-size: 0.85rem;
   font-weight: 700;
@@ -60,28 +58,28 @@
   margin: 0;
 }
 
-.mljar-packages-manager-package-list-container {
+.mljar-packages-manager-list-container {
   flex: 1;
   overflow-y: hidden;
   padding-right: 10px;
 }
 
-.mljar-packages-manager-package-list {
+.mljar-packages-manager-list {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.mljar-packages-manager-package-list-container::-webkit-scrollbar {
+.mljar-packages-manager-list-container::-webkit-scrollbar {
   width: 8px;
 }
 
-.mljar-packages-manager-package-list-container::-webkit-scrollbar-thumb {
+.mljar-packages-manager-list-container::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.2);
   border-radius: 4px;
 }
 
-.mljar-packages-manager-package-list-container::-webkit-scrollbar-track {
+.mljar-packages-manager-list-container::-webkit-scrollbar-track {
   background-color: rgba(0, 0, 0, 0.05);
 }
 
@@ -91,9 +89,6 @@
   font-family: 'Courier New', Courier, monospace;
 }
 
-/* containers end */
-
-/* buttons */
 .mljar-packages-manager-back-button,
 .mljar-packages-manager-install-button,
 .mljar-packages-manager-refresh-button {
@@ -176,13 +171,9 @@
   transition: background-color 0.3s ease;
 }
 
-.mljar-packages-manager-package-item:hover
-  .mljar-packages-manager-delete-button {
+.mljar-packages-manager-list-item:hover .mljar-packages-manager-delete-button {
   visibility: visible;
 }
-/* buttons end */
-
-/* icons */
 
 .mljar-packages-manager-refresh-icon,
 .mljar-packages-manager-install-icon,
@@ -243,8 +234,6 @@
   opacity: 1;
 }
 
-/* icons end */
-
 .mljar-packages-manager-install-form {
   display: flex;
   flex-direction: column;
@@ -281,8 +270,6 @@
   font-weight: bold;
 }
 
-/* spinner */
-
 .mljar-packages-manager-spinner-container {
   display: flex;
   justify-content: center;
@@ -306,11 +293,7 @@
   }
 }
 
-/* spinner end */
-
-/* list */
-
-.mljar-packages-manager-package-item {
+.mljar-packages-manager-list-item {
   flex: 1;
   display: grid;
   grid-template-columns: 1fr 1fr 2rem;
@@ -331,19 +314,12 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.mljar-packages-manager-package-item.active
-  .mljar-packages-manager-package-name,
-.mljar-packages-manager-package-item.active
-  .mljar-packages-manager-package-version {
-  color: #fff;
-}
-
-.mljar-packages-manager-package-item:hover {
+.mljar-packages-manager-list-item:hover {
   background-color: var(--jp-layout-color2);
   cursor: pointer;
 }
 
-.mljar-packages-manager-package-item.active {
+.mljar-packages-manager-list-item.active {
   background-color: var(--jp-brand-color1);
   color: var(--jp-ui-inverse-font-color1);
 }
@@ -359,7 +335,7 @@
   font-weight: 600;
 }
 
-.mljar-packages-manager-package-header-list {
+.mljar-packages-manager-list-header {
   display: grid;
   grid-template-columns: 1fr 1fr 2rem;
   align-items: center;
@@ -375,10 +351,6 @@
   border-top-left-radius: 5px;
   font-weight: 800;
 }
-
-/* list end */
-
-/* scrollbar */
 
 .mljar-packages-manager-sidebar-container::-webkit-scrollbar {
   width: 8px;
@@ -396,5 +368,3 @@
   border: 2px solid transparent;
   background-clip: padding-box;
 }
-
-/* scrollbar end */

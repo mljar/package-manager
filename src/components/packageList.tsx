@@ -16,11 +16,11 @@ export const PackageList: React.FC = () => {
 
 
   return (
-    <ul className='mljar-packages-manager-package-list'>
-        <li className='mljar-packages-manager-package-header-list'>
-          <span className='mljar-packages-manager-package-header-name'>Name</span>
-          <span className='mljar-packages-manager-package-header-version'>Version</span>
-          <span className='mljar-packages-manager-package-header-blank'>&nbsp;</span>
+    <ul className='mljar-packages-manager-list'>
+        <li className='mljar-packages-manager-list-header'>
+          <span className='mljar-packages-manager-header-name'>Name</span>
+          <span className='mljar-packages-manager-header-version'>Version</span>
+          <span className='mljar-packages-manager-header-blank'>&nbsp;</span>
         </li>
       {filteredPackages
         .sort((a,b) => a.name.localeCompare(b.name))
