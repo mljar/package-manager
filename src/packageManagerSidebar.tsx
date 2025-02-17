@@ -14,7 +14,7 @@ class PackageManagerSidebarWidget extends ReactWidget {
     this.id = 'package-manager::empty-sidebar';
     this.title.icon = packageManagerIcon;
     this.title.caption = 'Package Manager';
-    this.addClass('mljar-packages-manager-plugin-sidebar-widget');
+    this.addClass('mljar-packages-manager-sidebar-widget');
   }
 
   render(): JSX.Element {

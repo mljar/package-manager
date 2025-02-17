@@ -95,9 +95,6 @@ export const InstallForm: React.FC = () => {
 
   return (
     <div className="mljar-packages-manager-install-form">
-      {/* <div className="mljar-packages-manager-install-form-header">
-        <h4>Install New Package</h4>
-      </div> 0099cc*/} 
       <span className='mljar-packages-manager-usage-span'><span style={{ fontWeight: 600 }}>Usage: </span>Enter <span style={{ fontWeight: 600, color: '#0099cc' }}>package_name</span> or <span style={{ fontWeight: 600, color: '#0099cc' }}>package_name==version</span></span>
       <input
         type="text"

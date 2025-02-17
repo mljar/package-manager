@@ -85,9 +85,10 @@
   background-color: rgba(0, 0, 0, 0.05);
 }
 
-.mljar-packages-manager-plugin-sidebar-widget {
+.mljar-packages-manager-sidebar-widget {
   background-color: #ffffff;
   padding: 10px;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 /* containers end */
@@ -314,6 +315,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr 2rem;
   align-items: center;
+  min-height: 38px;
   column-gap: 1rem;
   padding-left: 8px;
   padding-right: 8px;
@@ -351,7 +353,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-family: 'Courier New', Courier, monospace;
 }
 
 .mljar-packages-manager-package-name {
@@ -394,13 +395,6 @@
   border-radius: 8px;
   border: 2px solid transparent;
   background-clip: padding-box;
-}
-
-.mljar-packages-manager-install-form-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0;
 }
 
 /* scrollbar end */
