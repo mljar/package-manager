@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img src="https://github.com/mljar/package-manager/blob/main/media/jupyter-package-manager.jpg?raw=true" height="270" alt="Jupyter Package Manager banner"/>
+  <img src="https://github.com/mljar/package-manager/blob/main/media/jupyter-package-manager.jpg?raw=true" alt="Jupyter Package Manager banner"/>
 </p>
 
 # Jupyter Package Manager
