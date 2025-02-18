@@ -5,12 +5,23 @@
 
 # Jupyter Package Manager
 
-It is a JupyterLabe extenstion that helps you manage packages. It can list, remove and install python packages from pip.
+It is a JupyterLabe extenstion that helps you manage packages. It can list, remove and install python packages from pip. 
 
 
+## List packages 
+
+It can list packages for currently open notebook:
+
+<img src="https://github.com/mljar/package-manager/blob/main/media/jupyterlab-package-manager-list-packages.png?raw=true" alt="Jupyter Package Manager list packages"/>
+
+## Install a new package
+
+It can install a new package for currently open notebook:
+
+<img src="https://github.com/mljar/package-manager/blob/main/media/jupyterlab-install-new-package.png?raw=true" alt="Jupyter Package Manager install new package"/>
 
 
-## Install
+## Install extension
 
 It can also be installed in JupyterLab > 4. To install the extension, execute:
 
@@ -20,7 +31,7 @@ pip install package_manager
 
 The extenstion is by default available in [MLJAR Studio](https://mljar.com) - a desktop app for creating Python notebooks. 
 
-## Uninstall
+## Uninstall extension
 
 To remove the extension, execute:
 
