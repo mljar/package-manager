@@ -1,30 +1,24 @@
-# package_manager
+
+<p align="center">
+  <img src="https://github.com/mljar/package-manager/blob/main/media/jupyter-package-manager.jpg?raw=true" height="270" alt="Jupyter Package Manager banner"/>
+</p>
+
+# Jupyter Package Manager
+
+It is a JupyterLabe extenstion that helps you manage packages. It can list, remove and install python packages from pip.
 
 
-what is package manager?
-A JupyterLab extension to list, remove and install python packages from pip.
 
-
-features of package manager
-- list available packages
-- install new package
-- remove package
-
-The extenstion is available in MLJAR Studio. It can also be installed in JupyterLab > 4.
-
-development install
-
-## Requirements
-
-- JupyterLab >= 4.0.0
 
 ## Install
 
-To install the extension, execute:
+It can also be installed in JupyterLab > 4. To install the extension, execute:
 
 ```bash
 pip install package_manager
 ```
+
+The extenstion is by default available in [MLJAR Studio](https://mljar.com) - a desktop app for creating Python notebooks. 
 
 ## Uninstall
 
@@ -81,7 +75,3 @@ pip uninstall package_manager
 In development mode, you will also need to remove the symlink created by `jupyter labextension develop`
 command. To find its location, you can run `jupyter labextension list` to figure out where the `labextensions`
 folder is located. Then you can remove the symlink named `package-manager` within that folder.
-
-### Packaging the extension
-
-See [RELEASE](RELEASE.md)
