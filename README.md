@@ -19,7 +19,7 @@ It can list packages for currently open notebook:
 
 You can filter packages by name:
 
-<img src="https://github.com/mljar/package-manager/blob/main/media/jupyterlab-package-manager-list-packages.png?raw=true" alt="Jupyter Package Manager filter packages"/>
+<img src="https://github.com/mljar/package-manager/blob/main/media/filtering.gif?raw=true" alt="Jupyter Package Manager filter packages"/>
 
 ### Install a new package
 
