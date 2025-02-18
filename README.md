@@ -7,18 +7,39 @@
 
 It is a JupyterLabe extenstion that helps you manage packages. It can list, remove and install python packages from pip. 
 
+## Features
 
-## List packages 
+### List packages 
 
 It can list packages for currently open notebook:
 
 <img src="https://github.com/mljar/package-manager/blob/main/media/jupyterlab-package-manager-list-packages.png?raw=true" alt="Jupyter Package Manager list packages"/>
 
-## Install a new package
+### Filtering packages by name 
+
+You can filter packages by name:
+
+<img src="https://github.com/mljar/package-manager/blob/main/media/jupyterlab-package-manager-list-packages.png?raw=true" alt="Jupyter Package Manager filter packages"/>
+
+### Install a new package
 
 It can install a new package for currently open notebook:
 
 <img src="https://github.com/mljar/package-manager/blob/main/media/jupyterlab-install-new-package.png?raw=true" alt="Jupyter Package Manager install new package"/>
+
+
+### Remove package
+
+It can install a new package for currently open notebook:
+
+<img src="https://github.com/mljar/package-manager/blob/main/media/remove-package.gif?raw=true" alt="Jupyter Package Manager remove package"/>
+
+
+### Dark theme
+
+There is a dark theme available too:
+
+<img src="https://github.com/mljar/package-manager/blob/main/media/jupyterlab-dark-theme-package-manager.png?raw=true" alt="Jupyter Package Manager dark theme"/>
 
 
 ## Install extension
