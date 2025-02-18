@@ -3,9 +3,9 @@ requires = ["hatchling>=1.5.0", "jupyterlab>=4.0.0,<5", "hatch-nodejs-version>=0
 build-backend = "hatchling.build"
 
 [project]
-name = "package_manager"
+name = "jupyter_package_manager"
 readme = "README.md"
-license = { file = "LICENSE" }
+license = "AGPL-3.0-or-later"
 requires-python = ">=3.8"
 classifiers = [
     "Framework :: Jupyter",
@@ -37,8 +37,8 @@ artifacts = ["package_manager/labextension"]
 exclude = [".github", "binder"]
 
 [tool.hatch.build.targets.wheel.shared-data]
-"package_manager/labextension" = "share/jupyter/labextensions/package-manager"
-"install.json" = "share/jupyter/labextensions/package-manager/install.json"
+"package_manager/labextension" = "share/jupyter/labextensions/jupyter-package-manager"
+"install.json" = "share/jupyter/labextensions/jupyter-package-manager/install.json"
 
 [tool.hatch.build.hooks.version]
 path = "package_manager/_version.py"

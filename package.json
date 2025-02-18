@@ -1,6 +1,6 @@
 {
-    "name": "package-manager",
-    "version": "0.1.0",
+    "name": "jupyter-package-manager",
+    "version": "1.0.0",
     "description": "A JupyterLab extension to list, remove and install python packages from pip.",
     "keywords": [
         "jupyter",
@@ -11,7 +11,7 @@
     "bugs": {
         "url": "https://github.com/mljar/package-manager/issues"
     },
-    "license": "SEE LICENSE IN LICENSE",
+    "license": "AGPL-3.0-or-later",
     "author": {
         "name": "MLJAR",
         "email": "contact@mljar.com"

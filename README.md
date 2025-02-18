@@ -47,7 +47,7 @@ Enjoy a dark mode experience for more comfortable viewing in low-light environme
 It can also be installed in JupyterLab > 4. To install the extension, execute:
 
 ```bash
-pip install package_manager
+pip install jupyter_package_manager
 ```
 
 The extenstion is by default available in [MLJAR Studio](https://mljar.com) - a desktop app for creating Python notebooks. 
@@ -57,7 +57,7 @@ The extenstion is by default available in [MLJAR Studio](https://mljar.com) - a 
 To remove the extension, execute:
 
 ```bash
-pip uninstall package_manager
+pip uninstall jupyter_package_manager
 ```
 
 ## Contributing
@@ -101,9 +101,9 @@ jupyter lab build --minimize=False
 ### Development uninstall
 
 ```bash
-pip uninstall package_manager
+pip uninstall jupyter_package_manager
 ```
 
 In development mode, you will also need to remove the symlink created by `jupyter labextension develop`
 command. To find its location, you can run `jupyter labextension list` to figure out where the `labextensions`
-folder is located. Then you can remove the symlink named `package-manager` within that folder.
+folder is located. Then you can remove the symlink named `jupyter-package-manager` within that folder.
