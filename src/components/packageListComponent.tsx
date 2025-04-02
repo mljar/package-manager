@@ -23,19 +23,25 @@ export const PackageListComponent: React.FC = () => {
     <PackageContextProvider>
       <div className="mljar-packages-manager-container">
         <div className="mljar-packages-manager-header-container">
-          {view === 'list' && <h3 className="mljar-packages-manager-header">Packages Manager</h3>}
-          {view === 'install' && <h3 className="mljar-packages-manager-header">Install Packages</h3>}
+          {view === 'list' && (
+            <h3 className="mljar-packages-manager-header">Packages Manager</h3>
+          )}
+          {view === 'install' && (
+            <h3 className="mljar-packages-manager-header">Install Packages</h3>
+          )}
           {view === 'list' && <RefreshButton />}
-          {view === 'list' && <InstallButton onStartInstall={handleStartInstall} />}
+          {view === 'list' && (
+            <InstallButton onStartInstall={handleStartInstall} />
+          )}
           {view === 'install' && <BackButton onBack={handleBack} />}
         </div>
         {view === 'list' ? (
           <div>
             <SearchBar />
-          <PackageListContent />
+            <PackageListContent />
           </div>
         ) : (
-          <InstallForm/>
+          <InstallForm />
         )}
       </div>
     </PackageContextProvider>

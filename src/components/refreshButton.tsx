@@ -2,8 +2,6 @@ import { usePackageContext } from '../contexts/packagesListContext';
 import { refreshIcon } from '../icons/refreshIcon';
 import React from 'react';
 
-
-
 export const RefreshButton: React.FC = () => {
   const { refreshPackages, loading } = usePackageContext();
 
@@ -19,4 +17,3 @@ export const RefreshButton: React.FC = () => {
     </button>
   );
 };
-

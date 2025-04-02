@@ -1,17 +1,23 @@
 // src/contexts/PackageContext.tsx
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback
+} from 'react';
 import { useNotebookPanelContext } from './notebookPanelContext';
 import { useNotebookKernelContext } from './notebookKernelContext';
 import { listPackagesCode } from '../pcode/utils';
 import { KernelMessage } from '@jupyterlab/services';
 
-interface PackageInfo {
+interface IPackageInfo {
   name: string;
   version: string;
 }
 
-interface PackageContextProps {
-  packages: PackageInfo[];
+interface IPackageContextProps {
+  packages: IPackageInfo[];
   loading: boolean;
   error: string | null;
   searchTerm: string;
@@ -19,12 +25,18 @@ interface PackageContextProps {
   refreshPackages: () => void;
 }
 
-const PackageContext = createContext<PackageContextProps | undefined>(undefined);
+const PackageContext = createContext<IPackageContextProps | undefined>(
+  undefined
+);
 
-export const PackageContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+let kernelIdToPackagesList: Record<string, IPackageInfo[]> = {};
+
+export const PackageContextProvider: React.FC<{
+  children: React.ReactNode;
+}> = ({ children }) => {
   const notebookPanel = useNotebookPanelContext();
   const kernel = useNotebookKernelContext();
-  const [packages, setPackages] = useState<PackageInfo[]>([]);
+  const [packages, setPackages] = useState<IPackageInfo[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -34,64 +46,82 @@ export const PackageContextProvider: React.FC<{ children: React.ReactNode }> = (
     setLoading(true);
     setError(null);
 
-
     if (!notebookPanel || !kernel) {
       setLoading(false);
       return;
     }
 
     try {
-      const future = notebookPanel.sessionContext?.session?.kernel?.requestExecute({
-        code: listPackagesCode,
-        store_history: false,
-      });
+      const kernelId = notebookPanel.sessionContext?.session?.kernel?.id;
+      // check if there are packages for current kernel, if yes load them
+      // otherwise run code request to Python kernel
+      if (
+        kernelId !== undefined &&
+        kernelId !== null &&
+        kernelId in kernelIdToPackagesList
+      ) {
+        setPackages(kernelIdToPackagesList[kernelId]);
+        setLoading(false);
+      } else {
+        const future =
+          notebookPanel.sessionContext?.session?.kernel?.requestExecute({
+            code: listPackagesCode,
+            store_history: false
+          });
 
-      if (future) {
-        future.onIOPub = (msg: KernelMessage.IIOPubMessage) => {
-          const msgType = msg.header.msg_type;
+        if (future) {
+          future.onIOPub = (msg: KernelMessage.IIOPubMessage) => {
+            const msgType = msg.header.msg_type;
+            if (
+              msgType === 'execute_result' ||
+              msgType === 'display_data' ||
+              msgType === 'update_display_data'
+            ) {
+              const content = msg.content as any;
 
-          if (
-            msgType === 'execute_result' ||
-            msgType === 'display_data' ||
-            msgType === 'update_display_data'
-          ) {
-            const content = msg.content as any;
+              const jsonData = content.data['application/json'];
+              const textData = content.data['text/plain'];
 
-            const jsonData = content.data['application/json'];
-            const textData = content.data['text/plain'];
-
-            if (jsonData) {
-              if (Array.isArray(jsonData)) {
-                setPackages(jsonData);
-              } else {
-                console.warn('Data is not JSON:', jsonData);
-              }
-              setLoading(false);
-            } else if (textData) {
-              try {
-                const cleanedData = textData.replace(/^['"]|['"]$/g, '');
-                const doubleQuotedData = cleanedData.replace(/'/g, '"');
-                const parsedData: PackageInfo[] = JSON.parse(doubleQuotedData);
-
-                if (Array.isArray(parsedData)) {
-                  setPackages([]);
-                  setPackages(parsedData);
+              if (jsonData) {
+                if (Array.isArray(jsonData)) {
+                  setPackages(jsonData);
                 } else {
-                  throw new Error('Error during parsing.');
+                  console.warn('Data is not JSON:', jsonData);
                 }
                 setLoading(false);
-              } catch (err) {
-                console.error('Error during export JSON from text/plain:', err);
-                setError('Error during export JSON.');
-                setLoading(false);
+              } else if (textData) {
+                try {
+                  const cleanedData = textData.replace(/^['"]|['"]$/g, '');
+                  const doubleQuotedData = cleanedData.replace(/'/g, '"');
+                  const parsedData: IPackageInfo[] =
+                    JSON.parse(doubleQuotedData);
+
+                  if (Array.isArray(parsedData)) {
+                    setPackages([]);
+                    setPackages(parsedData);
+                    if (kernelId !== undefined && kernelId !== null) {
+                      kernelIdToPackagesList[kernelId] = parsedData;
+                    }
+                  } else {
+                    throw new Error('Error during parsing.');
+                  }
+                  setLoading(false);
+                } catch (err) {
+                  console.error(
+                    'Error during export JSON from text/plain:',
+                    err
+                  );
+                  setError('Error during export JSON');
+                  setLoading(false);
+                }
               }
             }
-          }
-        };
+          };
+        }
       }
     } catch (err) {
       console.error('Unexpected error:', err);
-      setError('Unexpected error.');
+      setError('Unexpected error');
       setLoading(false);
     }
   }, [notebookPanel, kernel]);
@@ -102,18 +132,28 @@ export const PackageContextProvider: React.FC<{ children: React.ReactNode }> = (
 
   return (
     <PackageContext.Provider
-      value={{ packages, loading, error, searchTerm, setSearchTerm, refreshPackages: executeCode }}
+      value={{
+        packages,
+        loading,
+        error,
+        searchTerm,
+        setSearchTerm,
+        refreshPackages: () => {
+          // clear all stored packages for all kernels
+          kernelIdToPackagesList = {};
+          executeCode();
+        }
+      }}
     >
       {children}
     </PackageContext.Provider>
   );
 };
 
-export const usePackageContext = (): PackageContextProps => {
+export const usePackageContext = (): IPackageContextProps => {
   const context = useContext(PackageContext);
   if (context === undefined) {
     throw new Error('usePackageContext must be used within a PackageProvider');
   }
   return context;
 };
-

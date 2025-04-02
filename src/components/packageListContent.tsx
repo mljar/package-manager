@@ -9,7 +9,11 @@ export const PackageListContent: React.FC = () => {
     <div className="mljar-packages-manager-list-container">
       {loading && (
         <div className="mljar-packages-manager-spinner-container">
-            <div className="mljar-packages-manager-spinner" role="status" aria-label="Loading"></div>
+          <div
+            className="mljar-packages-manager-spinner"
+            role="status"
+            aria-label="Loading"
+          ></div>
         </div>
       )}
       {error && <p className="mljar-packages-manager-error-message">{error}</p>}
@@ -17,4 +21,3 @@ export const PackageListContent: React.FC = () => {
     </div>
   );
 };
-

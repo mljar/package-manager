@@ -2,11 +2,11 @@ import React from 'react';
 import { usePackageContext } from '../contexts/packagesListContext';
 import { installIcon } from '../icons/installPackageIcon';
 
-interface InstallButtonProps {
+interface IInstallButtonProps {
   onStartInstall: () => void;
 }
 
-export const InstallButton: React.FC<InstallButtonProps> = ({
+export const InstallButton: React.FC<IInstallButtonProps> = ({
   onStartInstall
 }) => {
   const { loading } = usePackageContext();
