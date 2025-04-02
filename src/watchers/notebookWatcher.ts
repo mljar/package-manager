@@ -5,7 +5,6 @@ import { Signal } from '@lumino/signaling';
 import { DocumentWidget } from '@jupyterlab/docregistry';
 import { NotebookPanel } from '@jupyterlab/notebook';
 
-
 function getNotebook(widget: Widget | null): Notebook | null {
   if (!(widget instanceof DocumentWidget)) {
     return null;

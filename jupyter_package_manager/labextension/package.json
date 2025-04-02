@@ -1,6 +1,6 @@
 {
   "name": "package-manager",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A JupyterLab extension to list, remove and install python packages from pip.",
   "keywords": [
     "jupyter",
