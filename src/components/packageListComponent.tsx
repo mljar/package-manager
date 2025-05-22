@@ -1,5 +1,6 @@
 // src/components/PackageListComponent.tsx
 import React, { useState } from 'react';
+import { IStateDB } from '@jupyterlab/statedb';
 import { SearchBar } from '../components/searchBar';
 import { PackageListContent } from '../components/packageListContent';
 import { PackageContextProvider } from '../contexts/packagesListContext';
@@ -8,7 +9,13 @@ import { InstallButton } from '../components/installButton';
 import { BackButton } from '../components/backButton';
 import { InstallForm } from './installFrom';
 
-export const PackageListComponent: React.FC = () => {
+interface IPackageListComponentProps {
+  stateDB: IStateDB;
+}
+
+export const PackageListComponent: React.FC<IPackageListComponentProps> = ({
+  stateDB
+}) => {
   const [view, setView] = useState<'list' | 'install'>('list');
 
   const handleStartInstall = () => {

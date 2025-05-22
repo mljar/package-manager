@@ -29,37 +29,6 @@ export type NotebookSelection = {
 
 export type NotebookSelections = NotebookSelection[];
 
-export function getNotebookSelections(notebook: Notebook): NotebookSelections {
-  const selections: NotebookSelections = [];
-
-  const cellModels = notebook.model?.cells;
-
-  if (cellModels) {
-    for (let i = 0; i < cellModels.length; i++) {
-      const cell = cellModels.get(i);
-      const cellSource = cell?.sharedModel.getSource();
-      const cellId = cell?.id;
-
-      if (cellSource && cellId) {
-        const numLines = cellSource.split('\n').length;
-
-        const selection: NotebookSelection = {
-          start: { line: 0, column: 0 },
-          end: { line: numLines - 1, column: cellSource.length },
-          text: cellSource,
-          numLines,
-          widgetId: notebook.id,
-          cellId
-        };
-
-        selections.push(selection);
-      }
-    }
-  }
-
-  return selections;
-}
-
 export class NotebookWatcher {
   constructor(shell: JupyterFrontEnd.IShell) {
     this._shell = shell;
@@ -90,24 +59,6 @@ export class NotebookWatcher {
   get kernelChanged(): Signal<this, KernelInfo | null> {
     return this._kernelChanged;
   }
-
-  // protected _poll(): void {
-  //   const notebook = getNotebook(this._mainAreaWidget);
-  //   const currSelections = notebook ? getNotebookSelections(notebook) : [];
-  //
-  //   if (JSON.stringify(this._selections) === JSON.stringify(currSelections)) {
-  //     return;
-  //   }
-  //
-  //   this._selections = currSelections;
-  //   this._selectionChanged.emit(currSelections);
-  //
-  //   const newNotebookPanel = this.notebookPanel();
-  //   if (this._notebookPanel !== newNotebookPanel) {
-  //     this._notebookPanel = newNotebookPanel;
-  //     this._notebookPanelChanged.emit(this._notebookPanel);
-  //   }
-  // }
 
   notebookPanel(): NotebookPanel | null {
     const notebook = getNotebook(this._mainAreaWidget);
