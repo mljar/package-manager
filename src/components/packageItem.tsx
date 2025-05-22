@@ -83,25 +83,28 @@ export const PackageItem: React.FC<PackageItemProps> = ({ pkg }) => {
   return (
     <li className="mljar-packages-manager-list-item">
       <span className="mljar-packages-manager-package-name"> {pkg.name}</span>
-      <span className="mljar-packages-manager-package-version">{pkg.version}</span>
-      <button
-        className="mljar-packages-manager-delete-button"
-        onClick={handleDelete}
-        aria-label={
-          error
-            ? `Error during uninstalling ${pkg.name}`
-            : `Uninstall ${pkg.name}`
-        }
-        title={`Delete ${pkg.name}`}
-      >
-        {loading ? (
-          <span className="mljar-packages-manager-spinner" />
-        ) : error ? (
-          <errorIcon.react className="mljar-packages-manager-error-icon" />
-        ) : (
-          <myDeleteIcon.react className="mljar-packages-manager-delete-icon" />
-        )}
-      </button>
+      <span className="mljar-packages-manager-package-version">
+        {pkg.version}
+      </span>
+      {!loading && (
+        <button
+          className="mljar-packages-manager-delete-button"
+          onClick={handleDelete}
+          aria-label={
+            error
+              ? `Error during uninstalling ${pkg.name}`
+              : `Uninstall ${pkg.name}`
+          }
+          title={`Delete ${pkg.name}`}
+        >
+          {error ? (
+            <errorIcon.react className="mljar-packages-manager-error-icon" />
+          ) : (
+            <myDeleteIcon.react className="mljar-packages-manager-delete-icon" />
+          )}
+        </button>
+      )}
+      {loading && <span className="mljar-packages-manager-spinner" />}
     </li>
   );
 };
