@@ -18,7 +18,11 @@ const leftTab: JupyterFrontEndPlugin<void> = {
 
     // notebookWatcher.selectionChanged.connect((sender, selections) => { });
 
-    const widget = createPackageManagerSidebar(notebookWatcher, stateDB);
+    const widget = createPackageManagerSidebar(
+      notebookWatcher,
+      stateDB,
+      app.commands
+    );
 
     app.shell.add(widget, 'left', { rank: 1999 });
   }

@@ -6,6 +6,9 @@ import React, {
   useEffect,
   useCallback
 } from 'react';
+
+import { IStateDB } from '@jupyterlab/statedb';
+import { CommandRegistry } from '@lumino/commands';
 import { useNotebookPanelContext } from './notebookPanelContext';
 import { useNotebookKernelContext } from './notebookKernelContext';
 import { listPackagesCode } from '../pcode/utils';
@@ -33,7 +36,9 @@ let kernelIdToPackagesList: Record<string, IPackageInfo[]> = {};
 
 export const PackageContextProvider: React.FC<{
   children: React.ReactNode;
-}> = ({ children }) => {
+  stateDB: IStateDB;
+  commands: CommandRegistry;
+}> = ({ children, stateDB, commands }) => {
   const notebookPanel = useNotebookPanelContext();
   const kernel = useNotebookKernelContext();
   const [packages, setPackages] = useState<IPackageInfo[]>([]);
@@ -41,13 +46,23 @@ export const PackageContextProvider: React.FC<{
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
 
+  const setPackagesList = (pkgs: IPackageInfo[]) => {
+    setPackages(pkgs);
+    stateDB.save('mljarPackagesList', JSON.stringify(pkgs));
+  };
+
+  const setPackagesListLoading = (ld: boolean) => {
+    setLoading(ld);
+    stateDB.save('mljarPackagesListLoading', ld);
+  };
+
   const executeCode = useCallback(async () => {
-    setPackages([]);
-    setLoading(true);
+    setPackagesList([] as IPackageInfo[]);
+    setPackagesListLoading(true);
     setError(null);
 
     if (!notebookPanel || !kernel) {
-      setLoading(false);
+      setPackagesListLoading(false);
       return;
     }
 
@@ -60,8 +75,8 @@ export const PackageContextProvider: React.FC<{
         kernelId !== null &&
         kernelId in kernelIdToPackagesList
       ) {
-        setPackages(kernelIdToPackagesList[kernelId]);
-        setLoading(false);
+        setPackagesList(kernelIdToPackagesList[kernelId]);
+        setPackagesListLoading(false);
       } else {
         const future =
           notebookPanel.sessionContext?.session?.kernel?.requestExecute({
@@ -84,11 +99,11 @@ export const PackageContextProvider: React.FC<{
 
               if (jsonData) {
                 if (Array.isArray(jsonData)) {
-                  setPackages(jsonData);
+                  setPackagesList(jsonData);
                 } else {
                   console.warn('Data is not JSON:', jsonData);
                 }
-                setLoading(false);
+                setPackagesListLoading(false);
               } else if (textData) {
                 try {
                   const cleanedData = textData.replace(/^['"]|['"]$/g, '');
@@ -97,22 +112,22 @@ export const PackageContextProvider: React.FC<{
                     JSON.parse(doubleQuotedData);
 
                   if (Array.isArray(parsedData)) {
-                    setPackages([]);
-                    setPackages(parsedData);
+                    setPackagesList([]);
+                    setPackagesList(parsedData);
                     if (kernelId !== undefined && kernelId !== null) {
                       kernelIdToPackagesList[kernelId] = parsedData;
                     }
                   } else {
                     throw new Error('Error during parsing.');
                   }
-                  setLoading(false);
+                  setPackagesListLoading(false);
                 } catch (err) {
                   console.error(
                     'Error during export JSON from text/plain:',
                     err
                   );
                   setError('Error during export JSON');
-                  setLoading(false);
+                  setPackagesListLoading(false);
                 }
               }
             }
@@ -122,13 +137,23 @@ export const PackageContextProvider: React.FC<{
     } catch (err) {
       console.error('Unexpected error:', err);
       setError('Unexpected error');
-      setLoading(false);
+      setPackagesListLoading(false);
     }
   }, [notebookPanel, kernel]);
 
   useEffect(() => {
     executeCode();
   }, [executeCode]);
+
+  useEffect(() => {
+    commands.addCommand('mljar-packages-manager-refresh', {
+      execute: () => {
+        kernelIdToPackagesList = {};
+        executeCode();
+      },
+      label: 'Refresh packages in MLJAR Packages Manager'
+    });
+  }, [commands]);
 
   return (
     <PackageContext.Provider
