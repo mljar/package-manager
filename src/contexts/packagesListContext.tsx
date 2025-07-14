@@ -151,7 +151,7 @@ export const PackageContextProvider: React.FC<{
         kernelIdToPackagesList = {};
         executeCode();
       },
-      label: 'Refresh packages in MLJAR Packages Manager'
+      label: 'Refresh packages in MLJAR Package Manager'
     });
   }, [commands]);
 

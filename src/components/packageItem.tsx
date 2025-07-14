@@ -7,6 +7,7 @@ import { useNotebookPanelContext } from '../contexts/notebookPanelContext';
 import { KernelMessage } from '@jupyterlab/services';
 import { usePackageContext } from '../contexts/packagesListContext';
 import { errorIcon } from '../icons/errorIcon';
+import { t } from '../translator';
 
 interface PackageInfo {
   name: string;
@@ -28,11 +29,11 @@ export const PackageItem: React.FC<PackageItemProps> = ({ pkg }) => {
     if ((window as any).electron) {
       confirm = await (window as any).electron.invoke(
         'show-confirm-dialog',
-        `Click "Ok" to confirm the deletion of ${pkg.name}.`
+        `${t('Click "Ok" to confirm the deletion of')} ${pkg.name}.`
       );
     } else {
       confirm = window.confirm(
-        `Click "Ok" to confirm the deletion of ${pkg.name}.`
+        `${t('Click "Ok" to confirm the deletion of')} ${pkg.name}.`
       );
     }
 
@@ -92,10 +93,10 @@ export const PackageItem: React.FC<PackageItemProps> = ({ pkg }) => {
           onClick={handleDelete}
           aria-label={
             error
-              ? `Error during uninstalling ${pkg.name}`
-              : `Uninstall ${pkg.name}`
+              ? `${t('Error during uninstalling')} ${pkg.name}`
+              : `${t('Uninstall')} ${pkg.name}`
           }
-          title={`Delete ${pkg.name}`}
+          title={`${t('Delete')} ${pkg.name}`}
         >
           {error ? (
             <errorIcon.react className="mljar-packages-manager-error-icon" />

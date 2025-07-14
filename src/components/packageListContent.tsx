@@ -1,6 +1,7 @@
 import React from 'react';
 import { usePackageContext } from '../contexts/packagesListContext';
 import { PackageList } from '../components/packageList';
+import { t } from '../translator';
 
 export const PackageListContent: React.FC = () => {
   const { loading, error } = usePackageContext();
@@ -12,7 +13,7 @@ export const PackageListContent: React.FC = () => {
           <div
             className="mljar-packages-manager-spinner"
             role="status"
-            aria-label="Loading"
+            aria-label={t('Loading...')}
           ></div>
         </div>
       )}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { backIcon } from '../icons/backIcon';
+import { t } from '../translator';
 
 interface BackButtonProps {
   onBack: () => void;
@@ -10,10 +11,10 @@ export const BackButton: React.FC<BackButtonProps> = ({ onBack }) => {
     <button
       className="mljar-packages-manager-back-button"
       onClick={onBack}
-      title="Go Back"
+      title={t('Go Back')}
     >
       <backIcon.react className="mljar-packages-manager-back-icon" />
-      Back
+      {t('Back')}
     </button>
   );
 };

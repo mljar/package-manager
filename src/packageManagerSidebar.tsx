@@ -8,6 +8,8 @@ import { NotebookPanelContextProvider } from './contexts/notebookPanelContext';
 import { NotebookKernelContextProvider } from './contexts/notebookKernelContext';
 import { PackageListComponent } from './components/packageListComponent';
 import { PackageContextProvider } from './contexts/packagesListContext';
+import { t } from './translator';
+
 
 class PackageManagerSidebarWidget extends ReactWidget {
   private notebookWatcher: NotebookWatcher;
@@ -20,12 +22,12 @@ class PackageManagerSidebarWidget extends ReactWidget {
   ) {
     super();
     this.notebookWatcher = notebookWatcher;
-    this.stateDB = stateDB;
     this.commands = commands;
     this.id = 'package-manager::empty-sidebar';
     this.title.icon = packageManagerIcon;
-    this.title.caption = 'Package Manager';
+    this.title.caption = t('Package Manager');
     this.addClass('mljar-packages-manager-sidebar-widget');
+    this.stateDB = stateDB;
   }
 
   render(): JSX.Element {

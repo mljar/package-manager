@@ -6,6 +6,7 @@ import { RefreshButton } from '../components/refreshButton';
 import { InstallButton } from '../components/installButton';
 import { BackButton } from '../components/backButton';
 import { InstallForm } from './installFrom';
+import { t } from '../translator';
 
 interface IPackageListComponentProps {}
 
@@ -26,10 +27,14 @@ export const PackageListComponent: React.FC<
     <div className="mljar-packages-manager-container">
       <div className="mljar-packages-manager-header-container">
         {view === 'list' && (
-          <h3 className="mljar-packages-manager-header">Packages Manager</h3>
+          <h3 className="mljar-packages-manager-header">
+            {t('Package Manager')}
+          </h3>
         )}
         {view === 'install' && (
-          <h3 className="mljar-packages-manager-header">Install Packages</h3>
+          <h3 className="mljar-packages-manager-header">
+            {t('Install Packages')}
+          </h3>
         )}
         {view === 'list' && <RefreshButton />}
         {view === 'list' && (

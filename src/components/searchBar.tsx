@@ -1,6 +1,8 @@
 // src/components/SearchBar.tsx
 import React from 'react';
 import { usePackageContext } from '../contexts/packagesListContext';
+import { t } from '../translator';
+// import { t } from '../translator';
 
 export const SearchBar: React.FC = () => {
   const { searchTerm, setSearchTerm } = usePackageContext();
@@ -16,7 +18,7 @@ export const SearchBar: React.FC = () => {
         type="text"
         value={searchTerm}
         onChange={handleChange}
-        placeholder="Search Package..."
+        placeholder={t('Search package...')}
         className='mljar-packages-manager-search-bar-input'
       />
     </div>

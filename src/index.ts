@@ -5,6 +5,8 @@ import {
 
 import { createPackageManagerSidebar } from './packageManagerSidebar';
 import { IStateDB } from '@jupyterlab/statedb';
+import { ITranslator } from '@jupyterlab/translation';
+import { translator as trans } from './translator';
 import { NotebookWatcher } from './watchers/notebookWatcher';
 
 const leftTab: JupyterFrontEndPlugin<void> = {
@@ -12,8 +14,14 @@ const leftTab: JupyterFrontEndPlugin<void> = {
   description:
     'A JupyterLab extension to list, remove and install python packages from pip.',
   autoStart: true,
-  requires: [IStateDB],
-  activate: async (app: JupyterFrontEnd, stateDB: IStateDB) => {
+  requires: [IStateDB, ITranslator],
+  activate: async (
+    app: JupyterFrontEnd,
+    stateDB: IStateDB,
+    translator: ITranslator
+  ) => {
+    const lang = translator.languageCode;
+    if (lang === 'pl-PL') trans.setLanguage('pl');
     const notebookWatcher = new NotebookWatcher(app.shell);
 
     // notebookWatcher.selectionChanged.connect((sender, selections) => { });

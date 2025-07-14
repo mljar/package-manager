@@ -3,6 +3,7 @@ import { useNotebookPanelContext } from '../contexts/notebookPanelContext';
 import { checkIfPackageInstalled, installPackagePip } from '../pcode/utils';
 import { KernelMessage } from '@jupyterlab/services';
 import { usePackageContext } from '../contexts/packagesListContext';
+import { t } from '../translator';
 // import { infoIcon } from '../icons/infoIcon'
 
 const isSuccess = (message: string | null): boolean => {
@@ -33,7 +34,7 @@ export const InstallForm: React.FC = () => {
 
     if (!future) {
       setInstalling(false);
-      setMessage('No kernel available.');
+      setMessage(t('No kernel available.'));
       return;
     }
     future.onIOPub = (msg: KernelMessage.IIOPubMessage) => {
@@ -54,12 +55,12 @@ export const InstallForm: React.FC = () => {
           proceedWithInstall();
         } else if (content.text.includes('INSTALLED')) {
           setInstalling(false);
-          setMessage('Package is already installed.');
+          setMessage(t('Package is already installed.'));
         }
       } else if (msgType === 'error') {
         setInstalling(false);
         setMessage(
-          'An error occurred while checking installation. Check the correctness of the package name.'
+          t('An error occurred while checking installation. Check the correctness of the package name.')
         );
       }
     };
@@ -73,7 +74,7 @@ export const InstallForm: React.FC = () => {
         store_history: false
       });
     if (!future) {
-      setMessage('No kernel available.');
+      setMessage(t('No kernel available.'));
       setInstalling(false);
       return;
     }
@@ -91,16 +92,16 @@ export const InstallForm: React.FC = () => {
         }
         const content = msg.content as IContentData;
         if (content.text.includes('ERROR')) {
-          setMessage('Error installing the package.');
+          setMessage(t('Error installing the package.'));
           setInstalling(false);
         } else if (content.text.includes('Successfully installed')) {
-          setMessage('Package installed successfully.');
+          setMessage(t('Package installed successfully.'));
           setInstalling(false);
           refreshPackages();
         }
       } else if (msgType === 'error') {
         setMessage(
-          'An error occurred during installation. Check the correctness of the package name.'
+          t('An error occurred during installation. Check the correctness of the package name.')
         );
         setInstalling(false);
       }
@@ -110,18 +111,18 @@ export const InstallForm: React.FC = () => {
   return (
     <div className="mljar-packages-manager-install-form">
       <span className="mljar-packages-manager-usage-span">
-        <span style={{ fontWeight: 600 }}>Usage: </span>Enter{' '}
-        <span style={{ fontWeight: 600, color: '#0099cc' }}>package_name</span>{' '}
-        or{' '}
+        <span style={{ fontWeight: 600 }}>{t('Usage')}: </span>{t('Enter')}{' '}
+        <span style={{ fontWeight: 600, color: '#0099cc' }}>{t('package_name')}</span>{' '}
+        {t('or')}{' '}
         <span style={{ fontWeight: 600, color: '#0099cc' }}>
-          package_name==version
+          {t('package_name==version')}
         </span>
       </span>
       <input
         type="text"
         value={packageName}
         onChange={e => setPackageName(e.target.value)}
-        placeholder="Enter package name..."
+        placeholder={t('Enter package name...')}
         className="mljar-packages-manager-install-input"
       />
       <div className="mljar-packages-manager-install-form-buttons">
@@ -130,7 +131,7 @@ export const InstallForm: React.FC = () => {
           onClick={handleCheckAndInstall}
           disabled={installing || packageName.trim() === ''}
         >
-          {installing ? 'Processing...' : 'Install'}
+          {installing ? t('Processing...') : t('Install')}
         </button>
       </div>
       {message && (
