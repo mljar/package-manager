@@ -8,8 +8,8 @@ import { t } from '../translator';
 
 const isSuccess = (message: string | null): boolean => {
   return (
-    message?.toLowerCase().includes('success') ||
-    message?.toLowerCase().includes('already') ||
+    message?.toLowerCase().includes(t('success')) ||
+    message?.toLowerCase().includes(t('already')) ||
     false
   );
 };
@@ -60,7 +60,9 @@ export const InstallForm: React.FC = () => {
       } else if (msgType === 'error') {
         setInstalling(false);
         setMessage(
-          t('An error occurred while checking installation. Check the correctness of the package name.')
+          t(
+            'An error occurred while checking installation. Check the correctness of the package name.'
+          )
         );
       }
     };
@@ -101,7 +103,9 @@ export const InstallForm: React.FC = () => {
         }
       } else if (msgType === 'error') {
         setMessage(
-          t('An error occurred during installation. Check the correctness of the package name.')
+          t(
+            'An error occurred during installation. Check the correctness of the package name.'
+          )
         );
         setInstalling(false);
       }
@@ -111,8 +115,11 @@ export const InstallForm: React.FC = () => {
   return (
     <div className="mljar-packages-manager-install-form">
       <span className="mljar-packages-manager-usage-span">
-        <span style={{ fontWeight: 600 }}>{t('Usage')}: </span>{t('Enter')}{' '}
-        <span style={{ fontWeight: 600, color: '#0099cc' }}>{t('package_name')}</span>{' '}
+        <span style={{ fontWeight: 600 }}>{t('Usage')}: </span>
+        {t('Enter')}{' '}
+        <span style={{ fontWeight: 600, color: '#0099cc' }}>
+          {t('package_name')}
+        </span>{' '}
         {t('or')}{' '}
         <span style={{ fontWeight: 600, color: '#0099cc' }}>
           {t('package_name==version')}
@@ -136,7 +143,7 @@ export const InstallForm: React.FC = () => {
       </div>
       {message && (
         <p
-          className={`mljar-packages-manager-install-message ${isSuccess(message) ? 'success' : 'error'}`}
+          className={`mljar-packages-manager-install-message ${isSuccess(message) ? '' : 'error'}`}
         >
           {message}
         </p>

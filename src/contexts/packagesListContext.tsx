@@ -13,6 +13,7 @@ import { useNotebookPanelContext } from './notebookPanelContext';
 import { useNotebookKernelContext } from './notebookKernelContext';
 import { listPackagesCode } from '../pcode/utils';
 import { KernelMessage } from '@jupyterlab/services';
+import { t } from '../translator';
 
 interface IPackageInfo {
   name: string;
@@ -151,7 +152,7 @@ export const PackageContextProvider: React.FC<{
         kernelIdToPackagesList = {};
         executeCode();
       },
-      label: 'Refresh packages in MLJAR Package Manager'
+      label: t('Refresh packages in MLJAR Package Manager')
     });
   }, [commands]);
 

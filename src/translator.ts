@@ -41,6 +41,9 @@ class Translator {
       'Enter package name...': 'Wpisz nazwę pakietu...',
       'Processing...': 'Przetwarzanie...',
       'Install': 'Zainstaluj',
+      'Refresh packages in MLJAR Package Manager': 'Odśwież pakiety w MLJAR Package Manager',
+      'success': 'pomyślnie',
+      'already': 'już'
     },
     en: {}
   };
