@@ -43,14 +43,14 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-bottom: 8px;
-  margin-right: 8px;
+  margin-bottom: 10px;
+  margin-right: 10px;
   border-bottom: 2px solid #ddd;
 }
 
 .mljar-packages-manager-header {
   flex: 4;
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   font-weight: 700;
   color: var(--jp-ui-font-color1);
   text-align: left;
@@ -89,12 +89,28 @@
   font-family: 'Courier New', Courier, monospace;
 }
 
+.mljar-packages-manager-sidebar-widget:hover {
+  padding-right: 5px;
+}
+.mljar-packages-manager-sidebar-widget:hover
+  .mljar-packages-manager-search-bar-container {
+  margin-right: 5px;
+}
+.mljar-packages-manager-sidebar-widget:hover
+  .mljar-packages-manager-header-container {
+  margin-right: 5px;
+}
+.mljar-packages-manager-sidebar-widget:hover
+  .mljar-packages-manager-list-container {
+  padding-right: 5px;
+}
+
 .mljar-packages-manager-back-button,
 .mljar-packages-manager-install-button,
 .mljar-packages-manager-refresh-button {
   width: 30px;
   display: flex;
-  margin: 1px 0px 2px 0px;
+  margin: 2px 1px;
   align-items: center;
   justify-content: center;
   gap: 8px;
@@ -310,7 +326,8 @@
   width: 100%;
   box-sizing: border-box;
   background-color: var(--jp-layout-color0);
-  font-size: 0.7rem;
+  font-size: 0.8rem;
+  font-weight: 500;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -339,7 +356,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr 2rem;
   align-items: center;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   padding-left: 8px;
   padding-right: 8px;
   padding-top: 10px;
@@ -353,17 +370,24 @@
 }
 
 .mljar-packages-manager-sidebar-container::-webkit-scrollbar {
-  width: 8px;
+  width: 0px;
+}
+
+.mljar-packages-manager-sidebar-widget:hover
+  .mljar-packages-manager-sidebar-container::-webkit-scrollbar {
+  width: 10px;
   height: 8px;
 }
 
-.mljar-packages-manager-sidebar-container::-webkit-scrollbar-track {
-  background: #d3d3d3;
-  border-radius: 8px;
+.mljar-packages-manager-sidebar-widget:hover
+  .mljar-packages-manager-sidebar-container::-webkit-scrollbar-track {
+  background: var(--jp-layout-color2);
+  border-radius: 4px;
 }
 
-.mljar-packages-manager-sidebar-container::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.6);
+.mljar-packages-manager-sidebar-widget:hover
+  .mljar-packages-manager-sidebar-container::-webkit-scrollbar-thumb {
+  background: var(--jp-layout-color3);
   border-radius: 8px;
   border: 2px solid transparent;
   background-clip: padding-box;
