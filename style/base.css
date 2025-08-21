@@ -1,13 +1,22 @@
 .mljar-packages-manager-sidebar-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow-y: auto;
+  height: 99vh;
+}
+.mljar-packages-manager-sidebar-container::-webkit-scrollbar {
+  display: none;
 }
 
 .mljar-packages-manager-search-bar-container {
-  margin: 0px 10px 10px 0px;
+  margin-bottom: 10px;
+  margin-right: 0px;
+  padding-right: 20px;
+  padding-top: 15px;
+  padding-bottom: 5px;
+  position: sticky;
+  top: 38px;
+  z-index: 10;
+  background: var(--jp-layout-color1);
 }
+
 .mljar-packages-manager-install-input,
 .mljar-packages-manager-search-bar-input {
   width: 100%;
@@ -33,19 +42,20 @@
   color: var(--jp-ui-font-color2);
 }
 
-.mljar-packages-manager-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
+
 
 .mljar-packages-manager-header-container {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-bottom: 10px;
-  margin-right: 10px;
   border-bottom: 2px solid #ddd;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--jp-layout-color1);
+  margin-bottom: 0px;
+  margin-right: 0px;
+  padding-right: 20px;
 }
 
 .mljar-packages-manager-header {
@@ -59,50 +69,27 @@
 }
 
 .mljar-packages-manager-list-container {
-  flex: 1;
-  overflow-y: hidden;
-  padding-right: 10px;
+  padding-right: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+  position: relative;
 }
 
 .mljar-packages-manager-list {
+  overflow-y: auto;
+  min-height: 0;
+  max-height: 85vh;
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.mljar-packages-manager-list-container::-webkit-scrollbar {
-  width: 8px;
-}
-
-.mljar-packages-manager-list-container::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
-}
-
-.mljar-packages-manager-list-container::-webkit-scrollbar-track {
-  background-color: rgba(0, 0, 0, 0.05);
-}
-
 .mljar-packages-manager-sidebar-widget {
   background-color: #ffffff;
-  padding: 10px;
+  padding: 10px 0px 10px 10px;
   font-family: 'Courier New', Courier, monospace;
-}
-
-.mljar-packages-manager-sidebar-widget:hover {
-  padding-right: 5px;
-}
-.mljar-packages-manager-sidebar-widget:hover
-  .mljar-packages-manager-search-bar-container {
-  margin-right: 5px;
-}
-.mljar-packages-manager-sidebar-widget:hover
-  .mljar-packages-manager-header-container {
-  margin-right: 5px;
-}
-.mljar-packages-manager-sidebar-widget:hover
-  .mljar-packages-manager-list-container {
-  padding-right: 5px;
 }
 
 .mljar-packages-manager-back-button,
@@ -369,24 +356,21 @@
   font-weight: 800;
 }
 
-.mljar-packages-manager-sidebar-container::-webkit-scrollbar {
+.mljar-packages-manager-list::-webkit-scrollbar {
   width: 0px;
 }
 
-.mljar-packages-manager-sidebar-widget:hover
-  .mljar-packages-manager-sidebar-container::-webkit-scrollbar {
+.mljar-packages-manager-list:hover::-webkit-scrollbar {
   width: 10px;
   height: 8px;
 }
 
-.mljar-packages-manager-sidebar-widget:hover
-  .mljar-packages-manager-sidebar-container::-webkit-scrollbar-track {
+.mljar-packages-manager-list:hover::-webkit-scrollbar-track {
   background: var(--jp-layout-color2);
   border-radius: 4px;
 }
 
-.mljar-packages-manager-sidebar-widget:hover
-  .mljar-packages-manager-sidebar-container::-webkit-scrollbar-thumb {
+.mljar-packages-manager-list:hover::-webkit-scrollbar-thumb {
   background: var(--jp-layout-color3);
   border-radius: 8px;
   border: 2px solid transparent;
