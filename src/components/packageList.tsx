@@ -16,16 +16,14 @@ export const PackageList: React.FC = () => {
   useEffect(() => {
     const listEl = listRef.current;
     if (!listEl) return;
-    const containerEl = listEl.closest<HTMLElement>('.mljar-packages-manager-list-container') || null;
+    const containerEl =
+      listEl.closest<HTMLElement>('.mljar-packages-manager-list-container') ||
+      null;
     if (!containerEl) return;
-
-    console.log('lolek: ', containerEl)
 
     // function to check if there is overflow
     const checkOverflow = () => {
-          const hasOverflowY = listEl.scrollHeight > listEl.clientHeight;
-
-      console.log('overflow', hasOverflowY)
+      const hasOverflowY = listEl.scrollHeight > listEl.clientHeight;
 
       if (hasOverflowY) {
         listEl.classList.add('package-manager-has-overflow');
@@ -41,14 +39,18 @@ export const PackageList: React.FC = () => {
 
     // hover handle
     const handleMouseEnter = () => {
-      const elements = document.querySelectorAll<HTMLElement>('.package-manager-has-overflow');
+      const elements = document.querySelectorAll<HTMLElement>(
+        '.package-manager-has-overflow'
+      );
       elements.forEach(el => {
         el.style.paddingRight = '5px';
       });
     };
 
     const handleMouseLeave = () => {
-      const elements = document.querySelectorAll<HTMLElement>('.package-manager-has-overflow');
+      const elements = document.querySelectorAll<HTMLElement>(
+        '.package-manager-has-overflow'
+      );
       elements.forEach(el => {
         el.style.paddingRight = '';
       });

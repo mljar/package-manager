@@ -33,7 +33,7 @@ class Translator {
       'Error installing the package.': 'Błąd podczas instalacji pakietu.',
       'Package installed successfully.': 'Pomyślnie zainstalowano pakiet.',
       'An error occurred during installation. Check the correctness of the package name.': 'Wystąpił błąd podczas instalacji. Sprawdź, czy nazwa pakietu jest poprawna.',
-      'Usage': 'Użycie',
+      'Usage:': 'Użycie:',
       'Enter': 'Wpisz',
       'package_name': 'nazwa_pakietu',
       'or': 'lub',
@@ -43,7 +43,12 @@ class Translator {
       'Install': 'Zainstaluj',
       'Refresh packages in MLJAR Package Manager': 'Odśwież pakiety w MLJAR Package Manager',
       'success': 'pomyślnie',
-      'already': 'już'
+      'already': 'już',
+      "Installation stopped by user.": "Instalacja zatrzymana przez użytkownika.",
+      "Error while checking installation. Check package name.": "Błąd podczas sprawdzania instalacji. Sprawdź nazwę pakietu.",
+      "An error occurred during installation. Check package name.": "Wystąpił błąd podczas instalacji. Sprawdź nazwę pakietu.",
+      "Install another package": "Zainstaluj inny pakiet",
+      "Close": "Zamknij",
     },
     en: {}
   };

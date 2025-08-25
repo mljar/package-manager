@@ -13,7 +13,7 @@
   padding-bottom: 5px;
   position: sticky;
   top: 38px;
-  z-index: 10;
+  z-index: 5;
   background: var(--jp-layout-color1);
 }
 
@@ -28,10 +28,6 @@
   border-radius: 5px;
 }
 
-.mljar-packages-manager-install-input {
-  margin-bottom: 8px;
-}
-
 .mljar-packages-manager-install-input:focus,
 .mljar-packages-manager-search-bar-input:focus {
   outline: none;
@@ -41,8 +37,6 @@
 .mljar-packages-manager-search-bar-input::placeholder {
   color: var(--jp-ui-font-color2);
 }
-
-
 
 .mljar-packages-manager-header-container {
   display: flex;
@@ -145,29 +139,6 @@
   cursor: not-allowed;
 }
 
-.mljar-packages-manager-install-submit-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #28a745;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 8px 12px;
-  cursor: pointer;
-  font-size: 0.75rem;
-  transition: background-color 0.3s ease;
-}
-
-.mljar-packages-manager-install-submit-button:disabled {
-  background-color: #94d3a2;
-  cursor: not-allowed;
-}
-
-.mljar-packages-manager-install-submit-button:hover:not(:disabled) {
-  background-color: #1e7e34;
-}
-
 .mljar-packages-manager-delete-button:hover {
   color: #fff;
   background-color: #dc3545;
@@ -200,7 +171,7 @@
   height: 15px;
 }
 
-.mljar-packages-manager-info-icon-container {
+/* .mljar-packages-manager-info-icon-container {
   position: relative;
   display: inline-block;
   cursor: pointer;
@@ -235,12 +206,12 @@
 .mljar-packages-manager-info-icon-container:hover {
   visibility: visible;
   opacity: 1;
-}
+} */
 
 .mljar-packages-manager-install-form {
   display: flex;
   flex-direction: column;
-  margin-right: 8px;
+  margin-right: 0px;
 }
 
 .mljar-packages-manager-install-form h4 {
@@ -254,18 +225,6 @@
   text-align: left;
   font-size: 0.8rem;
   padding: 5px 2px;
-}
-
-.mljar-packages-manager-install-message {
-  color: #28a745;
-  font-weight: bold;
-  margin-top: 10px;
-  text-align: left;
-  padding: 5px 2px;
-}
-
-.mljar-packages-manager-install-message.error {
-  color: #dc3545;
 }
 
 .mljar-packages-manager-error-message {
@@ -375,4 +334,213 @@
   border-radius: 8px;
   border: 2px solid transparent;
   background-clip: padding-box;
+}
+
+/* START */
+
+.mljar-package-manager-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.mljar-package-manager-content {
+  background: var(--jp-layout-color1);
+  padding: 20px;
+  border-radius: 8px;
+  width: 600px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.25);
+  position: relative;
+}
+
+.mljar-package-manager-content h3 {
+  font-size: 20px;
+}
+
+.mljar-package-manager-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* .mljar-modal-confirm {
+  background: #2b7ce9;
+  color: white;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+} */
+
+/* .mljar-modal-cancel {
+  background: #e0e0e0;
+  color: #333;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+} */
+
+.mljar-packages-manager-install-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mljar-packages-manager-install-input {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  margin: 1px;
+}
+
+.mljar-packages-manager-install-input:focus {
+  outline: none;
+  border: 2px solid #4a90e2;
+  margin: 0px;
+}
+
+.mljar-packages-manager-install-logs {
+  background: #1e1e1e;
+  color: #0f0;
+  font-family: monospace;
+  font-size: 13px;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #333;
+  max-height: 200px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  line-height: 1.4;
+}
+
+.mljar-packages-manager-install-logs::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.mljar-packages-manager-install-logs::-webkit-scrollbar-track {
+  background: #1e1e1e;
+}
+
+.mljar-packages-manager-install-logs::-webkit-scrollbar-thumb {
+  background-color: #555;
+  border-radius: 4px;
+}
+
+.mljar-packages-manager-install-logs::-webkit-scrollbar-thumb:hover {
+  background-color: #777;
+}
+
+.mljar-packages-manager-install-form-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.mljar-packages-manager-install-submit-button {
+  background: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.mljar-packages-manager-install-submit-button:hover:not(:disabled) {
+  background: #43a047;
+}
+
+.mljar-packages-manager-install-submit-button:disabled {
+  background: #a5d6a7;
+  cursor: not-allowed;
+}
+
+.mljar-packages-manager-install-message {
+  font-size: 14px;
+  margin: 0px;
+}
+
+.mljar-packages-manager-install-message.error {
+  color: #e53935;
+}
+
+.mljar-packages-manager-install-message:not(.error) {
+  color: #4caf50;
+}
+
+.mljar-packages-manager-usage-box {
+  background: #f5f7fa;
+  border-left: 4px solid #4a90e2;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #333;
+}
+
+.mljar-packages-manager-usage-box code {
+  background: #e8f0fe;
+  color: #1a73e8;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: monospace;
+}
+.mljar-packages-manager-usage-box strong {
+  margin-right: 5px;
+}
+
+.mljar-packages-manager-spinner {
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid #fff;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  animation: spin 1s linear infinite;
+  margin: auto;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.mljar-packages-manager-result {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.mljar-packages-manager-install-close-button,
+.mljar-packages-manager-stop-button {
+  background: #e53935;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.mljar-packages-manager-install-close-button:hover,
+.mljar-packages-manager-stop-button:hover {
+  background: #c62828;
 }

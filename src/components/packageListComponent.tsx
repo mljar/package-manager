@@ -1,11 +1,9 @@
 // src/components/PackageListComponent.tsx
-import React, { useState } from 'react';
+import React from 'react';
 import { SearchBar } from '../components/searchBar';
 import { PackageListContent } from '../components/packageListContent';
 import { RefreshButton } from '../components/refreshButton';
 import { InstallButton } from '../components/installButton';
-import { BackButton } from '../components/backButton';
-import { InstallForm } from './installFrom';
 import { t } from '../translator';
 
 interface IPackageListComponentProps {}
@@ -13,43 +11,19 @@ interface IPackageListComponentProps {}
 export const PackageListComponent: React.FC<
   IPackageListComponentProps
 > = () => {
-  const [view, setView] = useState<'list' | 'install'>('list');
-
-  const handleStartInstall = () => {
-    setView('install');
-  };
-
-  const handleBack = () => {
-    setView('list');
-  };
-
   return (
     <div className="mljar-packages-manager-container">
       <div className="mljar-packages-manager-header-container">
-        {view === 'list' && (
-          <h3 className="mljar-packages-manager-header">
-            {t('Package Manager')}
-          </h3>
-        )}
-        {view === 'install' && (
-          <h3 className="mljar-packages-manager-header">
-            {t('Install Packages')}
-          </h3>
-        )}
-        {view === 'list' && <RefreshButton />}
-        {view === 'list' && (
-          <InstallButton onStartInstall={handleStartInstall} />
-        )}
-        {view === 'install' && <BackButton onBack={handleBack} />}
+        <h3 className="mljar-packages-manager-header">
+          {t('Package Manager')}
+        </h3>
+        <RefreshButton />
+        <InstallButton onStartInstall={() => {}} />
       </div>
-      {view === 'list' ? (
-        <div>
-          <SearchBar />
-          <PackageListContent />
-        </div>
-      ) : (
-        <InstallForm />
-      )}
+      <div>
+        <SearchBar />
+        <PackageListContent />
+      </div>
     </div>
   );
 };
