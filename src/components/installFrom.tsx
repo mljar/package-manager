@@ -7,6 +7,7 @@ import { t } from '../translator';
 
 interface InstallFormProps {
   onClose: () => void;
+  initialPackageName?: string;
 }
 
 const isSuccess = (message: string | null): boolean => {
@@ -17,8 +18,15 @@ const isSuccess = (message: string | null): boolean => {
   );
 };
 
-export const InstallForm: React.FC<InstallFormProps> = ({ onClose }) => {
-  const [packageName, setPackageName] = useState<string>('');
+export const InstallForm: React.FC<InstallFormProps> = ({
+  onClose,
+  initialPackageName
+}) => {
+  const EVENT_PACKAGES_INSTALLED = 'mljar-packages-installed';
+
+  const [packageName, setPackageName] = useState<string>(
+    initialPackageName ?? ''
+  );
   const [installing, setInstalling] = useState<boolean>(false);
   const [message, setMessage] = useState<string | null>(null);
   const [logs, setLogs] = useState<string[]>([]);
@@ -27,6 +35,10 @@ export const InstallForm: React.FC<InstallFormProps> = ({ onClose }) => {
   const { refreshPackages } = usePackageContext();
 
   const logsEndRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (initialPackageName !== undefined) setPackageName(initialPackageName);
+  }, [initialPackageName]);
 
   useEffect(() => {
     if (logsEndRef.current) {
@@ -93,6 +105,9 @@ export const InstallForm: React.FC<InstallFormProps> = ({ onClose }) => {
         } else if (content.text.includes('INSTALLED')) {
           setInstalling(false);
           setMessage(t('Package is already installed.'));
+          window.dispatchEvent(
+            new CustomEvent(EVENT_PACKAGES_INSTALLED, { detail: { packages: packageName } })
+          );
         }
       } else if (msgType === 'error') {
         setInstalling(false);
@@ -135,6 +150,9 @@ export const InstallForm: React.FC<InstallFormProps> = ({ onClose }) => {
         setMessage(t('Package installed successfully.'));
         setInstalling(false);
         refreshPackages();
+        window.dispatchEvent(
+          new CustomEvent(EVENT_PACKAGES_INSTALLED, { detail: { packages: packageName } })
+        );
       }
     };
   };

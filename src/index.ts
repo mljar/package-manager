@@ -24,8 +24,6 @@ const leftTab: JupyterFrontEndPlugin<void> = {
     if (lang === 'pl-PL') trans.setLanguage('pl');
     const notebookWatcher = new NotebookWatcher(app.shell);
 
-    // notebookWatcher.selectionChanged.connect((sender, selections) => { });
-
     const widget = createPackageManagerSidebar(
       notebookWatcher,
       stateDB,
@@ -33,6 +31,24 @@ const leftTab: JupyterFrontEndPlugin<void> = {
     );
 
     app.shell.add(widget, 'left', { rank: 1999 });
+
+    // add new command for installing packages
+    app.commands.addCommand('mljar-packages:install', {
+      label: 'Install Python Package…',
+      caption: 'Open MLJAR Package Manager installer',
+      execute: args => {
+        const pkg =
+          typeof args?.package === 'string' && args.package.trim() !== ''
+            ? args.package.trim()
+            : undefined;
+
+        window.dispatchEvent(
+          new CustomEvent('mljar-packages-install', {
+            detail: { packageName: pkg }
+          })
+        );
+      }
+    });
   }
 };
 
