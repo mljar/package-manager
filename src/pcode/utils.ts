@@ -14,14 +14,14 @@ __mljar__list_packages()
 `;
 
 export const installPackagePip = (pkg: string): string => `
-def __mljar__install_pip():
-    import subprocess
-    import sys
+def __mljar__install_pip(pkg):
+    import subprocess, sys
     python_exe = sys.executable
     if python_exe.startswith('\\\\?'):
         python_exe = python_exe[4:] 
-    subprocess.check_call([python_exe, '-m', 'pip', 'install', '${pkg}'])
-__mljar__install_pip()
+    packages = pkg.split()
+    subprocess.check_call([python_exe, '-m', 'pip', 'install', *packages])
+__mljar__install_pip('${pkg}')
 `;
 
 export const removePackagePip = (pkg: string): string => `
