@@ -15,6 +15,16 @@ import { listPackagesCode } from '../pcode/utils';
 import { KernelMessage } from '@jupyterlab/services';
 import { t } from '../translator';
 
+// constants
+// StateDB keys
+export const STATE_DB_PACKAGES_LIST = 'mljarPackagesList';
+export const STATE_DB_PACKAGES_LOADING = 'mljarPackagesListLoading';
+
+// Commands
+export const CMD_REFRESH_PIECE_OF_CODE = 'mljar-piece-of-code:refresh-packages'; // force refresh in Piece of Code
+export const CMD_REFRESH_AI_ASSISTANT = 'mljar-ai-assistant:refresh-packages'; // force refresh in AI Assistant
+export const CMD_REFRESH_PACKAGES_MANAGER = 'mljar-packages-manager-refresh'; // force refresh in this package
+
 interface IPackageInfo {
   name: string;
   version: string;
@@ -49,12 +59,14 @@ export const PackageContextProvider: React.FC<{
 
   const setPackagesList = (pkgs: IPackageInfo[]) => {
     setPackages(pkgs);
-    stateDB.save('mljarPackagesList', JSON.stringify(pkgs));
+    stateDB.save(STATE_DB_PACKAGES_LIST, JSON.stringify(pkgs));
   };
 
   const setPackagesListLoading = (ld: boolean) => {
     setLoading(ld);
-    stateDB.save('mljarPackagesListLoading', ld);
+    stateDB.save(STATE_DB_PACKAGES_LOADING, ld);
+    commands.execute(CMD_REFRESH_PIECE_OF_CODE).catch(err => {});
+    commands.execute(CMD_REFRESH_AI_ASSISTANT).catch(err => {});
   };
 
   const executeCode = useCallback(async () => {
@@ -147,7 +159,7 @@ export const PackageContextProvider: React.FC<{
   }, [executeCode]);
 
   useEffect(() => {
-    commands.addCommand('mljar-packages-manager-refresh', {
+    commands.addCommand(CMD_REFRESH_PACKAGES_MANAGER, {
       execute: () => {
         kernelIdToPackagesList = {};
         executeCode();
