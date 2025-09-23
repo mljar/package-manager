@@ -1,5 +1,7 @@
 #!/bin/bash
 
+[ -d dist ] && rm -f dist/*
+
 jlpm run build
 
 python -m build

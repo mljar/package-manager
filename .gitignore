@@ -1,3 +1,5 @@
+jupyter_package_manager/labextension/
+
 *.bundle.*
 lib/
 node_modules/
