@@ -17,8 +17,8 @@ import { t } from '../translator';
 
 // constants
 // StateDB keys
-export const STATE_DB_PACKAGES_LIST = 'mljarPackagesList';
-export const STATE_DB_PACKAGES_LOADING = 'mljarPackagesListLoading';
+export const STATE_DB_PACKAGES_LIST = 'mljarPackages';
+export const STATE_DB_PACKAGES_STATUS = 'mljarPackagesStatus';
 
 // Commands
 export const CMD_REFRESH_PIECE_OF_CODE = 'mljar-piece-of-code:refresh-packages'; // force refresh in Piece of Code
@@ -62,20 +62,21 @@ export const PackageContextProvider: React.FC<{
     stateDB.save(STATE_DB_PACKAGES_LIST, JSON.stringify(pkgs));
   };
 
-  const setPackagesListLoading = (ld: boolean) => {
-    setLoading(ld);
-    stateDB.save(STATE_DB_PACKAGES_LOADING, ld);
+  const setPackagesStatus = (s: 'unknown' | 'loading' | 'loaded' | 'error') => {
+    stateDB.save(STATE_DB_PACKAGES_STATUS, s);
     commands.execute(CMD_REFRESH_PIECE_OF_CODE).catch(err => {});
     commands.execute(CMD_REFRESH_AI_ASSISTANT).catch(err => {});
   };
 
   const executeCode = useCallback(async () => {
     setPackagesList([] as IPackageInfo[]);
-    setPackagesListLoading(true);
+    setLoading(true);
+    setPackagesStatus('loading');
     setError(null);
 
     if (!notebookPanel || !kernel) {
-      setPackagesListLoading(false);
+      setLoading(false);
+      setPackagesStatus('unknown');
       return;
     }
 
@@ -89,7 +90,8 @@ export const PackageContextProvider: React.FC<{
         kernelId in kernelIdToPackagesList
       ) {
         setPackagesList(kernelIdToPackagesList[kernelId]);
-        setPackagesListLoading(false);
+        setLoading(false);
+        setPackagesStatus('loaded');
       } else {
         const future =
           notebookPanel.sessionContext?.session?.kernel?.requestExecute({
@@ -113,10 +115,11 @@ export const PackageContextProvider: React.FC<{
               if (jsonData) {
                 if (Array.isArray(jsonData)) {
                   setPackagesList(jsonData);
+                  setPackagesStatus('loaded');
                 } else {
                   console.warn('Data is not JSON:', jsonData);
                 }
-                setPackagesListLoading(false);
+                setLoading(false);
               } else if (textData) {
                 try {
                   const cleanedData = textData.replace(/^['"]|['"]$/g, '');
@@ -127,20 +130,22 @@ export const PackageContextProvider: React.FC<{
                   if (Array.isArray(parsedData)) {
                     setPackagesList([]);
                     setPackagesList(parsedData);
+                    setPackagesStatus('loaded');
                     if (kernelId !== undefined && kernelId !== null) {
                       kernelIdToPackagesList[kernelId] = parsedData;
                     }
                   } else {
                     throw new Error('Error during parsing.');
                   }
-                  setPackagesListLoading(false);
+                  setLoading(false);
                 } catch (err) {
                   console.error(
                     'Error during export JSON from text/plain:',
                     err
                   );
                   setError('Error during export JSON');
-                  setPackagesListLoading(false);
+                  setLoading(false);
+                  setPackagesStatus('error');
                 }
               }
             }
@@ -150,7 +155,8 @@ export const PackageContextProvider: React.FC<{
     } catch (err) {
       console.error('Unexpected error:', err);
       setError('Unexpected error');
-      setPackagesListLoading(false);
+      setLoading(false);
+      setPackagesStatus('error');
     }
   }, [notebookPanel, kernel]);
 
