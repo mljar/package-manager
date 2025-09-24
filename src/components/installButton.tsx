@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { usePackageContext } from '../contexts/packagesListContext';
 import { installIcon } from '../icons/installPackageIcon';
 import { InstallModal } from './installModal';
-import { InstallForm } from './installFrom';
+import { InstallForm } from './installForm';
 import { t } from '../translator';
 
 interface IInstallButtonProps {
