@@ -483,8 +483,8 @@
 }
 
 .mljar-packages-manager-usage-box {
-  background: #f5f7fa;
-  border-left: 4px solid #4a90e2;
+  background: var(--jp-brand-color3);
+  border-left: 4px solid var(--jp-brand-color1);
   padding: 8px 12px;
   border-radius: 4px;
   font-size: 14px;
@@ -492,8 +492,8 @@
 }
 
 .mljar-packages-manager-usage-box code {
-  background: #e8f0fe;
-  color: #1a73e8;
+  background: var(--jp-brand-color4);
+  color: var(--jp-brand-color1);
   padding: 2px 4px;
   border-radius: 3px;
   font-family: monospace;
