@@ -4,13 +4,13 @@ def __mljar__list_packages():
     pkgs = []
     seen = set()
     for dist in distributions():
-        name = dist.metadata["Name"]
+        name = dist.metadata["Name"].lower()
         if name not in seen:
             seen.add(name)
             pkgs.append({"name": name, "version": dist.version})
     return pkgs
 
-__mljar__list_packages()
+__mljar__list_packages();
 `;
 
 export const installPackagePip = (pkg: string): string => `

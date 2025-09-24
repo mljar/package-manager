@@ -4,7 +4,8 @@ import React, {
   useContext,
   useState,
   useEffect,
-  useCallback
+  useCallback,
+  useRef
 } from 'react';
 
 import { IStateDB } from '@jupyterlab/statedb';
@@ -56,6 +57,7 @@ export const PackageContextProvider: React.FC<{
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const retryCountRef = useRef(0);
 
   const setPackagesList = (pkgs: IPackageInfo[]) => {
     setPackages(pkgs);
@@ -92,16 +94,23 @@ export const PackageContextProvider: React.FC<{
         setPackagesList(kernelIdToPackagesList[kernelId]);
         setLoading(false);
         setPackagesStatus('loaded');
+        retryCountRef.current = 0;
       } else {
         const future =
           notebookPanel.sessionContext?.session?.kernel?.requestExecute({
             code: listPackagesCode,
             store_history: false
           });
-
         if (future) {
+          let runAgain = false;
           future.onIOPub = (msg: KernelMessage.IIOPubMessage) => {
             const msgType = msg.header.msg_type;
+            if (msgType === 'error') {
+              runAgain = true;
+              setLoading(false);
+              setPackagesStatus('error');
+              return;
+            }
             if (
               msgType === 'execute_result' ||
               msgType === 'display_data' ||
@@ -116,6 +125,7 @@ export const PackageContextProvider: React.FC<{
                 if (Array.isArray(jsonData)) {
                   setPackagesList(jsonData);
                   setPackagesStatus('loaded');
+                  retryCountRef.current = 0;
                 } else {
                   console.warn('Data is not JSON:', jsonData);
                 }
@@ -131,6 +141,7 @@ export const PackageContextProvider: React.FC<{
                     setPackagesList([]);
                     setPackagesList(parsedData);
                     setPackagesStatus('loaded');
+                    retryCountRef.current = 0;
                     if (kernelId !== undefined && kernelId !== null) {
                       kernelIdToPackagesList[kernelId] = parsedData;
                     }
@@ -150,6 +161,17 @@ export const PackageContextProvider: React.FC<{
               }
             }
           };
+          await future.done;
+          if (runAgain) {
+            // clean JupyterLab displayhook previous cell check
+            notebookPanel.sessionContext?.session?.kernel?.requestExecute({
+              code: 'pass'
+            });
+            if (retryCountRef.current < 2) {
+              retryCountRef.current += 1;
+              setTimeout(executeCode, 100);
+            }
+          }
         }
       }
     } catch (err) {
