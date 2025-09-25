@@ -20,7 +20,7 @@ def __mljar__install_pip(pkg):
     if python_exe.startswith('\\\\?'):
         python_exe = python_exe[4:] 
     packages = pkg.split()
-    subprocess.check_call([python_exe, '-m', 'pip', 'install', *packages])
+    subprocess.check_call([python_exe, '-m', 'pip', 'install', '--progress-bar', 'off', '--no-color', '--disable-pip-version-check', *packages])
 __mljar__install_pip('${pkg}')
 `;
 

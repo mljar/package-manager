@@ -167,7 +167,7 @@ export const PackageContextProvider: React.FC<{
             notebookPanel.sessionContext?.session?.kernel?.requestExecute({
               code: 'pass'
             });
-            if (retryCountRef.current < 2) {
+            if (retryCountRef.current < 1) {
               retryCountRef.current += 1;
               setTimeout(executeCode, 100);
             }
@@ -183,8 +183,10 @@ export const PackageContextProvider: React.FC<{
   }, [notebookPanel, kernel]);
 
   useEffect(() => {
-    executeCode();
-  }, [executeCode]);
+    if (kernel) {
+      executeCode();
+    }
+  }, [kernel?.id]); // run only when kernel.id is changed and kernel is not null
 
   useEffect(() => {
     commands.addCommand(CMD_REFRESH_PACKAGES_MANAGER, {
