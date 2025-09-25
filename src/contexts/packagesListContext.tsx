@@ -186,7 +186,7 @@ export const PackageContextProvider: React.FC<{
     if (kernel) {
       executeCode();
     }
-  }, [kernel?.id]); // run only when kernel.id is change and kernel is not null
+  }, [kernel?.id]); // run only when kernel.id is changed and kernel is not null
 
   useEffect(() => {
     commands.addCommand(CMD_REFRESH_PACKAGES_MANAGER, {
