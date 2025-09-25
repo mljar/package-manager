@@ -178,7 +178,7 @@ export const InstallForm: React.FC<InstallFormProps> = ({
         onChange={e => setPackageName(e.target.value)}
         placeholder={t('Enter package name...')}
         className="mljar-packages-manager-install-input"
-        disabled={!!message}
+        disabled={!!message || installing}
         onKeyDown={e => {
           if (e.key === 'Enter' && packageName.trim() !== '' && !installing) {
             handleCheckAndInstall();
