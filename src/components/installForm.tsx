@@ -53,7 +53,8 @@ export const InstallForm: React.FC<InstallFormProps> = ({
         line =>
           line.trim() !== '' &&
           !line.includes('NOT_INSTALLED') &&
-          !line.includes('INSTALLED')
+          !line.includes('INSTALLED') &&
+          !line.includes('NOTHING_TO_CHANGE')
       );
     if (lines.length > 0) {
       setLogs(prev => [...prev, ...lines]);
@@ -73,7 +74,7 @@ export const InstallForm: React.FC<InstallFormProps> = ({
     setLogs([]);
 
     const code = checkIfPackageInstalled(packageName);
-    const future =
+    const future =  
       notebookPanel?.sessionContext.session?.kernel?.requestExecute({
         code,
         store_history: false
@@ -105,6 +106,12 @@ export const InstallForm: React.FC<InstallFormProps> = ({
         } else if (content.text.includes('INSTALLED')) {
           setInstalling(false);
           setMessage(t('Package is already installed.'));
+          window.dispatchEvent(
+            new CustomEvent(EVENT_PACKAGES_INSTALLED, { detail: { packages: packageName } })
+          );
+        } else if (content.text.includes('NOTHING_TO_CHANGE')) {
+          setInstalling(false);
+          setMessage(t('Requirement already satisfied'));
           window.dispatchEvent(
             new CustomEvent(EVENT_PACKAGES_INSTALLED, { detail: { packages: packageName } })
           );

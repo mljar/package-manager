@@ -38,10 +38,36 @@ __mljar__remove_package()
 export const checkIfPackageInstalled = (pkg: string) => `
 def __mljar__check_if_installed():
     from importlib.metadata import distributions
+    from packaging import version
+    import re
+
+    m = re.match(r"^([A-Za-z0-9_\\-]+)(==|>=|<=)?([\\w\\.]+)?$", "${pkg}".strip())
+    if not m:
+        print("INVALID")
+        return
+
+    name, op, ver = m.groups()
+    name = name.lower()
+
     for dist in distributions():
-        if dist.metadata["Name"].lower() == "${pkg}".lower():
-            print("INSTALLED")
+        if dist.metadata["Name"].lower() == name:
+            if not op:
+                print("INSTALLED")
+                return
+
+            dist_ver = version.parse(dist.version)
+            target_ver = version.parse(ver)
+
+            if op == "==":
+                print("NOTHING_TO_CHANGE" if dist_ver == target_ver else "NOT_INSTALLED")
+            elif op == ">=":
+                print("NOTHING_TO_CHANGE" if dist_ver >= target_ver else "NOT_INSTALLED")
+            elif op == "<=":
+                print("NOTHING_TO_CHANGE" if dist_ver <= target_ver else "NOT_INSTALLED")
             return
+
     print("NOT_INSTALLED")
+
 __mljar__check_if_installed()
 `;
+

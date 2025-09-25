@@ -49,6 +49,7 @@ class Translator {
       "An error occurred during installation. Check package name.": "Wystąpił błąd podczas instalacji. Sprawdź nazwę pakietu.",
       "Install another package": "Zainstaluj inny pakiet",
       "Close": "Zamknij",
+      "Requirement already satisfied": "Wymagana wersja już jest zainstalowana"
     },
     en: {}
   };
