@@ -20,6 +20,7 @@ import { t } from '../translator';
 // StateDB keys
 export const STATE_DB_PACKAGES_LIST = 'mljarPackages';
 export const STATE_DB_PACKAGES_STATUS = 'mljarPackagesStatus';
+export const STATE_DB_PACKAGES_PANEL_ID = 'mljarPackagesPanelId';
 
 // Commands
 export const CMD_REFRESH_PIECE_OF_CODE = 'mljar-piece-of-code:refresh-packages'; // force refresh in Piece of Code
@@ -68,6 +69,11 @@ export const PackageContextProvider: React.FC<{
     stateDB.save(STATE_DB_PACKAGES_STATUS, s);
     commands.execute(CMD_REFRESH_PIECE_OF_CODE).catch(err => {});
     commands.execute(CMD_REFRESH_AI_ASSISTANT).catch(err => {});
+    if (s === 'loaded' && notebookPanel) {
+      stateDB.save(STATE_DB_PACKAGES_PANEL_ID, notebookPanel.id);
+    } else {
+      stateDB.save(STATE_DB_PACKAGES_PANEL_ID, '');
+    }
   };
 
   const executeCode = useCallback(async () => {
