@@ -16,23 +16,67 @@ __mljar__list_packages();
 export const installPackagePip = (pkg: string): string => `
 def __mljar__install_pip(pkg):
     import subprocess, sys
+
     python_exe = sys.executable
     if python_exe.startswith('\\\\?'):
-        python_exe = python_exe[4:] 
-    packages = pkg.split()
-    subprocess.check_call([python_exe, '-m', 'pip', 'install', '--progress-bar', 'off', '--no-color', '--disable-pip-version-check', *packages])
+        python_exe = python_exe[4:]
+
+    cmd = [python_exe, '-m', 'pip', 'install',
+           '--progress-bar', 'off', '--no-color',
+           '--disable-pip-version-check', *pkg.split()]
+
+    proc = subprocess.Popen(
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        bufsize=1,
+        universal_newlines=True
+    )
+
+    for line in iter(proc.stdout.readline, ''):
+        print(line.replace('\\r', '\\n'), end='')
+        sys.stdout.flush()
+
+    proc.stdout.close()
+    rc = proc.wait()
+    if rc == 0:
+        print('[done] Installation OK')
+    else:
+        print(f'[error] Installation failed:{rc}')
+
 __mljar__install_pip('${pkg}')
 `;
 
 export const removePackagePip = (pkg: string): string => `
-def __mljar__remove_package():
-    import subprocess
-    import sys
+def __mljar__remove_package(pkg):
+    import subprocess, sys
+
     python_exe = sys.executable
     if python_exe.startswith('\\\\?'):
         python_exe = python_exe[4:]
-    subprocess.check_call([python_exe, '-m', 'pip', 'uninstall', '-y', '${pkg}'])
-__mljar__remove_package()
+
+    cmd = [python_exe, '-m', 'pip', 'uninstall', '-y', pkg]
+
+    proc = subprocess.Popen(
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        bufsize=1,
+        universal_newlines=True
+    )
+
+    for line in iter(proc.stdout.readline, ''):
+        print(line.replace('\\r', '\\n'), end='')
+        sys.stdout.flush()
+
+    proc.stdout.close()
+    rc = proc.wait()
+    if rc == 0:
+        print('[done] Package removed')
+    else:
+        print(f'[error] Package removal failed:{rc}')
+
+__mljar__remove_package('${pkg}')
 `;
 
 export const checkIfPackageInstalled = (pkg: string) => `

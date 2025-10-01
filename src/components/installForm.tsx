@@ -22,8 +22,6 @@ export const InstallForm: React.FC<InstallFormProps> = ({
   onClose,
   initialPackageName
 }) => {
-  const EVENT_PACKAGES_INSTALLED = 'mljar-packages-installed';
-
   const [packageName, setPackageName] = useState<string>(
     initialPackageName ?? ''
   );
@@ -37,7 +35,9 @@ export const InstallForm: React.FC<InstallFormProps> = ({
   const logsEndRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (initialPackageName !== undefined) setPackageName(initialPackageName);
+    if (initialPackageName !== undefined) {
+      setPackageName(initialPackageName);
+    }
   }, [initialPackageName]);
 
   useEffect(() => {
@@ -74,7 +74,7 @@ export const InstallForm: React.FC<InstallFormProps> = ({
     setLogs([]);
 
     const code = checkIfPackageInstalled(packageName);
-    const future =  
+    const future =
       notebookPanel?.sessionContext.session?.kernel?.requestExecute({
         code,
         store_history: false
@@ -86,39 +86,118 @@ export const InstallForm: React.FC<InstallFormProps> = ({
       return;
     }
 
-    future.onIOPub = (msg: KernelMessage.IIOPubMessage) => {
+    let done = false; // guard to avoid double-handling
+    let kickedOffInstall = false;
+
+    const finish = (msgText?: string) => {
+      if (done) return;
+      done = true;
+      try {
+        future.dispose?.();
+      } catch {
+        /* ignore */
+      }
+      if (msgText) appendLog(msgText);
+    };
+
+    // helper: extract printable text from IOPub messages
+    const extractText = (msg: KernelMessage.IIOPubMessage): string => {
       const msgType = msg.header.msg_type;
+
+      // 1) 'stream' -> content.text
+      if (msgType === 'stream') {
+        const c = msg.content as { text?: string };
+        return c?.text ?? '';
+      }
+
+      // 2) 'execute_result' / 'display_data' / 'update_display_data' -> content.data['text/plain']
+      if (
+        msgType === 'execute_result' ||
+        msgType === 'display_data' ||
+        msgType === 'update_display_data'
+      ) {
+        const c = msg.content as { data?: Record<string, any> };
+        const data = c?.data || {};
+        // Prefer text/plain. Some envs may return JSON; fall back to JSON stringify.
+        if (typeof data['text/plain'] === 'string')
+          return data['text/plain'] as string;
+        try {
+          return JSON.stringify(data);
+        } catch {
+          return '';
+        }
+      }
+
+      // Other types not used for user-facing text here
+      return '';
+    };
+
+    // normalize text for logging/parsing
+    const normalize = (s: string) => (s || '').replace(/\r/g, '\n'); // windows progress uses CR
+
+    future.onIOPub = (msg: KernelMessage.IIOPubMessage) => {
+      if (done) return;
+
+      const msgType = msg.header.msg_type;
+
       if (
         msgType === 'stream' ||
         msgType === 'execute_result' ||
         msgType === 'display_data' ||
         msgType === 'update_display_data'
       ) {
-        interface IContentData {
-          text: string;
-        }
-        const content = msg.content as IContentData;
+        const raw = extractText(msg);
+        if (!raw) return;
 
-        if (content.text) appendLog(content.text);
+        const text = normalize(raw);
 
-        if (content.text.includes('NOT_INSTALLED')) {
+        // Show logs
+        appendLog(text);
+
+        // Parse markers from the checker
+        if (!kickedOffInstall && text.includes('NOT_INSTALLED')) {
+          kickedOffInstall = true; // guard against multiple triggers
           proceedWithInstall();
-        } else if (content.text.includes('INSTALLED')) {
+          // do not finish here; the install flow will setInstalling(false) later
+          return;
+        }
+
+        if (text.includes('INSTALLED')) {
           setInstalling(false);
           setMessage(t('Package is already installed.'));
-          window.dispatchEvent(
-            new CustomEvent(EVENT_PACKAGES_INSTALLED, { detail: { packages: packageName } })
-          );
-        } else if (content.text.includes('NOTHING_TO_CHANGE')) {
+          finish();
+          return;
+        }
+
+        if (text.includes('NOTHING_TO_CHANGE')) {
           setInstalling(false);
           setMessage(t('Requirement already satisfied'));
-          window.dispatchEvent(
-            new CustomEvent(EVENT_PACKAGES_INSTALLED, { detail: { packages: packageName } })
-          );
+          finish();
+          return;
         }
       } else if (msgType === 'error') {
         setInstalling(false);
         setMessage(t('Error while checking installation. Check package name.'));
+        finish();
+      } else if (msgType === 'status') {
+        // When kernel says idle after the check and nothing matched, just stop listening.
+        const c = msg.content as { execution_state?: string };
+        if (c?.execution_state === 'idle' && !kickedOffInstall && !done) {
+          // No recognizable marker came back; end gracefully.
+          setInstalling(false);
+          finish();
+        }
+      }
+    };
+
+    // Also handle the reply channel in case the kernel errors without IOPub error
+    future.onReply = (reply: KernelMessage.IShellMessage) => {
+      if (done) return;
+      const status = (reply.content as any)?.status;
+      if (status === 'error') {
+        setInstalling(false);
+        setMessage(t('Error while checking installation. Check package name.'));
+        finish();
       }
     };
   };
@@ -146,20 +225,22 @@ export const InstallForm: React.FC<InstallFormProps> = ({
       }
       const content = msg.content as IContentData;
 
-      if (content.text) appendLog(content.text);
+      if (content.text) {
+        appendLog(content.text);
+      }
 
-      if (msgType === 'error') {
+      if (msgType === 'error' || content.text.includes('[error]')) {
         setMessage(
           t('An error occurred during installation. Check package name.')
         );
         setInstalling(false);
-      } else if (content.text.includes('Successfully installed')) {
+      } else if (
+        content.text.includes('[done]') ||
+        content.text.includes('Successfully installed')
+      ) {
         setMessage(t('Package installed successfully.'));
         setInstalling(false);
         refreshPackages();
-        window.dispatchEvent(
-          new CustomEvent(EVENT_PACKAGES_INSTALLED, { detail: { packages: packageName } })
-        );
       }
     };
   };

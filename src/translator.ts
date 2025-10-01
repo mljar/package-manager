@@ -11,18 +11,18 @@ class Translator {
   private language: Language = 'en';
   private translations: Translations = {
     pl: {
-      'Package Manager': 'Menedżer Pakietów',
+      'Package Manager': 'Menedżer pakietów',
       'Search package...': 'Wyszukaj paczkę...',
-      'Install Packages': 'Zainstaluj Pakiety',
-      'Refresh Packages': 'Odśwież Pakiety',
+      'Install Packages': 'Zainstaluj pakiety',
+      'Refresh Packages': 'Odśwież pakiety',
       'Back': 'Wstecz',
-      'Go Back': "Wróć",
+      'Go Back': 'Wróć',
       'Loading...': 'Wczytywanie...',
       'Sorry, no packages found or notebook is closed.': 'Nie znaleziono żadnych pakietów lub notatnik nie został otwarty.',
       'Name': 'Nazwa',
       'Version': 'Wersja',
       'Click "Ok" to confirm the deletion of': 'Kliknij "OK", aby potwierdzić usunięcie',
-      'Delete':'Usuń',
+      'Delete': 'Usuń',
       'Uninstall': 'Odinstaluj',
       'Error during uninstalling': 'Błąd podczas instalacji',
       'No kernel available.': 'Brak dostępnego rdzenia obliczeniowego.',
@@ -45,14 +45,14 @@ class Translator {
       "Installation stopped by user.": "Instalacja zatrzymana przez użytkownika.",
       "Error while checking installation. Check package name.": "Błąd podczas sprawdzania instalacji. Sprawdź nazwę pakietu.",
       "An error occurred during installation. Check package name.": "Wystąpił błąd podczas instalacji. Sprawdź nazwę pakietu.",
-      "Install another package": "Zainstaluj inny pakiet",
+      "Install another package": "Zainstaluj kolejny pakiet",
       "Close": "Zamknij",
       "Requirement already satisfied": "Wymagana wersja już jest zainstalowana"
     },
     en: {}
   };
 
-  private constructor() {}
+  private constructor() { }
 
   public static getInstance(): Translator {
     if (!Translator.instance) {
