@@ -1,9 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNotebookPanelContext } from '../contexts/notebookPanelContext';
-import { checkIfPackageInstalled, installPackagePip } from '../pcode/utils';
+import {
+  checkIfPackageInstalled,
+  installPackagePip,
+  killPipProcess
+} from '../pcode/utils';
 import { KernelMessage } from '@jupyterlab/services';
 import { usePackageContext } from '../contexts/packagesListContext';
 import { t } from '../translator';
+import { providePackageManagerSubshellKernel } from '../utils/packageManagerSubshell';
 
 interface InstallFormProps {
   onClose: () => void;
@@ -29,7 +34,11 @@ export const InstallForm: React.FC<InstallFormProps> = ({
   const [message, setMessage] = useState<string | null>(null);
   const [logs, setLogs] = useState<string[]>([]);
   const interruptedRef = useRef(false);
+  const currentPidRef = useRef<number | null>(null);
+
   const notebookPanel = useNotebookPanelContext();
+  const kernel = notebookPanel?.sessionContext.session?.kernel;
+
   const { refreshPackages } = usePackageContext();
 
   const logsEndRef = useRef<HTMLDivElement | null>(null);
@@ -61,24 +70,52 @@ export const InstallForm: React.FC<InstallFormProps> = ({
     }
   };
 
-  const handleStop = () => {
-    notebookPanel?.sessionContext.session?.kernel?.interrupt();
+  const handleStop = async () => {
+    const pid = currentPidRef.current;
+    if (!pid) {
+      setMessage(t('Nothing to stop.'));
+      return;
+    }
+
+    const pmKernel = await providePackageManagerSubshellKernel(kernel);
+    if (!pmKernel) return;
+
+    await pmKernel.requestExecute({
+      code: killPipProcess(pid),
+      store_history: false
+    }).done;
+
+    pmKernel.requestExecute({
+      code: 'pass',
+      store_history: false
+    });
+
+    currentPidRef.current = null;
     interruptedRef.current = true;
-    setMessage(t('Installation stopped by user.'));
     setInstalling(false);
+    setMessage(
+      t('Installation was cancelled. The package may have been installed.')
+    );
+    refreshPackages();
   };
 
-  const handleCheckAndInstall = () => {
+  const handleCheckAndInstall = async () => {
     setInstalling(true);
     setMessage(null);
     setLogs([]);
 
+    const pmKernel = await providePackageManagerSubshellKernel(kernel);
+    if (!pmKernel) {
+      setInstalling(false);
+      setMessage(t('No kernel available.'));
+      return;
+    }
+
     const code = checkIfPackageInstalled(packageName);
-    const future =
-      notebookPanel?.sessionContext.session?.kernel?.requestExecute({
-        code,
-        store_history: false
-      });
+    const future = pmKernel.requestExecute({
+      code,
+      store_history: false
+    });
 
     if (!future) {
       setInstalling(false);
@@ -190,7 +227,6 @@ export const InstallForm: React.FC<InstallFormProps> = ({
       }
     };
 
-    // Also handle the reply channel in case the kernel errors without IOPub error
     future.onReply = (reply: KernelMessage.IShellMessage) => {
       if (done) return;
       const status = (reply.content as any)?.status;
@@ -202,13 +238,20 @@ export const InstallForm: React.FC<InstallFormProps> = ({
     };
   };
 
-  const proceedWithInstall = () => {
+  const proceedWithInstall = async () => {
+    const pmKernel = await providePackageManagerSubshellKernel(kernel);
+    if (!pmKernel) {
+      setMessage(t('No kernel available.'));
+      setInstalling(false);
+      return;
+    }
+
     const code = installPackagePip(packageName);
-    const future =
-      notebookPanel?.sessionContext.session?.kernel?.requestExecute({
-        code,
-        store_history: false
-      });
+    const future = pmKernel.requestExecute({
+      code,
+      store_history: false
+    });
+
     if (!future) {
       setMessage(t('No kernel available.'));
       setInstalling(false);
@@ -216,27 +259,28 @@ export const InstallForm: React.FC<InstallFormProps> = ({
     }
 
     future.onIOPub = (msg: KernelMessage.IIOPubMessage) => {
-      if (interruptedRef.current) {
-        return;
-      }
-      const msgType = msg.header.msg_type;
-      interface IContentData {
-        text: string;
-      }
-      const content = msg.content as IContentData;
+      if (interruptedRef.current) return;
 
-      if (content.text) {
-        appendLog(content.text);
+      const content = msg.content as { text?: string };
+      if (content.text) appendLog(content.text);
+      if (content.text?.startsWith('[pid]')) {
+        const pid = Number(content.text.slice(5));
+        if (!isNaN(pid)) {
+          currentPidRef.current = pid;
+          return; // nie pokazuj tego w logach
+        }
       }
-
-      if (msgType === 'error' || content.text.includes('[error]')) {
+      if (
+        msg.header.msg_type === 'error' ||
+        content.text?.includes('[error]')
+      ) {
         setMessage(
           t('An error occurred during installation. Check package name.')
         );
         setInstalling(false);
       } else if (
-        content.text.includes('[done]') ||
-        content.text.includes('Successfully installed')
+        content.text?.includes('[done]') ||
+        content.text?.includes('Successfully installed')
       ) {
         setMessage(t('Package installed successfully.'));
         setInstalling(false);

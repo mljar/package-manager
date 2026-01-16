@@ -15,6 +15,7 @@ class Translator {
       'Search package...': 'Wyszukaj paczkę...',
       'Install Packages': 'Zainstaluj pakiety',
       'Refresh Packages': 'Odśwież pakiety',
+      'Installation was cancelled. The package may have been installed.': 'Instalacja została przerwana. Nie można zagwarantować, że pakiet nie został zainstalowany.',
       'Back': 'Wstecz',
       'Go Back': 'Wróć',
       'Loading...': 'Wczytywanie...',

@@ -8,6 +8,7 @@ import { KernelMessage } from '@jupyterlab/services';
 import { usePackageContext } from '../contexts/packagesListContext';
 import { errorIcon } from '../icons/errorIcon';
 import { t } from '../translator';
+import { providePackageManagerSubshellKernel } from '../utils/packageManagerSubshell';
 
 interface PackageInfo {
   name: string;
@@ -41,12 +42,20 @@ export const PackageItem: React.FC<PackageItemProps> = ({ pkg }) => {
     setLoading(true);
     setError(false);
 
+    const kernel = notebookPanel?.sessionContext?.session?.kernel;
+    const pmKernel = await providePackageManagerSubshellKernel(kernel);
+
+    if (!pmKernel) {
+      setLoading(false);
+      setError(true);
+      return;
+    }
+
     const code = removePackagePip(pkg.name);
-    const future =
-      notebookPanel?.sessionContext.session?.kernel?.requestExecute({
-        code,
-        store_history: false
-      });
+    const future = pmKernel.requestExecute({
+      code,
+      store_history: false
+    });
 
     if (!future) {
       setLoading(false);

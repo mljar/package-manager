@@ -15,6 +15,10 @@ import { useNotebookKernelContext } from './notebookKernelContext';
 import { listPackagesCode } from '../pcode/utils';
 import { KernelMessage } from '@jupyterlab/services';
 import { t } from '../translator';
+import {
+  providePackageManagerSubshellKernel,
+  resetPackageManagerSubshell
+} from '../utils/packageManagerSubshell';
 
 // constants
 // StateDB keys
@@ -89,9 +93,18 @@ export const PackageContextProvider: React.FC<{
     }
 
     try {
-      const kernelId = notebookPanel.sessionContext?.session?.kernel?.id;
-      // check if there are packages for current kernel, if yes load them
-      // otherwise run code request to Python kernel
+      const pmKernel = await providePackageManagerSubshellKernel(
+        notebookPanel.sessionContext?.session?.kernel
+      );
+
+      if (!pmKernel) {
+        setLoading(false);
+        setPackagesStatus('unknown');
+        return;
+      }
+
+      const kernelId = pmKernel.id;
+
       if (
         kernelId !== undefined &&
         kernelId !== null &&
@@ -102,11 +115,11 @@ export const PackageContextProvider: React.FC<{
         setPackagesStatus('loaded');
         retryCountRef.current = 0;
       } else {
-        const future =
-          notebookPanel.sessionContext?.session?.kernel?.requestExecute({
-            code: listPackagesCode,
-            store_history: false
-          });
+        const future = pmKernel.requestExecute({
+          code: listPackagesCode,
+          store_history: false
+        });
+
         if (future) {
           let runAgain = false;
           future.onIOPub = (msg: KernelMessage.IIOPubMessage) => {
@@ -169,10 +182,7 @@ export const PackageContextProvider: React.FC<{
           };
           await future.done;
           if (runAgain) {
-            // clean JupyterLab displayhook previous cell check
-            notebookPanel.sessionContext?.session?.kernel?.requestExecute({
-              code: 'pass'
-            });
+            pmKernel.requestExecute({ code: 'pass' });
             if (retryCountRef.current < 1) {
               retryCountRef.current += 1;
               setTimeout(executeCode, 100);
@@ -189,10 +199,34 @@ export const PackageContextProvider: React.FC<{
   }, [notebookPanel, kernel]);
 
   useEffect(() => {
+    if (!notebookPanel) {
+      return;
+    }
+
+    const sessionContext = notebookPanel.sessionContext;
+    if (!sessionContext) {
+      return;
+    }
+
+    const handleRestart = (_sender: any, status: string) => {
+      if (status === 'restarting') {
+        resetPackageManagerSubshell();
+        kernelIdToPackagesList = {};
+      }
+    };
+
+    sessionContext.statusChanged.connect(handleRestart);
+
+    return () => {
+      sessionContext.statusChanged.disconnect(handleRestart);
+    };
+  }, [notebookPanel]);
+
+  useEffect(() => {
     if (kernel) {
       executeCode();
     }
-  }, [kernel?.id]); // run only when kernel.id is changed and kernel is not null
+  }, [kernel])
 
   useEffect(() => {
     commands.addCommand(CMD_REFRESH_PACKAGES_MANAGER, {

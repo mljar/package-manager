@@ -13,12 +13,34 @@ def __mljar__list_packages():
 __mljar__list_packages();
 `;
 
+export const killPipProcess = (pid: number): string => `
+import os, signal
+
+__mljar__pm_processes = globals().get("__mljar__pm_processes", {})
+
+proc = __mljar__pm_processes.get(${pid})
+if proc:
+    try:
+        proc.terminate()
+        print("[killed]")
+    except Exception as e:
+        print("[kill-error]", e)
+else:
+    try:
+        os.kill(${pid}, signal.SIGTERM)
+        print("[killed]")
+    except Exception as e:
+        print("[kill-error]", e)
+`;
+
 export const installPackagePip = (pkg: string): string => `
+__mljar__pm_processes = globals().get("__mljar__pm_processes", {})
+
 def __mljar__install_pip(pkg):
     import subprocess, sys
 
     python_exe = sys.executable
-    if python_exe.startswith('\\\\?'):
+    if python_exe.startswith('\\\\\\\\?'):
         python_exe = python_exe[4:]
 
     cmd = [python_exe, '-m', 'pip', 'install',
@@ -33,12 +55,18 @@ def __mljar__install_pip(pkg):
         universal_newlines=True
     )
 
+    __mljar__pm_processes[proc.pid] = proc
+    print(f"[pid]{proc.pid}")
+    sys.stdout.flush()
+
     for line in iter(proc.stdout.readline, ''):
         print(line.replace('\\r', '\\n'), end='')
         sys.stdout.flush()
 
     proc.stdout.close()
     rc = proc.wait()
+    __mljar__pm_processes.pop(proc.pid, None)
+
     if rc == 0:
         print('[done] Installation OK')
     else:
