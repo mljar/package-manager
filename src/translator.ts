@@ -15,6 +15,7 @@ class Translator {
       'Search package...': 'Wyszukaj paczkę...',
       'Install Packages': 'Zainstaluj pakiety',
       'Refresh Packages': 'Odśwież pakiety',
+      'Installation failed. Check logs for more information.':'Instalacja nie powiodła się. Sprawdź logi aby uzyskać więcej informacji.',
       'Installation was cancelled. The package may have been installed.': 'Instalacja została przerwana. Nie można zagwarantować, że pakiet nie został zainstalowany.',
       'Back': 'Wstecz',
       'Go Back': 'Wróć',
@@ -48,7 +49,9 @@ class Translator {
       "An error occurred during installation. Check package name.": "Wystąpił błąd podczas instalacji. Sprawdź nazwę pakietu.",
       "Install another package": "Zainstaluj kolejny pakiet",
       "Close": "Zamknij",
-      "Requirement already satisfied": "Wymagana wersja już jest zainstalowana"
+      "Requirement already satisfied": "Wymagana wersja już jest zainstalowana",
+      'Nothing to stop.':'Brak procesów do zatrzymania.',
+      
     },
     en: {}
   };

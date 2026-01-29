@@ -1,11 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNotebookPanelContext } from '../contexts/notebookPanelContext';
-import {
-  checkIfPackageInstalled,
-  installPackagePip,
-  killPipProcess
-} from '../pcode/utils';
-import { KernelMessage } from '@jupyterlab/services';
+import { installPackagePip, killPipProcess } from '../pcode/utils';
 import { usePackageContext } from '../contexts/packagesListContext';
 import { t } from '../translator';
 import { providePackageManagerSubshellKernel } from '../utils/packageManagerSubshell';
@@ -35,6 +30,9 @@ export const InstallForm: React.FC<InstallFormProps> = ({
   const [logs, setLogs] = useState<string[]>([]);
   const interruptedRef = useRef(false);
   const currentPidRef = useRef<number | null>(null);
+
+  const futureRef = useRef<any>(null);
+  const doneRef = useRef(false);
 
   const notebookPanel = useNotebookPanelContext();
   const kernel = notebookPanel?.sessionContext.session?.kernel;
@@ -70,6 +68,29 @@ export const InstallForm: React.FC<InstallFormProps> = ({
     }
   };
 
+  // disconnect future
+  const detachFuture = () => {
+    // guard
+    if (doneRef.current) return;
+    doneRef.current = true;
+
+    const f = futureRef.current;
+    futureRef.current = null;
+
+    if (f) {
+      try {
+        f.dispose?.();
+      } catch {
+        // ignore
+      }
+      try {
+        f.onIOPub = null;
+      } catch {
+        // ignore
+      }
+    }
+  };
+
   const handleStop = async () => {
     const pid = currentPidRef.current;
     if (!pid) {
@@ -77,8 +98,23 @@ export const InstallForm: React.FC<InstallFormProps> = ({
       return;
     }
 
+    // interupt future
+    interruptedRef.current = true;
+    detachFuture();
+
+    // immediate UI update
+    currentPidRef.current = null;
+    setInstalling(false);
+    setMessage(
+      t('Installation was cancelled. The package may have been installed.')
+    );
+
+    // stop process
     const pmKernel = await providePackageManagerSubshellKernel(kernel);
-    if (!pmKernel) return;
+    if (!pmKernel) {
+      refreshPackages();
+      return;
+    }
 
     await pmKernel.requestExecute({
       code: killPipProcess(pid),
@@ -90,19 +126,17 @@ export const InstallForm: React.FC<InstallFormProps> = ({
       store_history: false
     });
 
-    currentPidRef.current = null;
-    interruptedRef.current = true;
-    setInstalling(false);
-    setMessage(
-      t('Installation was cancelled. The package may have been installed.')
-    );
     refreshPackages();
   };
 
-  const handleCheckAndInstall = async () => {
+  const handleInstall = async () => {
     setInstalling(true);
     setMessage(null);
     setLogs([]);
+    interruptedRef.current = false;
+
+    // reset (new installation)
+    doneRef.current = false;
 
     const pmKernel = await providePackageManagerSubshellKernel(kernel);
     if (!pmKernel) {
@@ -111,9 +145,8 @@ export const InstallForm: React.FC<InstallFormProps> = ({
       return;
     }
 
-    const code = checkIfPackageInstalled(packageName);
     const future = pmKernel.requestExecute({
-      code,
+      code: installPackagePip(packageName),
       store_history: false
     });
 
@@ -123,168 +156,47 @@ export const InstallForm: React.FC<InstallFormProps> = ({
       return;
     }
 
-    let done = false; // guard to avoid double-handling
-    let kickedOffInstall = false;
+    // remember future
+    futureRef.current = future;
 
-    const finish = (msgText?: string) => {
-      if (done) return;
-      done = true;
-      try {
-        future.dispose?.();
-      } catch {
-        /* ignore */
-      }
-      if (msgText) appendLog(msgText);
-    };
-
-    // helper: extract printable text from IOPub messages
-    const extractText = (msg: KernelMessage.IIOPubMessage): string => {
-      const msgType = msg.header.msg_type;
-
-      // 1) 'stream' -> content.text
-      if (msgType === 'stream') {
-        const c = msg.content as { text?: string };
-        return c?.text ?? '';
-      }
-
-      // 2) 'execute_result' / 'display_data' / 'update_display_data' -> content.data['text/plain']
-      if (
-        msgType === 'execute_result' ||
-        msgType === 'display_data' ||
-        msgType === 'update_display_data'
-      ) {
-        const c = msg.content as { data?: Record<string, any> };
-        const data = c?.data || {};
-        // Prefer text/plain. Some envs may return JSON; fall back to JSON stringify.
-        if (typeof data['text/plain'] === 'string')
-          return data['text/plain'] as string;
-        try {
-          return JSON.stringify(data);
-        } catch {
-          return '';
-        }
-      }
-
-      // Other types not used for user-facing text here
-      return '';
-    };
-
-    // normalize text for logging/parsing
-    const normalize = (s: string) => (s || '').replace(/\r/g, '\n'); // windows progress uses CR
-
-    future.onIOPub = (msg: KernelMessage.IIOPubMessage) => {
-      if (done) return;
-
-      const msgType = msg.header.msg_type;
-
-      if (
-        msgType === 'stream' ||
-        msgType === 'execute_result' ||
-        msgType === 'display_data' ||
-        msgType === 'update_display_data'
-      ) {
-        const raw = extractText(msg);
-        if (!raw) return;
-
-        const text = normalize(raw);
-
-        // Show logs
-        appendLog(text);
-
-        // Parse markers from the checker
-        if (!kickedOffInstall && text.includes('NOT_INSTALLED')) {
-          kickedOffInstall = true; // guard against multiple triggers
-          proceedWithInstall();
-          // do not finish here; the install flow will setInstalling(false) later
-          return;
-        }
-
-        if (text.includes('INSTALLED')) {
-          setInstalling(false);
-          setMessage(t('Package is already installed.'));
-          finish();
-          return;
-        }
-
-        if (text.includes('NOTHING_TO_CHANGE')) {
-          setInstalling(false);
-          setMessage(t('Requirement already satisfied'));
-          finish();
-          return;
-        }
-      } else if (msgType === 'error') {
-        setInstalling(false);
-        setMessage(t('Error while checking installation. Check package name.'));
-        finish();
-      } else if (msgType === 'status') {
-        // When kernel says idle after the check and nothing matched, just stop listening.
-        const c = msg.content as { execution_state?: string };
-        if (c?.execution_state === 'idle' && !kickedOffInstall && !done) {
-          // No recognizable marker came back; end gracefully.
-          setInstalling(false);
-          finish();
-        }
-      }
-    };
-
-    future.onReply = (reply: KernelMessage.IShellMessage) => {
-      if (done) return;
-      const status = (reply.content as any)?.status;
-      if (status === 'error') {
-        setInstalling(false);
-        setMessage(t('Error while checking installation. Check package name.'));
-        finish();
-      }
-    };
-  };
-
-  const proceedWithInstall = async () => {
-    const pmKernel = await providePackageManagerSubshellKernel(kernel);
-    if (!pmKernel) {
-      setMessage(t('No kernel available.'));
-      setInstalling(false);
-      return;
-    }
-
-    const code = installPackagePip(packageName);
-    const future = pmKernel.requestExecute({
-      code,
-      store_history: false
-    });
-
-    if (!future) {
-      setMessage(t('No kernel available.'));
-      setInstalling(false);
-      return;
-    }
-
-    future.onIOPub = (msg: KernelMessage.IIOPubMessage) => {
+    future.onIOPub = msg => {
+      // guard
       if (interruptedRef.current) return;
+      if (doneRef.current) return;
 
-      const content = msg.content as { text?: string };
-      if (content.text) appendLog(content.text);
-      if (content.text?.startsWith('[pid]')) {
-        const pid = Number(content.text.slice(5));
+      const text = (msg.content as any)?.text;
+      if (!text) return;
+
+      // additional guard (to avoid race)
+      if (interruptedRef.current || doneRef.current) return;
+
+      appendLog(text);
+
+      const match = text.match(/Starting installation process:\s*(\d+)/);
+      if (match) {
+        const pid = Number(match[1]);
         if (!isNaN(pid)) {
           currentPidRef.current = pid;
-          return; // nie pokazuj tego w logach
         }
+        return;
       }
-      if (
-        msg.header.msg_type === 'error' ||
-        content.text?.includes('[error]')
-      ) {
-        setMessage(
-          t('An error occurred during installation. Check package name.')
-        );
+
+      // error
+      if (text.startsWith('[error]')) {
+        detachFuture();
+        setMessage(t('Installation failed. Check logs for more information.'));
         setInstalling(false);
-      } else if (
-        content.text?.includes('[done]') ||
-        content.text?.includes('Successfully installed')
-      ) {
+        currentPidRef.current = null;
+        return;
+      }
+      // success
+      if (text.startsWith('[done]')) {
+        detachFuture();
         setMessage(t('Package installed successfully.'));
         setInstalling(false);
+        currentPidRef.current = null;
         refreshPackages();
+        return;
       }
     };
   };
@@ -295,14 +207,21 @@ export const InstallForm: React.FC<InstallFormProps> = ({
     setMessage(null);
     setInstalling(false);
     interruptedRef.current = false;
+    detachFuture();
   };
-
   return (
     <div className="mljar-packages-manager-install-form">
       <div className="mljar-packages-manager-usage-box">
-        <strong>{t('Usage:')} </strong> {t('Enter')}{' '}
-        <code>{t('package_name')}</code> {t('or')}{' '}
-        <code>{t('package_name==version')}</code>
+        <strong>{t('How to install packages')}</strong>
+        <div>
+          {t(
+            'Type the package name to install the latest version, for example:'
+          )}{' '}
+          <code>numpy</code>
+        </div>
+        <div>
+          {t('To install a specific version, use:')} <code>numpy==1.26.4</code>
+        </div>
       </div>
       <input
         type="text"
@@ -313,7 +232,7 @@ export const InstallForm: React.FC<InstallFormProps> = ({
         disabled={!!message || installing}
         onKeyDown={e => {
           if (e.key === 'Enter' && packageName.trim() !== '' && !installing) {
-            handleCheckAndInstall();
+            handleInstall();
           }
         }}
       />
@@ -329,7 +248,9 @@ export const InstallForm: React.FC<InstallFormProps> = ({
         <div className="mljar-packages-manager-install-form-buttons">
           <button
             className="mljar-packages-manager-install-submit-button"
-            onClick={handleCheckAndInstall}
+            onClick={() => {
+              handleInstall();
+            }}
             disabled={installing || packageName.trim() === ''}
           >
             {installing ? (

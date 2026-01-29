@@ -52,11 +52,11 @@ def __mljar__install_pip(pkg):
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         bufsize=1,
-        universal_newlines=True
+        universal_newlines=True,
     )
 
     __mljar__pm_processes[proc.pid] = proc
-    print(f"[pid]{proc.pid}")
+    print(f"Starting installation process: {proc.pid}")
     sys.stdout.flush()
 
     for line in iter(proc.stdout.readline, ''):
@@ -68,9 +68,9 @@ def __mljar__install_pip(pkg):
     __mljar__pm_processes.pop(proc.pid, None)
 
     if rc == 0:
-        print('[done] Installation OK')
+        print('[done] Installation succeed.')
     else:
-        print(f'[error] Installation failed:{rc}')
+        print('[error] Installation failed.')
 
 __mljar__install_pip('${pkg}')
 `;
@@ -107,39 +107,39 @@ def __mljar__remove_package(pkg):
 __mljar__remove_package('${pkg}')
 `;
 
-export const checkIfPackageInstalled = (pkg: string) => `
-def __mljar__check_if_installed():
-    from importlib.metadata import distributions
-    from packaging import version
-    import re
+// export const checkIfPackageInstalled = (pkg: string) => `
+// def __mljar__check_if_installed():
+//     from importlib.metadata import distributions
+//     from packaging import version
+//     import re
 
-    m = re.match(r"^([A-Za-z0-9_\\-]+)(==|>=|<=)?([\\w\\.]+)?$", "${pkg}".strip())
-    if not m:
-        print("INVALID")
-        return
+//     m = re.match(r"^([A-Za-z0-9_\\-]+)(==|>=|<=)?([\\w\\.]+)?$", "${pkg}".strip())
+//     if not m:
+//         print("INVALID")
+//         return
 
-    name, op, ver = m.groups()
-    name = name.lower()
+//     name, op, ver = m.groups()
+//     name = name.lower()
 
-    for dist in distributions():
-        if dist.metadata["Name"].lower() == name:
-            if not op:
-                print("INSTALLED")
-                return
+//     for dist in distributions():
+//         if dist.metadata["Name"].lower() == name:
+//             if not op:
+//                 print("INSTALLED")
+//                 return
 
-            dist_ver = version.parse(dist.version)
-            target_ver = version.parse(ver)
+//             dist_ver = version.parse(dist.version)
+//             target_ver = version.parse(ver)
 
-            if op == "==":
-                print("NOTHING_TO_CHANGE" if dist_ver == target_ver else "NOT_INSTALLED")
-            elif op == ">=":
-                print("NOTHING_TO_CHANGE" if dist_ver >= target_ver else "NOT_INSTALLED")
-            elif op == "<=":
-                print("NOTHING_TO_CHANGE" if dist_ver <= target_ver else "NOT_INSTALLED")
-            return
+//             if op == "==":
+//                 print("NOTHING_TO_CHANGE" if dist_ver == target_ver else "NOT_INSTALLED")
+//             elif op == ">=":
+//                 print("NOTHING_TO_CHANGE" if dist_ver >= target_ver else "NOT_INSTALLED")
+//             elif op == "<=":
+//                 print("NOTHING_TO_CHANGE" if dist_ver <= target_ver else "NOT_INSTALLED")
+//             return
 
-    print("NOT_INSTALLED")
+//     print("NOT_INSTALLED")
 
-__mljar__check_if_installed()
-`;
+// __mljar__check_if_installed()
+// `;
 
