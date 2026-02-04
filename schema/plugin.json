@@ -1,0 +1,16 @@
+{
+    "jupyter.lab.shortcuts": [],
+    "title": "mljar-package-manager",
+    "description": "MLJAR PACKAGE MANAGER SETTINGS",
+    "type": "object",
+    "properties": {
+      "pathToPrivatePyPIRepository": {
+        "type": "string",
+        "title": "pathToPrivatePyPIRepository",
+        "description": "Path to private PyPI repository.",
+        "default": "https://pypi.org/simple"
+      }
+    },
+    "additionalProperties": false
+  }
+  

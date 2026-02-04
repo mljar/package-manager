@@ -9,16 +9,18 @@ import { NotebookKernelContextProvider } from './contexts/notebookKernelContext'
 import { PackageListComponent } from './components/packageListComponent';
 import { PackageContextProvider } from './contexts/packagesListContext';
 import { t } from './translator';
-
+import { ISettingRegistry } from '@jupyterlab/settingregistry';
 
 class PackageManagerSidebarWidget extends ReactWidget {
   private notebookWatcher: NotebookWatcher;
   private stateDB: IStateDB;
   private commands: CommandRegistry;
+  private settingRegistry: ISettingRegistry | null = null;
   constructor(
     notebookWatcher: NotebookWatcher,
     stateDB: IStateDB,
-    commands: CommandRegistry
+    commands: CommandRegistry,
+    settingRegisty: ISettingRegistry | null
   ) {
     super();
     this.notebookWatcher = notebookWatcher;
@@ -28,6 +30,7 @@ class PackageManagerSidebarWidget extends ReactWidget {
     this.title.caption = t('Package Manager');
     this.addClass('mljar-packages-manager-sidebar-widget');
     this.stateDB = stateDB;
+    this.settingRegistry = settingRegisty;
   }
 
   render(): JSX.Element {
@@ -39,7 +42,7 @@ class PackageManagerSidebarWidget extends ReactWidget {
               stateDB={this.stateDB}
               commands={this.commands}
             >
-              <PackageListComponent />
+              <PackageListComponent settingRegistry={this.settingRegistry}/>
             </PackageContextProvider>
           </NotebookKernelContextProvider>
         </NotebookPanelContextProvider>
@@ -51,7 +54,13 @@ class PackageManagerSidebarWidget extends ReactWidget {
 export function createPackageManagerSidebar(
   notebookWatcher: NotebookWatcher,
   stateDB: IStateDB,
-  commands: CommandRegistry
+  commands: CommandRegistry,
+  settingRegistry: ISettingRegistry | null
 ): PackageManagerSidebarWidget {
-  return new PackageManagerSidebarWidget(notebookWatcher, stateDB, commands);
+  return new PackageManagerSidebarWidget(
+    notebookWatcher,
+    stateDB,
+    commands,
+    settingRegistry
+  );
 }

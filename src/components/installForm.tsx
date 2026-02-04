@@ -8,6 +8,7 @@ import { providePackageManagerSubshellKernel } from '../utils/packageManagerSubs
 interface InstallFormProps {
   onClose: () => void;
   initialPackageName?: string;
+  pypiServerUrl: string;
 }
 
 const isSuccess = (message: string | null): boolean => {
@@ -20,7 +21,8 @@ const isSuccess = (message: string | null): boolean => {
 
 export const InstallForm: React.FC<InstallFormProps> = ({
   onClose,
-  initialPackageName
+  initialPackageName,
+  pypiServerUrl
 }) => {
   const [packageName, setPackageName] = useState<string>(
     initialPackageName ?? ''
@@ -144,12 +146,10 @@ export const InstallForm: React.FC<InstallFormProps> = ({
       setMessage(t('No kernel available.'));
       return;
     }
-
     const future = pmKernel.requestExecute({
-      code: installPackagePip(packageName),
+      code: installPackagePip(packageName, pypiServerUrl),
       store_history: false
     });
-
     if (!future) {
       setInstalling(false);
       setMessage(t('No kernel available.'));

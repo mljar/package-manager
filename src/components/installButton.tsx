@@ -7,10 +7,12 @@ import { t } from '../translator';
 
 interface IInstallButtonProps {
   onStartInstall: () => void;
+  pypiServerUrl: string;
 }
 
 export const InstallButton: React.FC<IInstallButtonProps> = ({
-  onStartInstall
+  onStartInstall,
+  pypiServerUrl
 }) => {
   const { loading } = usePackageContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -51,6 +53,7 @@ export const InstallButton: React.FC<IInstallButtonProps> = ({
         <InstallForm
           onClose={() => setIsModalOpen(false)}
           initialPackageName={prefillPackage}
+          pypiServerUrl={pypiServerUrl}
         />
       </InstallModal>
     </>
