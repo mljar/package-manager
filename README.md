@@ -13,33 +13,45 @@ Package Manager is a JupyterLab extension that simplifies managing Python packag
 
 List all packages installed for the currently open notebook.
 
-<img src="https://github.com/mljar/package-manager/blob/main/media/jupyterlab-package-manager-list-packages.png?raw=true" alt="Jupyter Package Manager list packages"/>
+<img width="100%" alt="image" src="https://github.com/user-attachments/assets/283adf4b-d56b-4c48-805d-22bf2b22e442" alt="Jupyter Package Manager list packages"/>
 
 ### Filtering packages by name 
 
 Quickly search and filter through packages by name.
 
-<img src="https://github.com/mljar/package-manager/blob/main/media/filtering.gif?raw=true" alt="Jupyter Package Manager filter packages"/>
+<img width="100%" src="https://github.com/user-attachments/assets/8936ec19-aeee-4995-9329-edec22a38ada" alt="Jupyter Package Manager filter packages"/>
 
 ### Install a new package
 
-Install any new package you need directly from the notebook interface.
+Install any new package you need **directly from the notebook interface**.
 
-<img src="https://github.com/mljar/package-manager/blob/main/media/jupyterlab-install-new-package.png?raw=true" alt="Jupyter Package Manager install new package"/>
+During installation, you have **access to logs**, including output and error messages, which helps with debugging and troubleshooting.
 
+<img width="100%" src="https://github.com/user-attachments/assets/14cb8f44-fe50-42b1-9208-87d93462c685" alt="Jupyter Package Manager install new package"/>
 
 ### Remove package
 
-Easily remove packages that are no longer needed in your current environment.
+Easily remove packages that are no longer needed in your current environment, with an additional confirmation step to prevent accidental removal of required packages.
 
-<img src="https://github.com/mljar/package-manager/blob/main/media/remove-package.gif?raw=true" alt="Jupyter Package Manager remove package"/>
+<img width="100%" src="https://github.com/user-attachments/assets/aa1d65f8-6a94-4a50-ba71-cee11161a641" alt="Jupyter Package Manager remove package"/>
 
+### Change PyPI Server
+
+You can easily switch the **PyPI server** to your own **private repository**.
+
+This helps with **secure package management** and better control over installed packages.
+
+<img width="100%" src="https://github.com/user-attachments/assets/69de2ad3-68d6-48fb-a361-051e11fb7076" alt="Jupyter Package Manager change PyPI Server"/>
+
+You can also quickly switch back to the official PyPI server at any time — it only takes a moment.
+
+<img width="100%" src="https://github.com/user-attachments/assets/248676f3-1a93-4c5e-a7ac-db029ebef865" alt="Jupyter Package Manager restore default PyPI Server"/>
 
 ### Dark theme
 
 Enjoy a dark mode experience for more comfortable viewing in low-light environments.
 
-<img src="https://github.com/mljar/package-manager/blob/main/media/jupyterlab-dark-theme-package-manager.png?raw=true" alt="Jupyter Package Manager dark theme"/>
+<img width="100%" src="https://github.com/user-attachments/assets/ad2f0843-fab4-4a2b-8400-e2b6b7b9419f" alt="Jupyter Package Manager dark theme"/>
 
 
 ## Install extension
