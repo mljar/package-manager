@@ -14,23 +14,26 @@ __mljar__list_packages();
 `;
 
 export const killPipProcess = (pid: number): string => `
-import os, signal
+def __mljar__kill_pip_process(pid):
+    import os, signal
 
-__mljar__pm_processes = globals().get("__mljar__pm_processes", {})
+    __mljar__pm_processes = globals().get("__mljar__pm_processes", {})
 
-proc = __mljar__pm_processes.get(${pid})
-if proc:
-    try:
-        proc.terminate()
-        print("[killed]")
-    except Exception as e:
-        print("[kill-error]", e)
-else:
-    try:
-        os.kill(${pid}, signal.SIGTERM)
-        print("[killed]")
-    except Exception as e:
-        print("[kill-error]", e)
+    proc = __mljar__pm_processes.get(pid)
+    if proc:
+        try:
+            proc.terminate()
+            print("[killed]")
+        except Exception as e:
+            print("[kill-error]", e)
+    else:
+        try:
+            os.kill(pid, signal.SIGTERM)
+            print("[killed]")
+        except Exception as e:
+            print("[kill-error]", e)
+
+__mljar__kill_pip_process(${pid})
 `;
 
 export const installPackagePip = (pkg: string, url: string): string => `

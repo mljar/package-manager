@@ -32,6 +32,7 @@
 .mljar-packages-manager-search-bar-input:focus {
   outline: none;
   border: 2px solid var(--jp-ui-font-color1);
+  padding: 7px;
 }
 .mljar-packages-manager-install-input::placeholder,
 .mljar-packages-manager-search-bar-input::placeholder {
