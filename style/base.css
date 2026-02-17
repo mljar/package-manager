@@ -32,6 +32,7 @@
 .mljar-packages-manager-search-bar-input:focus {
   outline: none;
   border: 2px solid var(--jp-ui-font-color1);
+  padding: 7px;
 }
 .mljar-packages-manager-install-input::placeholder,
 .mljar-packages-manager-search-bar-input::placeholder {
@@ -88,7 +89,8 @@
 
 .mljar-packages-manager-back-button,
 .mljar-packages-manager-install-button,
-.mljar-packages-manager-refresh-button {
+.mljar-packages-manager-refresh-button,
+.mljar-packages-manager-settings-button {
   width: 30px;
   display: flex;
   margin: 2px 1px;
@@ -104,6 +106,10 @@
   transition: background-color 0.3s ease;
 }
 
+.mljar-packages-manager-settings-button {
+  padding: 7px 0px;
+}
+
 .mljar-packages-manager-back-button {
   width: 70px !important;
   text-align: center;
@@ -112,6 +118,7 @@
 
 .mljar-packages-manager-back-button:hover:not(:disabled),
 .mljar-packages-manager-refresh-button:hover:not(:disabled),
+.mljar-packages-manager-settings-button:hover:not(:disabled),
 .mljar-packages-manager-install-button:hover:not(:disabled) {
   background-color: #0099cc;
   color: #ffffff;
@@ -134,6 +141,7 @@
 }
 
 .mljar-packages-manager-refresh-button:disabled,
+.mljar-packages-manager-settings-button:disabled,
 .mljar-packages-manager-install-button:disabled,
 .mljar-packages-manager-back-button:disabled {
   cursor: not-allowed;
@@ -156,6 +164,13 @@
   align-items: center;
   width: 15px;
   height: 15px;
+}
+
+.mljar-packages-manager-settings-icon {
+  display: flex;
+  align-items: center;
+  width: 17px;
+  height: 17px;
 }
 
 .mljar-packages-manager-delete-icon {
@@ -362,16 +377,24 @@
 
 .mljar-package-manager-content h3 {
   font-size: 20px;
+  margin-bottom: 12px;
+  margin-top: 0px;
 }
 
 .mljar-package-manager-modal-close {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  right: 20px;
   border: none;
   background: transparent;
   font-size: 18px;
   cursor: pointer;
+}
+
+.mljar-package-manager-modal-close:hover {
+  background: black;
+  color: white;
+  border-radius: 8px;
+  padding: 2px 6px;
 }
 
 /* .mljar-modal-confirm {
@@ -427,17 +450,19 @@
 }
 
 .mljar-packages-manager-install-logs::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 .mljar-packages-manager-install-logs::-webkit-scrollbar-track {
   background: #1e1e1e;
+  border-radius: 6px;
+
 }
 
 .mljar-packages-manager-install-logs::-webkit-scrollbar-thumb {
   background-color: #555;
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
 .mljar-packages-manager-install-logs::-webkit-scrollbar-thumb:hover {
@@ -543,4 +568,106 @@
 .mljar-packages-manager-install-close-button:hover,
 .mljar-packages-manager-stop-button:hover {
   background: #c62828;
+}
+
+/* pypi section */
+
+.mljar-pypi-settings {
+  background: var(--jp-layout-color0);
+  border: 1px solid var(--jp-border-color2);
+  border-radius: 6px;
+  padding: 12px;
+  margin-top: 12px;
+  margin-right: 20px;
+}
+
+.mljar-pypi-settings-title {
+  margin: 0 0 10px 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--jp-ui-font-color1);
+}
+
+.mljar-pypi-settings-row {
+  display: grid;
+  grid-template-columns: 50px 1fr auto;
+  align-items: center;
+  height: 30px;
+  gap: 10px;
+}
+
+.mljar-pypi-settings-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--jp-ui-font-color2);
+}
+
+.mljar-pypi-settings-value {
+  min-width: 0;
+}
+
+.mljar-pypi-settings-code {
+  display: block;
+  font-weight: 600;
+  padding: 6px 8px;
+  background: var(--jp-layout-color1);
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mljar-pypi-settings-input {
+  width: calc(100% - 16px);
+  padding: 6px 8px;
+  border: 1px solid var(--jp-border-color2);
+  border-radius: 4px;
+  background: var(--jp-layout-color1);
+  color: var(--jp-ui-font-color1);
+  font-size: 0.8rem;
+}
+
+.mljar-pypi-settings-input:focus {
+  outline: none;
+  border: 1px solid var(--jp-brand-color1);
+}
+
+/* Actions */
+
+.mljar-pypi-settings-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.mljar-pypi-settings-edit,
+.mljar-pypi-settings-save {
+  background: #0099cc;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 7px 10px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.mljar-pypi-settings-edit:hover,
+.mljar-pypi-settings-save:hover {
+  background: #007fa8;
+}
+
+.mljar-pypi-settings-reset {
+  background: transparent;
+  color: #8f8f8f;
+  border: 1px solid #8f8f8f;
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.mljar-pypi-settings-reset:hover {
+  background: #8f8f8f;
+  color: white;
 }

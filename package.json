@@ -19,7 +19,8 @@
     "files": [
         "lib/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf}",
         "style/**/*.{css,js,eot,gif,html,jpg,json,png,svg,woff2,ttf}",
-        "src/**/*.{ts,tsx}"
+        "src/**/*.{ts,tsx}",
+        "schema/*.json"
     ],
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
@@ -57,6 +58,7 @@
     "dependencies": {
         "@jupyterlab/application": "^4.0.0",
         "@jupyterlab/notebook": "^4.2.0",
+        "@jupyterlab/settingregistry": "^4.0.0",
         "@jupyterlab/translation": "^4.4.4"
     },
     "devDependencies": {
@@ -94,7 +96,9 @@
     },
     "jupyterlab": {
         "extension": true,
-        "outputDir": "package_manager/labextension"
+        "outputDir": "package_manager/labextension",
+        "schemaDir": "schema"
+
     },
     "eslintIgnore": [
         "node_modules",
