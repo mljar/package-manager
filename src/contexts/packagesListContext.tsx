@@ -94,7 +94,7 @@ export const PackageContextProvider: React.FC<{
 
     try {
       const pmKernel = await providePackageManagerSubshellKernel(
-        notebookPanel.sessionContext?.session?.kernel
+        notebookPanel.context.sessionContext?.session?.kernel
       );
 
       if (!pmKernel) {
@@ -203,7 +203,7 @@ export const PackageContextProvider: React.FC<{
       return;
     }
 
-    const sessionContext = notebookPanel.sessionContext;
+    const sessionContext = notebookPanel.context.sessionContext;
     if (!sessionContext) {
       return;
     }
@@ -226,7 +226,7 @@ export const PackageContextProvider: React.FC<{
     if (kernel) {
       executeCode();
     }
-  }, [kernel])
+  }, [kernel]);
 
   useEffect(() => {
     commands.addCommand(CMD_REFRESH_PACKAGES_MANAGER, {

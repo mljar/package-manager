@@ -1,21 +1,30 @@
 import { JupyterFrontEnd } from '@jupyterlab/application';
-import { Notebook } from '@jupyterlab/notebook';
 import { Widget } from '@lumino/widgets';
 import { Signal } from '@lumino/signaling';
 import { DocumentWidget } from '@jupyterlab/docregistry';
-import { NotebookPanel } from '@jupyterlab/notebook';
+import { NotebookLikeWidget } from '../utils/notebookTypes';
 
-function getNotebook(widget: Widget | null): Notebook | null {
+const NOTEBOOK_FACTORY_NAMES = new Set(['Notebook', 'Conversation Notebook']);
+
+function getNotebookDocument(widget: Widget | null): NotebookLikeWidget {
   if (!(widget instanceof DocumentWidget)) {
     return null;
   }
 
-  const { content } = widget;
-  if (!(content instanceof Notebook)) {
+  const contextAny = widget.context as any;
+  const factoryName =
+    contextAny?.factoryName ?? contextAny?.factory?.name ?? '';
+  const model = contextAny?.model;
+  const looksLikeNotebookModel =
+    !!model?.cells ||
+    !!model?.sharedModel?.cells ||
+    !!model?.sharedModel?.nbformat;
+
+  if (!NOTEBOOK_FACTORY_NAMES.has(factoryName) && !looksLikeNotebookModel) {
     return null;
   }
 
-  return content;
+  return widget;
 }
 
 export type NotebookSelection = {
@@ -48,7 +57,7 @@ export class NotebookWatcher {
     return this._selectionChanged;
   }
 
-  get notebookPanelChanged(): Signal<this, NotebookPanel | null> {
+  get notebookPanelChanged(): Signal<this, NotebookLikeWidget> {
     return this._notebookPanelChanged;
   }
 
@@ -60,23 +69,20 @@ export class NotebookWatcher {
     return this._kernelChanged;
   }
 
-  notebookPanel(): NotebookPanel | null {
-    const notebook = getNotebook(this._mainAreaWidget);
-    if (!notebook) {
-      return null;
-    }
-    return notebook.parent instanceof NotebookPanel ? notebook.parent : null;
+  notebookPanel(): NotebookLikeWidget {
+    return getNotebookDocument(this._mainAreaWidget);
   }
 
   private _attachKernelChangeHandler(): void {
     if (this._notebookPanel) {
-      const session = this._notebookPanel.sessionContext.session;
+      const session = this._notebookPanel.context.sessionContext.session;
       if (session) {
         session.kernelChanged.connect(this._onKernelChanged, this);
         this._updateKernelInfo(session.kernel);
       } else {
         setTimeout(() => {
-          const delayedSession = this._notebookPanel?.sessionContext.session;
+          const delayedSession =
+            this._notebookPanel?.context.sessionContext.session;
           if (delayedSession) {
             delayedSession.kernelChanged.connect(this._onKernelChanged, this);
             this._updateKernelInfo(delayedSession.kernel);
@@ -116,8 +122,8 @@ export class NotebookWatcher {
   protected _mainAreaWidget: Widget | null = null;
   protected _selections: NotebookSelections = [];
   protected _selectionChanged = new Signal<this, NotebookSelections>(this);
-  protected _notebookPanel: NotebookPanel | null = null;
-  protected _notebookPanelChanged = new Signal<this, NotebookPanel | null>(this);
+  protected _notebookPanel: NotebookLikeWidget = null;
+  protected _notebookPanelChanged = new Signal<this, NotebookLikeWidget>(this);
 }
 
 export type KernelInfo = {

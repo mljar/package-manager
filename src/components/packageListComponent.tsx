@@ -9,6 +9,7 @@ import { SettingsButton } from './settingsButton';
 import { BackButton } from './backButton';
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
 import { MLJAR_PACKAGE_MANAGER_ID, pypiPathProperty } from '../index';
+import { usePackageContext } from '../contexts/packagesListContext';
 
 interface IPackageListComponentProps {
   settingRegistry: ISettingRegistry | null;
@@ -21,6 +22,7 @@ export const PackageListComponent: React.FC<IPackageListComponentProps> = ({
   const [view, setView] = useState<viewMode>('home');
   const [editing, setEditing] = useState<boolean>(false);
   const [path, setPath] = useState('');
+  const { packages } = usePackageContext();
   const defaultPath = 'https://pypi.org/simple';
 
   const loadPypiUrl = async () => {
@@ -88,9 +90,14 @@ export const PackageListComponent: React.FC<IPackageListComponentProps> = ({
     <div className="mljar-packages-manager-container">
       {view === 'home' ? (
         <div className="mljar-packages-manager-header-container">
-          <h3 className="mljar-packages-manager-header">
-            {t('Package Manager')}
-          </h3>
+          <div className="mljar-packages-manager-header-title-wrap">
+            <h3 className="mljar-packages-manager-header">
+              {t('Package Manager')}
+            </h3>
+            <span className="mljar-packages-manager-count-badge">
+              {packages.length}
+            </span>
+          </div>
           <RefreshButton />
           <SettingsButton onClick={() => setView('settings')} />
           <InstallButton onStartInstall={() => {}} pypiServerUrl={path} />
@@ -104,7 +111,7 @@ export const PackageListComponent: React.FC<IPackageListComponentProps> = ({
         </div>
       )}
       {view === 'home' ? (
-        <div>
+        <div className="mljar-packages-manager-home">
           <SearchBar />
           <PackageListContent />
         </div>

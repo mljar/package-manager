@@ -1,305 +1,325 @@
-.mljar-packages-manager-sidebar-container {
-  height: 99vh;
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+.mljar-packages-manager-sidebar-widget {
+  --bg: #f5f7fa;
+  --surface: #fff;
+  --surface2: #f0f4f8;
+  --border: #e2e8f0;
+  --border2: #cbd5e1;
+  --text: #0f172a;
+  --muted: #64748b;
+  --blue: #0284c7;
+  --blue-dim: #e0f2fe;
+  --blue-glow: rgb(2 132 199 / 15%);
+  --green: #16a34a;
+  --green-dim: #dcfce7;
+  --rose: #e11d48;
+  --rose-dim: #ffe4e6;
+  --mono: 'JetBrains Mono', 'Consolas', 'Monaco', monospace;
+  --sans: 'Geist', -apple-system, blinkmacsystemfont, 'Segoe UI', sans-serif;
+
+  background: radial-gradient(circle at 8% 0%, #ecfeff 0%, var(--bg) 40%);
+  color: var(--text);
+  padding: 14px 10px;
+  font-family: var(--sans);
 }
+
+.mljar-packages-manager-sidebar-container {
+  height: 100%;
+  overflow: hidden;
+}
+
 .mljar-packages-manager-sidebar-container::-webkit-scrollbar {
   display: none;
 }
 
-.mljar-packages-manager-search-bar-container {
-  margin-bottom: 10px;
-  margin-right: 0px;
-  padding-right: 20px;
-  padding-top: 15px;
-  padding-bottom: 5px;
-  position: sticky;
-  top: 38px;
-  z-index: 5;
-  background: var(--jp-layout-color1);
+.mljar-packages-manager-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: calc(100vh - 28px);
 }
 
-.mljar-packages-manager-install-input,
-.mljar-packages-manager-search-bar-input {
-  width: 100%;
-  padding: 8px;
-  box-sizing: border-box;
-  background-color: var(--jp-layout-color1);
-  color: var(--jp-ui-font-color1);
-  border: 1px solid var(--jp-border-color2);
-  border-radius: 5px;
-}
-
-.mljar-packages-manager-install-input:focus,
-.mljar-packages-manager-search-bar-input:focus {
-  outline: none;
-  border: 2px solid var(--jp-ui-font-color1);
-  padding: 7px;
-}
-.mljar-packages-manager-install-input::placeholder,
-.mljar-packages-manager-search-bar-input::placeholder {
-  color: var(--jp-ui-font-color2);
+.mljar-packages-manager-home {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .mljar-packages-manager-header-container {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  border-bottom: 2px solid #ddd;
+  align-items: center;
+  gap: 6px;
   position: sticky;
   top: 0;
-  z-index: 10;
-  background: var(--jp-layout-color1);
-  margin-bottom: 0px;
-  margin-right: 0px;
-  padding-right: 20px;
+  z-index: 20;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  padding: 0 0 12px;
+  background: transparent;
 }
 
 .mljar-packages-manager-header {
-  flex: 4;
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--jp-ui-font-color1);
-  text-align: left;
-  padding-bottom: 8px;
   margin: 0;
+  margin-right: auto;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.1px;
+  color: var(--text);
 }
 
-.mljar-packages-manager-list-container {
-  padding-right: 20px;
+.mljar-packages-manager-header-title-wrap {
   display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow-y: auto;
-  position: relative;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  margin-right: auto;
 }
 
-.mljar-packages-manager-list {
-  overflow-y: auto;
-  min-height: 0;
-  max-height: 85vh;
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.mljar-packages-manager-count-badge {
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface2);
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 10px;
 }
 
-.mljar-packages-manager-sidebar-widget {
-  background-color: #ffffff;
-  padding: 10px 0px 10px 10px;
-  font-family: 'Courier New', Courier, monospace;
+.mljar-packages-manager-search-bar-container {
+  position: sticky;
+  top: 44px;
+  z-index: 11;
+  margin-right: 8px;
+  margin-bottom: 10px;
+  background: transparent;
 }
 
-.mljar-packages-manager-back-button,
+.mljar-packages-manager-install-input,
+.mljar-packages-manager-search-bar-input,
+.mljar-pypi-settings-input {
+  width: 100%;
+  height: 36px;
+  box-sizing: border-box;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+.mljar-packages-manager-install-input::placeholder,
+.mljar-packages-manager-search-bar-input::placeholder,
+.mljar-pypi-settings-input::placeholder {
+  color: var(--muted);
+}
+
+.mljar-packages-manager-install-input:focus,
+.mljar-packages-manager-search-bar-input:focus,
+.mljar-pypi-settings-input:focus {
+  outline: none;
+  border-color: rgb(2 132 199 / 40%);
+  box-shadow: 0 0 0 3px var(--blue-glow);
+}
+
 .mljar-packages-manager-install-button,
 .mljar-packages-manager-refresh-button,
 .mljar-packages-manager-settings-button {
-  width: 30px;
-  display: flex;
-  margin: 2px 1px;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  color: #0099cc;
+  display: inline-grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  line-height: 1;
   border: none;
-  border-radius: 4px;
-  padding: 8px 0px;
+  border-radius: 0;
+  background: transparent;
+  color: var(--muted);
   cursor: pointer;
-  font-size: 0.75rem;
-  transition: background-color 0.3s ease;
-}
-
-.mljar-packages-manager-settings-button {
-  padding: 7px 0px;
+  transition: color 0.15s ease;
 }
 
 .mljar-packages-manager-back-button {
-  width: 70px !important;
-  text-align: center;
-  padding-right: 4px;
-}
-
-.mljar-packages-manager-back-button:hover:not(:disabled),
-.mljar-packages-manager-refresh-button:hover:not(:disabled),
-.mljar-packages-manager-settings-button:hover:not(:disabled),
-.mljar-packages-manager-install-button:hover:not(:disabled) {
-  background-color: #0099cc;
-  color: #ffffff;
-}
-
-.mljar-packages-manager-delete-button {
-  visibility: hidden;
-  background: none;
-  position: relative;
-  border: none;
-  border-radius: 4px;
+  display: inline-grid;
+  place-items: center;
+  grid-auto-flow: column;
+  gap: 6px;
+  width: auto;
+  min-width: 62px;
+  height: 28px;
+  padding: 0 10px;
+  line-height: 1;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--muted);
   cursor: pointer;
-  padding: 4px;
-  margin: 5px auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #dc3545;
-  transition: background-color 0.3s ease;
+  transition: all 0.15s ease;
+  font-family: var(--mono);
+  font-size: 11px;
 }
 
 .mljar-packages-manager-refresh-button:disabled,
 .mljar-packages-manager-settings-button:disabled,
 .mljar-packages-manager-install-button:disabled,
 .mljar-packages-manager-back-button:disabled {
+  opacity: 0.55;
   cursor: not-allowed;
 }
 
-.mljar-packages-manager-delete-button:hover {
-  color: #fff;
-  background-color: #dc3545;
-  transition: background-color 0.3s ease;
+.mljar-packages-manager-back-button:hover:not(:disabled),
+.mljar-packages-manager-refresh-button:hover:not(:disabled),
+.mljar-packages-manager-settings-button:hover:not(:disabled),
+.mljar-packages-manager-install-button:hover:not(:disabled) {
+  color: var(--text);
 }
 
-.mljar-packages-manager-list-item:hover .mljar-packages-manager-delete-button {
-  visibility: visible;
+.mljar-packages-manager-back-button:hover:not(:disabled) {
+  border-color: var(--border2);
+  background: var(--surface2);
 }
 
 .mljar-packages-manager-refresh-icon,
 .mljar-packages-manager-install-icon,
-.mljar-packages-manager-back-icon {
-  display: flex;
-  align-items: center;
-  width: 15px;
-  height: 15px;
+.mljar-packages-manager-back-icon,
+.mljar-packages-manager-settings-icon,
+.mljar-packages-manager-error-icon {
+  display: block;
+  width: 14px;
+  height: 14px;
 }
 
-.mljar-packages-manager-settings-icon {
-  display: flex;
-  align-items: center;
-  width: 17px;
-  height: 17px;
+.mljar-packages-manager-refresh-icon svg,
+.mljar-packages-manager-install-icon svg,
+.mljar-packages-manager-back-icon svg,
+.mljar-packages-manager-settings-icon svg,
+.mljar-packages-manager-error-icon svg {
+  display: block;
+  width: 14px;
+  height: 14px;
 }
 
 .mljar-packages-manager-delete-icon {
-  display: flex;
-  align-items: center;
-  width: 20px;
-  height: 20px;
+  display: block;
+  width: 14px;
+  height: 14px;
+}
+
+.mljar-packages-manager-delete-icon svg {
+  display: block;
+  width: 14px;
+  height: 14px;
 }
 
 .mljar-packages-manager-error-icon {
-  color: #dc3545;
-  width: 15px;
-  height: 15px;
+  color: var(--rose);
 }
 
-/* .mljar-packages-manager-info-icon-container {
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
-}
-
-.mljar-packages-manager-info-icon-container span:first-child {
-  display: inline-flex;
-  align-items: center;
-  color: #0099cc;
-  margin: 0px;
-  width: 18px;
-  height: 18px;
-}
-
-.mljar-packages-manager-info-icon-container {
-  visibility: hidden;
-  width: 150px;
-  background-color: #28a745;
-  color: white;
-  text-align: center;
-  border-radius: 4px;
-  padding: 5px;
-  position: absolute;
-  left: -160px;
-  top: 100%;
-  z-index: 1;
-  opacity: 0;
-  transition: opacity 0.3s;
-  white-space: pre-line;
-}
-
-.mljar-packages-manager-info-icon-container:hover {
-  visibility: visible;
-  opacity: 1;
-} */
-
-.mljar-packages-manager-install-form {
+.mljar-packages-manager-list-container {
   display: flex;
-  flex-direction: column;
-  margin-right: 0px;
-}
-
-.mljar-packages-manager-install-form h4 {
-  margin-top: 0px;
-  margin-bottom: 4px;
-  padding: 0;
-}
-
-.mljar-packages-manager-usage-span {
-  margin-bottom: 8px;
-  text-align: left;
-  font-size: 0.8rem;
-  padding: 5px 2px;
-}
-
-.mljar-packages-manager-error-message {
-  color: #dc3545;
-  font-weight: bold;
-}
-
-.mljar-packages-manager-spinner-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  padding: 20px;
-}
-
-.mljar-packages-manager-spinner {
-  border: 4px solid rgba(0, 0, 0, 0.1);
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  border-left-color: #ffffff;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.mljar-packages-manager-list-item {
   flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  margin-right: 8px;
+}
+
+.mljar-packages-manager-list {
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-y: auto;
+  scroll-padding-bottom: 16px;
+  scrollbar-width: none;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.mljar-packages-manager-list::after {
+  content: '';
+  display: block;
+  height: 16px;
+}
+
+.mljar-packages-manager-list-header {
   display: grid;
   grid-template-columns: 1fr 1fr 2rem;
   align-items: center;
-  min-height: 38px;
-  column-gap: 1rem;
-  padding-left: 8px;
-  padding-right: 8px;
-  border-bottom: 1px solid var(--jp-border-color2);
-  border-left: 1px solid var(--jp-border-color2);
-  border-right: 1px solid var(--jp-border-color2);
-  margin-bottom: 0px;
-  margin-right: 0px;
-  width: 100%;
-  box-sizing: border-box;
-  background-color: var(--jp-layout-color0);
-  font-size: 0.8rem;
-  font-weight: 500;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  column-gap: 12px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
 }
 
-.mljar-packages-manager-list-item:hover {
-  background-color: var(--jp-layout-color2);
+.mljar-packages-manager-header-name,
+.mljar-packages-manager-header-version {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mljar-packages-manager-header-version {
+  text-align: left;
+}
+
+.mljar-packages-manager-header-blank {
+  display: block;
+}
+
+.mljar-packages-manager-list-item {
+  display: grid;
+  grid-template-columns: 1fr 1fr 2rem;
+  position: relative;
+  align-items: center;
+  min-height: 42px;
+  padding: 0 12px;
+  column-gap: 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  animation: fadein-row 0.22s ease both;
   cursor: pointer;
 }
 
+.mljar-packages-manager-list-item:last-child {
+  border-bottom: none;
+}
+
+.mljar-packages-manager-list-item::before {
+  content: '';
+  position: absolute;
+  top: 7px;
+  bottom: 7px;
+  left: 0;
+  width: 2px;
+  border-radius: 0 2px 2px 0;
+  background: var(--blue);
+  opacity: 0;
+  transition: opacity 0.14s ease;
+}
+
+.mljar-packages-manager-list-item:hover {
+  background: var(--surface2);
+}
+
+.mljar-packages-manager-list-item:hover::before {
+  opacity: 1;
+}
+
 .mljar-packages-manager-list-item.active {
-  background-color: var(--jp-brand-color1);
-  color: var(--jp-ui-inverse-font-color1);
+  background: var(--blue-dim);
+  color: var(--blue);
 }
 
 .mljar-packages-manager-package-name,
@@ -307,299 +327,347 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-family: var(--mono);
+  font-size: 12px;
 }
 
 .mljar-packages-manager-package-name {
-  font-weight: 600;
+  color: var(--text);
+  font-weight: 500;
 }
 
-.mljar-packages-manager-list-header {
+.mljar-packages-manager-package-version {
+  color: var(--muted);
+}
+
+.mljar-packages-manager-delete-button {
+  visibility: hidden;
+  display: inline-grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  margin-left: auto;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--rose);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.mljar-packages-manager-delete-button:hover {
+  color: #9f1239;
+}
+
+.mljar-packages-manager-list-item:hover .mljar-packages-manager-delete-button {
+  visibility: visible;
+}
+
+.mljar-packages-manager-error-message,
+.mljar-packages-manager-list-container > p {
+  margin: 8px 0 0;
+  padding: 12px;
+  border: 1px dashed var(--border2);
+  border-radius: 10px;
+  background: rgb(255 255 255 / 60%);
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+.mljar-packages-manager-spinner-container {
   display: grid;
-  grid-template-columns: 1fr 1fr 2rem;
-  align-items: center;
-  font-size: 0.9rem;
-  padding-left: 8px;
-  padding-right: 8px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  background-color: var(--jp-layout-color0);
-  color: #0099cc;
-  border: 1px solid #0099cc;
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
-  font-weight: 800;
+  place-items: center;
+  padding: 16px 0;
+}
+
+.mljar-packages-manager-spinner {
+  width: 12px;
+  height: 12px;
+  border: 3px solid rgb(2 132 199 / 25%);
+  border-left-color: var(--blue);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
 .mljar-packages-manager-list::-webkit-scrollbar {
-  width: 0px;
+  width: 0;
 }
 
 .mljar-packages-manager-list:hover::-webkit-scrollbar {
-  width: 10px;
-  height: 8px;
+  width: 8px;
 }
 
-.mljar-packages-manager-list:hover::-webkit-scrollbar-track {
-  background: var(--jp-layout-color2);
-  border-radius: 4px;
+.mljar-packages-manager-list::-webkit-scrollbar-track,
+.mljar-packages-manager-install-logs::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.mljar-packages-manager-list:hover::-webkit-scrollbar-thumb {
-  background: var(--jp-layout-color3);
+.mljar-packages-manager-list::-webkit-scrollbar-thumb,
+.mljar-packages-manager-install-logs::-webkit-scrollbar-thumb {
   border-radius: 8px;
-  border: 2px solid transparent;
-  background-clip: padding-box;
+  background: #cbd5e1;
 }
 
-/* START */
+.mljar-packages-manager-list:hover {
+  scrollbar-width: thin;
+}
+
+.mljar-packages-manager-install-logs::-webkit-scrollbar {
+  width: 8px;
+}
 
 .mljar-package-manager-modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  inset: 0;
+  z-index: 9999;
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
+  background: rgb(15 23 42 / 44%);
+  backdrop-filter: blur(2px);
 }
 
 .mljar-package-manager-content {
-  background: var(--jp-layout-color1);
-  padding: 20px;
-  border-radius: 8px;
-  width: 600px;
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.25);
   position: relative;
+  width: calc(100vw - 32px);
+  max-width: 640px;
+  max-height: calc(100vh - 48px);
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: radial-gradient(circle at 8% 0%, #ecfeff 0%, #f8fafc 42%);
+  box-shadow: 0 20px 40px rgb(15 23 42 / 22%);
+  padding: 16px;
 }
 
 .mljar-package-manager-content h3 {
-  font-size: 20px;
-  margin-bottom: 12px;
-  margin-top: 0px;
+  margin: 0 28px 12px 0;
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 600;
 }
 
 .mljar-package-manager-modal-close {
   position: absolute;
-  right: 20px;
-  border: none;
-  background: transparent;
-  font-size: 18px;
+  top: 10px;
+  right: 10px;
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 12px;
   cursor: pointer;
+  transition: all 0.15s ease;
 }
 
 .mljar-package-manager-modal-close:hover {
-  background: black;
-  color: white;
-  border-radius: 8px;
-  padding: 2px 6px;
+  border-color: var(--border2);
+  color: var(--text);
+  background: var(--surface2);
 }
-
-/* .mljar-modal-confirm {
-  background: #2b7ce9;
-  color: white;
-  padding: 6px 12px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-} */
-
-/* .mljar-modal-cancel {
-  background: #e0e0e0;
-  color: #333;
-  padding: 6px 12px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-} */
 
 .mljar-packages-manager-install-form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
-.mljar-packages-manager-install-input {
-  padding: 6px 10px;
-  border: 1px solid #ccc;
+.mljar-packages-manager-usage-box {
+  padding: 10px 0;
+  border: 1px dashed var(--border2);
+  border-radius: 10px;
+  background: transparent;
+  color: #475569;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.mljar-packages-manager-usage-box strong {
+  display: inline-block;
+  margin-bottom: 4px;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.mljar-packages-manager-usage-box code {
+  padding: 1px 5px;
+  border: 1px solid var(--border);
   border-radius: 6px;
-  font-size: 14px;
-  margin: 1px;
-}
-
-.mljar-packages-manager-install-input:focus {
-  outline: none;
-  border: 2px solid #4a90e2;
-  margin: 0px;
+  background: var(--surface2);
+  color: var(--blue);
+  font-family: var(--mono);
+  font-size: 12px;
 }
 
 .mljar-packages-manager-install-logs {
-  background: #1e1e1e;
-  color: #0f0;
-  font-family: monospace;
-  font-size: 13px;
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #333;
-  max-height: 200px;
+  max-height: 230px;
   overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #0f172a;
+  color: #d1fae5;
+  padding: 10px;
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1.45;
   white-space: pre-wrap;
-  line-height: 1.4;
-}
-
-.mljar-packages-manager-install-logs::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-.mljar-packages-manager-install-logs::-webkit-scrollbar-track {
-  background: #1e1e1e;
-  border-radius: 6px;
-
-}
-
-.mljar-packages-manager-install-logs::-webkit-scrollbar-thumb {
-  background-color: #555;
-  border-radius: 6px;
-}
-
-.mljar-packages-manager-install-logs::-webkit-scrollbar-thumb:hover {
-  background-color: #777;
 }
 
 .mljar-packages-manager-install-form-buttons {
   display: flex;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
-.mljar-packages-manager-install-submit-button {
-  background: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 6px 14px;
-  font-size: 14px;
+.mljar-packages-manager-install-actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  padding-top: 10px;
+  padding-bottom: 2px;
+  background: linear-gradient(
+    180deg,
+    rgb(248 250 252 / 0%) 0%,
+    rgb(248 250 252 / 96%) 34%
+  );
+}
+
+.mljar-packages-manager-result-actions {
+  padding-top: 2px;
+}
+
+.mljar-packages-manager-install-submit-button,
+.mljar-packages-manager-install-close-button,
+.mljar-packages-manager-stop-button,
+.mljar-pypi-settings-edit,
+.mljar-pypi-settings-save,
+.mljar-pypi-settings-reset {
+  height: 34px;
+  padding: 0 14px;
+  border: 1px solid #d9e2ec;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgb(15 23 42 / 6%);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
   cursor: pointer;
-  transition: background 0.2s;
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease,
+    background 0.15s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
-.mljar-packages-manager-install-submit-button:hover:not(:disabled) {
-  background: #43a047;
+.mljar-packages-manager-install-submit-button,
+.mljar-pypi-settings-edit,
+.mljar-pypi-settings-save {
+  background: linear-gradient(180deg, #14b8ff 0%, #0284c7 100%);
+  border-color: #0284c7;
+  box-shadow: 0 6px 14px rgb(2 132 199 / 26%);
+  color: #fff;
 }
 
 .mljar-packages-manager-install-submit-button:disabled {
-  background: #a5d6a7;
+  background: linear-gradient(180deg, #7dd3fc 0%, #38bdf8 100%);
+  border-color: #38bdf8;
+  box-shadow: none;
+  opacity: 0.85;
   cursor: not-allowed;
 }
 
-.mljar-packages-manager-install-message {
-  font-size: 14px;
-  margin: 0px;
+.mljar-packages-manager-install-submit-button:hover:not(:disabled),
+.mljar-pypi-settings-edit:hover,
+.mljar-pypi-settings-save:hover {
+  background: linear-gradient(180deg, #1ac5ff 0%, #0a7ab2 100%);
+  border-color: #0a7ab2;
+  box-shadow: 0 8px 16px rgb(2 132 199 / 32%);
+  transform: translateY(-1px);
 }
 
-.mljar-packages-manager-install-message.error {
-  color: #e53935;
+.mljar-packages-manager-install-close-button,
+.mljar-packages-manager-stop-button,
+.mljar-pypi-settings-reset {
+  background: linear-gradient(180deg, #fff 0%, #f8fafc 100%);
+  border-color: #d9e2ec;
+  color: #334155;
 }
 
-.mljar-packages-manager-install-message:not(.error) {
-  color: #4caf50;
+.mljar-packages-manager-install-close-button:hover,
+.mljar-pypi-settings-reset:hover {
+  background: linear-gradient(180deg, #f7fdff 0%, #ebf8ff 100%);
+  border-color: #7dd3fc;
+  color: #0f172a;
+  box-shadow: 0 6px 14px rgb(14 165 233 / 12%);
+  transform: translateY(-1px);
 }
 
-.mljar-packages-manager-usage-box {
-  background: var(--jp-brand-color3);
-  border-left: 4px solid var(--jp-brand-color1);
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 14px;
-  color: #333;
+.mljar-packages-manager-stop-button {
+  background: linear-gradient(180deg, #fff1f2 0%, #ffe4e6 100%);
+  border-color: #fda4af;
+  color: #be123c;
+  box-shadow: 0 2px 6px rgb(190 24 93 / 10%);
 }
 
-.mljar-packages-manager-usage-box code {
-  background: var(--jp-brand-color4);
-  color: var(--jp-brand-color1);
-  padding: 2px 4px;
-  border-radius: 3px;
-  font-family: monospace;
-}
-.mljar-packages-manager-usage-box strong {
-  margin-right: 5px;
-}
-
-.mljar-packages-manager-spinner {
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top: 2px solid #fff;
-  border-radius: 50%;
-  width: 16px;
-  height: 16px;
-  animation: spin 1s linear infinite;
-  margin: auto;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+.mljar-packages-manager-stop-button:hover {
+  background: linear-gradient(180deg, #ffe4e6 0%, #fecdd3 100%);
+  border-color: #fb7185;
+  color: #9f1239;
+  box-shadow: 0 6px 14px rgb(190 24 93 / 14%);
+  transform: translateY(-1px);
 }
 
 .mljar-packages-manager-result {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 12px;
+  gap: 10px;
 }
 
-.mljar-packages-manager-install-close-button,
-.mljar-packages-manager-stop-button {
-  background: #e53935;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 6px 14px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background 0.2s;
+.mljar-packages-manager-install-message {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--green);
 }
 
-.mljar-packages-manager-install-close-button:hover,
-.mljar-packages-manager-stop-button:hover {
-  background: #c62828;
+.mljar-packages-manager-install-message.error {
+  color: var(--rose);
 }
-
-/* pypi section */
 
 .mljar-pypi-settings {
-  background: var(--jp-layout-color0);
-  border: 1px solid var(--jp-border-color2);
-  border-radius: 6px;
+  margin-right: 8px;
   padding: 12px;
-  margin-top: 12px;
-  margin-right: 20px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
 }
 
 .mljar-pypi-settings-title {
-  margin: 0 0 10px 0;
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: var(--jp-ui-font-color1);
+  margin: 0 0 10px;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .mljar-pypi-settings-row {
   display: grid;
-  grid-template-columns: 50px 1fr auto;
+  grid-template-columns: 40px minmax(0, 1fr) auto;
   align-items: center;
-  height: 30px;
   gap: 10px;
 }
 
 .mljar-pypi-settings-label {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--jp-ui-font-color2);
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
 }
 
 .mljar-pypi-settings-value {
@@ -608,66 +676,39 @@
 
 .mljar-pypi-settings-code {
   display: block;
-  font-weight: 600;
-  padding: 6px 8px;
-  background: var(--jp-layout-color1);
-  border-radius: 4px;
-  font-family: monospace;
-  font-size: 0.75rem;
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface2);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 11px;
 }
-
-.mljar-pypi-settings-input {
-  width: calc(100% - 16px);
-  padding: 6px 8px;
-  border: 1px solid var(--jp-border-color2);
-  border-radius: 4px;
-  background: var(--jp-layout-color1);
-  color: var(--jp-ui-font-color1);
-  font-size: 0.8rem;
-}
-
-.mljar-pypi-settings-input:focus {
-  outline: none;
-  border: 1px solid var(--jp-brand-color1);
-}
-
-/* Actions */
 
 .mljar-pypi-settings-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 6px;
+  justify-content: flex-end;
 }
 
-.mljar-pypi-settings-edit,
-.mljar-pypi-settings-save {
-  background: #0099cc;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 7px 10px;
-  font-size: 0.8rem;
-  cursor: pointer;
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-.mljar-pypi-settings-edit:hover,
-.mljar-pypi-settings-save:hover {
-  background: #007fa8;
-}
+@keyframes fadein-row {
+  from {
+    opacity: 0;
+    transform: translateX(-4px);
+  }
 
-.mljar-pypi-settings-reset {
-  background: transparent;
-  color: #8f8f8f;
-  border: 1px solid #8f8f8f;
-  border-radius: 4px;
-  padding: 6px 10px;
-  font-size: 0.75rem;
-  cursor: pointer;
-}
-
-.mljar-pypi-settings-reset:hover {
-  background: #8f8f8f;
-  color: white;
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }

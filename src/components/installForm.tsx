@@ -37,7 +37,7 @@ export const InstallForm: React.FC<InstallFormProps> = ({
   const doneRef = useRef(false);
 
   const notebookPanel = useNotebookPanelContext();
-  const kernel = notebookPanel?.sessionContext.session?.kernel;
+  const kernel = notebookPanel?.context.sessionContext.session?.kernel;
 
   const { refreshPackages } = usePackageContext();
 
@@ -245,7 +245,7 @@ export const InstallForm: React.FC<InstallFormProps> = ({
         </div>
       )}
       {!message ? (
-        <div className="mljar-packages-manager-install-form-buttons">
+        <div className="mljar-packages-manager-install-form-buttons mljar-packages-manager-install-actions">
           <button
             className="mljar-packages-manager-install-submit-button"
             onClick={() => {
@@ -275,7 +275,7 @@ export const InstallForm: React.FC<InstallFormProps> = ({
           >
             {message}
           </p>
-          <div className="mljar-packages-manager-install-form-buttons">
+          <div className="mljar-packages-manager-install-form-buttons mljar-packages-manager-result-actions">
             <button
               className="mljar-packages-manager-install-submit-button"
               onClick={() => {

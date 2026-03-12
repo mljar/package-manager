@@ -42,7 +42,7 @@ export const PackageItem: React.FC<PackageItemProps> = ({ pkg }) => {
     setLoading(true);
     setError(false);
 
-    const kernel = notebookPanel?.sessionContext?.session?.kernel;
+    const kernel = notebookPanel?.context.sessionContext?.session?.kernel;
     const pmKernel = await providePackageManagerSubshellKernel(kernel);
 
     if (!pmKernel) {
