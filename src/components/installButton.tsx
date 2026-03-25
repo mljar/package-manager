@@ -49,7 +49,7 @@ export const InstallButton: React.FC<IInstallButtonProps> = ({
       </button>
 
       <InstallModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <h3>{t('Install Packages')}</h3>
+        <h3>{t('Install package')}</h3>
         <InstallForm
           onClose={() => setIsModalOpen(false)}
           initialPackageName={prefillPackage}

@@ -103,18 +103,20 @@
   height: 36px;
   box-sizing: border-box;
   padding: 0 12px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border, #dbe3ec);
   border-radius: 9px;
-  background: var(--surface);
-  color: var(--text);
+  background: var(--surface, #fff);
+  color: var(--text, #0f172a);
+  caret-color: var(--text, #0f172a);
   font-family: var(--mono);
   font-size: 12px;
+  font-weight: 500;
 }
 
 .mljar-packages-manager-install-input::placeholder,
 .mljar-packages-manager-search-bar-input::placeholder,
 .mljar-pypi-settings-input::placeholder {
-  color: var(--muted);
+  color: var(--muted, #64748b);
 }
 
 .mljar-packages-manager-install-input:focus,
@@ -123,6 +125,13 @@
   outline: none;
   border-color: rgb(2 132 199 / 40%);
   box-shadow: 0 0 0 3px var(--blue-glow);
+}
+
+.mljar-packages-manager-install-input:disabled,
+.mljar-pypi-settings-input:disabled {
+  opacity: 1;
+  color: #334155;
+  -webkit-text-fill-color: #334155;
 }
 
 .mljar-packages-manager-install-button,
@@ -418,6 +427,23 @@
 }
 
 .mljar-package-manager-modal-overlay {
+  --bg: #f5f7fa;
+  --surface: #fff;
+  --surface2: #f0f4f8;
+  --border: #e2e8f0;
+  --border2: #cbd5e1;
+  --text: #0f172a;
+  --muted: #64748b;
+  --blue: #0284c7;
+  --blue-dim: #e0f2fe;
+  --blue-glow: rgb(2 132 199 / 15%);
+  --green: #16a34a;
+  --green-dim: #dcfce7;
+  --rose: #e11d48;
+  --rose-dim: #ffe4e6;
+  --mono: 'JetBrains Mono', 'Consolas', 'Monaco', monospace;
+  --sans: 'Geist', -apple-system, blinkmacsystemfont, 'Segoe UI', sans-serif;
+
   position: fixed;
   inset: 0;
   z-index: 9999;
@@ -444,8 +470,9 @@
 .mljar-package-manager-content h3 {
   margin: 0 28px 12px 0;
   color: var(--text);
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 600;
+  letter-spacing: -0.2px;
 }
 
 .mljar-package-manager-modal-close {
@@ -478,8 +505,11 @@
 }
 
 .mljar-packages-manager-usage-box {
-  padding: 10px 0;
-  border: 1px dashed var(--border2);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 0;
+  border: none;
   border-radius: 10px;
   background: transparent;
   color: #475569;
@@ -487,21 +517,49 @@
   line-height: 1.45;
 }
 
-.mljar-packages-manager-usage-box strong {
-  display: inline-block;
-  margin-bottom: 4px;
+.mljar-packages-manager-usage-title {
   color: var(--text);
   font-weight: 600;
+  font-size: 14px;
+  letter-spacing: -0.1px;
 }
 
-.mljar-packages-manager-usage-box code {
-  padding: 1px 5px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: var(--surface2);
-  color: var(--blue);
+.mljar-packages-manager-usage-description {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.mljar-packages-manager-usage-examples {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mljar-packages-manager-usage-example-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.mljar-packages-manager-usage-example-label {
+  color: #334155;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.mljar-packages-manager-usage-example-code {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 0 8px;
+  border: 1px solid #d9e2ec;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #fff 0%, #f8fafc 100%);
+  color: #0369a1;
   font-family: var(--mono);
   font-size: 12px;
+  font-weight: 600;
 }
 
 .mljar-packages-manager-install-logs {

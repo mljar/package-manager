@@ -212,15 +212,29 @@ export const InstallForm: React.FC<InstallFormProps> = ({
   return (
     <div className="mljar-packages-manager-install-form">
       <div className="mljar-packages-manager-usage-box">
-        <strong>{t('How to install packages')}</strong>
-        <div>
-          {t(
-            'Type the package name to install the latest version, for example:'
-          )}{' '}
-          <code>numpy</code>
+        <div className="mljar-packages-manager-usage-title">
+          {t('Quick format guide')}
         </div>
-        <div>
-          {t('To install a specific version, use:')} <code>numpy==1.26.4</code>
+        <div className="mljar-packages-manager-usage-description">
+          {t('Use one of the following formats:')}
+        </div>
+        <div className="mljar-packages-manager-usage-examples">
+          <div className="mljar-packages-manager-usage-example-row">
+            <span className="mljar-packages-manager-usage-example-label">
+              {t('Install latest:')}
+            </span>
+            <code className="mljar-packages-manager-usage-example-code">
+              numpy
+            </code>
+          </div>
+          <div className="mljar-packages-manager-usage-example-row">
+            <span className="mljar-packages-manager-usage-example-label">
+              {t('Install specific version:')}
+            </span>
+            <code className="mljar-packages-manager-usage-example-code">
+              numpy==1.26.4
+            </code>
+          </div>
         </div>
       </div>
       <input
