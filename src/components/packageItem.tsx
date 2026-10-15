@@ -178,7 +178,7 @@ export const PackageItem: React.FC<PackageItemProps> = ({ pkg }) => {
       </span>
       {!loading && (
         <button
-          className="mljar-packages-manager-delete-button"
+          className="mljar-package-button mljar-package-danger mljar-package-icon-button mljar-packages-manager-delete-button"
           onClick={handleDelete}
           aria-label={
             error

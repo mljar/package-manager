@@ -9,7 +9,7 @@ interface BackButtonProps {
 export const BackButton: React.FC<BackButtonProps> = ({ onBack }) => {
   return (
     <button
-      className="mljar-packages-manager-back-button"
+      className="mljar-package-button mljar-packages-manager-back-button"
       onClick={onBack}
       title={t('Go Back')}
     >

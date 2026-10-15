@@ -11,6 +11,14 @@ class Translator {
   private language: Language = 'en';
   private translations: Translations = {
     pl: {
+      'Search packages': 'Szukaj pakietów',
+      'Package name': 'Nazwa pakietu',
+      'No packages available. Open a notebook and refresh.':
+        'Brak dostępnych pakietów. Otwórz notatnik i odśwież.',
+      'No packages match your search.':
+        'Żaden pakiet nie pasuje do wyszukiwania.',
+      'Close dialog': 'Zamknij okno',
+
       'Package Manager': 'Menedżer pakietów',
       'Search package...': 'Wyszukaj paczkę...',
       'Install Packages': 'Zainstaluj pakiety',

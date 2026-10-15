@@ -40,10 +40,11 @@ export const InstallButton: React.FC<IInstallButtonProps> = ({
   return (
     <>
       <button
-        className="mljar-packages-manager-install-button"
+        className="mljar-package-button mljar-package-primary mljar-package-icon-button mljar-packages-manager-install-button"
         onClick={handleClick}
         disabled={loading}
         title={t('Install Packages')}
+        aria-label={t('Install Packages')}
       >
         <installIcon.react className="mljar-packages-manager-install-icon" />
       </button>

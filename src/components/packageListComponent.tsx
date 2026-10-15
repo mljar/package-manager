@@ -98,9 +98,11 @@ export const PackageListComponent: React.FC<IPackageListComponentProps> = ({
               {packages.length}
             </span>
           </div>
-          <RefreshButton />
-          <SettingsButton onClick={() => setView('settings')} />
-          <InstallButton onStartInstall={() => {}} pypiServerUrl={path} />
+          <div className="mljar-packages-manager-header-actions">
+            <RefreshButton />
+            <SettingsButton onClick={() => setView('settings')} />
+            <InstallButton onStartInstall={() => {}} pypiServerUrl={path} />
+          </div>
         </div>
       ) : (
         <div className="mljar-packages-manager-header-container">
@@ -127,6 +129,7 @@ export const PackageListComponent: React.FC<IPackageListComponentProps> = ({
                 <input
                   type="text"
                   placeholder="https://pypi.org/simple"
+                  aria-label="PyPI server URL"
                   value={path}
                   onChange={e => setPath(e.target.value)}
                   className="mljar-pypi-settings-input"
@@ -139,14 +142,14 @@ export const PackageListComponent: React.FC<IPackageListComponentProps> = ({
             <div className="mljar-pypi-settings-actions">
               {editing ? (
                 <button
-                  className="mljar-pypi-settings-save"
+                  className="mljar-package-button mljar-package-primary mljar-pypi-settings-save"
                   onClick={saveNewPypiUrl}
                 >
                   Save
                 </button>
               ) : (
                 <button
-                  className="mljar-pypi-settings-edit"
+                  className="mljar-package-button mljar-pypi-settings-edit"
                   onClick={() => setEditing(true)}
                 >
                   Edit
@@ -155,7 +158,7 @@ export const PackageListComponent: React.FC<IPackageListComponentProps> = ({
 
               {!editing && path !== defaultPath && (
                 <button
-                  className="mljar-pypi-settings-reset"
+                  className="mljar-package-button mljar-pypi-settings-reset"
                   onClick={resetPypiUrlToDefault}
                 >
                   Restore defaults

@@ -1,27 +1,30 @@
-@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap');
-
-.mljar-packages-manager-sidebar-widget {
-  --bg: #f5f7fa;
+.mljar-packages-manager-sidebar-widget,
+.mljar-package-manager-modal-overlay {
+  --bg: var(--jp-layout-color1, #fff);
   --surface: #fff;
-  --surface2: #f0f4f8;
-  --border: #e2e8f0;
-  --border2: #cbd5e1;
-  --text: #0f172a;
-  --muted: #64748b;
-  --blue: #0284c7;
-  --blue-dim: #e0f2fe;
-  --blue-glow: rgb(2 132 199 / 15%);
+  --surface2: #f8f9fc;
+  --border: #e2e7f0;
+  --border2: #6b7280;
+  --text: #334155;
+  --muted: #5a6585;
+  --blue: #1976d2;
+  --blue-dim: #eaf3fc;
+  --blue-glow: rgb(25 118 210 / 30%);
   --green: #16a34a;
   --green-dim: #dcfce7;
   --rose: #e11d48;
   --rose-dim: #ffe4e6;
-  --mono: 'JetBrains Mono', 'Consolas', 'Monaco', monospace;
-  --sans: 'Geist', -apple-system, blinkmacsystemfont, 'Segoe UI', sans-serif;
+  --mono: var(--jp-code-font-family, monospace);
+  --sans: var(--jp-ui-font-family, system-ui, sans-serif);
 
-  background: radial-gradient(circle at 8% 0%, #ecfeff 0%, var(--bg) 40%);
+  background: var(--bg);
   color: var(--text);
-  padding: 14px 10px;
+  box-sizing: border-box;
   font-family: var(--sans);
+}
+
+.mljar-packages-manager-sidebar-widget {
+  padding: 12px;
 }
 
 .mljar-packages-manager-sidebar-container {
@@ -37,7 +40,7 @@
   display: flex;
   flex-direction: column;
   min-height: 0;
-  height: calc(100vh - 28px);
+  height: 100%;
 }
 
 .mljar-packages-manager-home {
@@ -48,13 +51,13 @@
 }
 
 .mljar-packages-manager-header-container {
+  flex-wrap: wrap;
   display: flex;
   align-items: center;
   gap: 6px;
   position: sticky;
   top: 0;
   z-index: 20;
-  margin-right: 8px;
   margin-bottom: 8px;
   padding: 0 0 12px;
   background: transparent;
@@ -75,6 +78,7 @@
   gap: 8px;
   min-width: 0;
   margin-right: auto;
+  flex-wrap: wrap;
 }
 
 .mljar-packages-manager-count-badge {
@@ -83,17 +87,31 @@
   border-radius: 999px;
   background: var(--surface2);
   color: var(--muted);
-  font-family: var(--mono);
-  font-size: 10px;
+  font-family: var(--sans);
+  font-size: 12px;
 }
 
 .mljar-packages-manager-search-bar-container {
   position: sticky;
   top: 44px;
   z-index: 11;
-  margin-right: 8px;
   margin-bottom: 10px;
   background: transparent;
+}
+
+.mljar-packages-manager-search-bar-container svg {
+  position: absolute;
+  top: 18px;
+  left: 12px;
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transform: translateY(-50%);
+  pointer-events: none;
 }
 
 .mljar-packages-manager-install-input,
@@ -104,13 +122,23 @@
   box-sizing: border-box;
   padding: 0 12px;
   border: 1px solid var(--border, #dbe3ec);
-  border-radius: 9px;
+  border-radius: 10px;
   background: var(--surface, #fff);
   color: var(--text, #0f172a);
   caret-color: var(--text, #0f172a);
-  font-family: var(--mono);
+  font-family: var(--sans);
   font-size: 12px;
   font-weight: 500;
+}
+
+.mljar-packages-manager-search-bar-input {
+  padding-left: 34px;
+  font-weight: 400;
+  line-height: 18px;
+}
+
+.mljar-packages-manager-search-bar-input::placeholder {
+  opacity: 1;
 }
 
 .mljar-packages-manager-install-input::placeholder,
@@ -122,73 +150,16 @@
 .mljar-packages-manager-install-input:focus,
 .mljar-packages-manager-search-bar-input:focus,
 .mljar-pypi-settings-input:focus {
-  outline: none;
-  border-color: rgb(2 132 199 / 40%);
-  box-shadow: 0 0 0 3px var(--blue-glow);
+  outline: 2px solid var(--blue-glow);
+  outline-offset: 1px;
+  border-color: #1976d2;
 }
 
 .mljar-packages-manager-install-input:disabled,
 .mljar-pypi-settings-input:disabled {
   opacity: 1;
-  color: #334155;
-  -webkit-text-fill-color: #334155;
-}
-
-.mljar-packages-manager-install-button,
-.mljar-packages-manager-refresh-button,
-.mljar-packages-manager-settings-button {
-  display: inline-grid;
-  place-items: center;
-  width: 16px;
-  height: 16px;
-  padding: 0;
-  line-height: 1;
-  border: none;
-  border-radius: 0;
-  background: transparent;
-  color: var(--muted);
-  cursor: pointer;
-  transition: color 0.15s ease;
-}
-
-.mljar-packages-manager-back-button {
-  display: inline-grid;
-  place-items: center;
-  grid-auto-flow: column;
-  gap: 6px;
-  width: auto;
-  min-width: 62px;
-  height: 28px;
-  padding: 0 10px;
-  line-height: 1;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--surface);
-  color: var(--muted);
-  cursor: pointer;
-  transition: all 0.15s ease;
-  font-family: var(--mono);
-  font-size: 11px;
-}
-
-.mljar-packages-manager-refresh-button:disabled,
-.mljar-packages-manager-settings-button:disabled,
-.mljar-packages-manager-install-button:disabled,
-.mljar-packages-manager-back-button:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-}
-
-.mljar-packages-manager-back-button:hover:not(:disabled),
-.mljar-packages-manager-refresh-button:hover:not(:disabled),
-.mljar-packages-manager-settings-button:hover:not(:disabled),
-.mljar-packages-manager-install-button:hover:not(:disabled) {
   color: var(--text);
-}
-
-.mljar-packages-manager-back-button:hover:not(:disabled) {
-  border-color: var(--border2);
-  background: var(--surface2);
+  -webkit-text-fill-color: var(--text);
 }
 
 .mljar-packages-manager-refresh-icon,
@@ -233,7 +204,6 @@
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
-  margin-right: 8px;
 }
 
 .mljar-packages-manager-list {
@@ -244,7 +214,7 @@
   list-style: none;
   overflow-y: auto;
   scroll-padding-bottom: 16px;
-  scrollbar-width: none;
+  scrollbar-width: thin;
   border: 1px solid var(--border);
   border-radius: 12px;
   background: var(--surface);
@@ -258,18 +228,16 @@
 
 .mljar-packages-manager-list-header {
   display: grid;
-  grid-template-columns: 1fr 1fr 2rem;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) 30px;
   align-items: center;
   column-gap: 12px;
   padding: 10px 12px;
   border-bottom: 1px solid var(--border);
   background: var(--surface2);
   color: var(--muted);
-  font-family: var(--mono);
-  font-size: 10px;
+  font-family: var(--sans);
+  font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
 }
 
 .mljar-packages-manager-header-name,
@@ -289,7 +257,7 @@
 
 .mljar-packages-manager-list-item {
   display: grid;
-  grid-template-columns: 1fr 1fr 2rem;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) 30px;
   position: relative;
   align-items: center;
   min-height: 42px;
@@ -297,8 +265,6 @@
   column-gap: 12px;
   border-bottom: 1px solid var(--border);
   background: var(--surface);
-  animation: fadein-row 0.22s ease both;
-  cursor: pointer;
 }
 
 .mljar-packages-manager-list-item:last-child {
@@ -349,38 +315,15 @@
   color: var(--muted);
 }
 
-.mljar-packages-manager-delete-button {
-  visibility: hidden;
-  display: inline-grid;
-  place-items: center;
-  width: 16px;
-  height: 16px;
-  margin-left: auto;
-  border: none;
-  border-radius: 4px;
-  background: transparent;
-  color: var(--rose);
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.mljar-packages-manager-delete-button:hover {
-  color: #9f1239;
-}
-
-.mljar-packages-manager-list-item:hover .mljar-packages-manager-delete-button {
-  visibility: visible;
-}
-
 .mljar-packages-manager-error-message,
 .mljar-packages-manager-list-container > p {
   margin: 8px 0 0;
   padding: 12px;
-  border: 1px dashed var(--border2);
+  border: 1px solid var(--border);
   border-radius: 10px;
-  background: rgb(255 255 255 / 60%);
+  background: var(--surface2);
   color: var(--muted);
-  font-family: var(--mono);
+  font-family: var(--sans);
   font-size: 12px;
 }
 
@@ -400,7 +343,7 @@
 }
 
 .mljar-packages-manager-list::-webkit-scrollbar {
-  width: 0;
+  width: 8px;
 }
 
 .mljar-packages-manager-list:hover::-webkit-scrollbar {
@@ -427,23 +370,6 @@
 }
 
 .mljar-package-manager-modal-overlay {
-  --bg: #f5f7fa;
-  --surface: #fff;
-  --surface2: #f0f4f8;
-  --border: #e2e8f0;
-  --border2: #cbd5e1;
-  --text: #0f172a;
-  --muted: #64748b;
-  --blue: #0284c7;
-  --blue-dim: #e0f2fe;
-  --blue-glow: rgb(2 132 199 / 15%);
-  --green: #16a34a;
-  --green-dim: #dcfce7;
-  --rose: #e11d48;
-  --rose-dim: #ffe4e6;
-  --mono: 'JetBrains Mono', 'Consolas', 'Monaco', monospace;
-  --sans: 'Geist', -apple-system, blinkmacsystemfont, 'Segoe UI', sans-serif;
-
   position: fixed;
   inset: 0;
   z-index: 9999;
@@ -456,14 +382,15 @@
 
 .mljar-package-manager-content {
   position: relative;
+  box-sizing: border-box;
   width: calc(100vw - 32px);
   max-width: 640px;
   max-height: calc(100vh - 48px);
   overflow: auto;
   border: 1px solid var(--border);
-  border-radius: 14px;
-  background: radial-gradient(circle at 8% 0%, #ecfeff 0%, #f8fafc 42%);
-  box-shadow: 0 20px 40px rgb(15 23 42 / 22%);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: 0 10px 25px rgb(15 23 42 / 20%);
   padding: 16px;
 }
 
@@ -473,29 +400,6 @@
   font-size: 17px;
   font-weight: 600;
   letter-spacing: -0.2px;
-}
-
-.mljar-package-manager-modal-close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  display: inline-grid;
-  place-items: center;
-  width: 24px;
-  height: 24px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--surface);
-  color: var(--muted);
-  font-size: 12px;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.mljar-package-manager-modal-close:hover {
-  border-color: var(--border2);
-  color: var(--text);
-  background: var(--surface2);
 }
 
 .mljar-packages-manager-install-form {
@@ -512,7 +416,7 @@
   border: none;
   border-radius: 10px;
   background: transparent;
-  color: #475569;
+  color: var(--text);
   font-size: 13px;
   line-height: 1.45;
 }
@@ -543,7 +447,7 @@
 }
 
 .mljar-packages-manager-usage-example-label {
-  color: #334155;
+  color: var(--text);
   font-size: 12px;
   font-weight: 500;
 }
@@ -553,10 +457,10 @@
   align-items: center;
   min-height: 24px;
   padding: 0 8px;
-  border: 1px solid #d9e2ec;
+  border: 1px solid var(--border);
   border-radius: 8px;
-  background: linear-gradient(180deg, #fff 0%, #f8fafc 100%);
-  color: #0369a1;
+  background: var(--surface2);
+  color: var(--text);
   font-family: var(--mono);
   font-size: 12px;
   font-weight: 600;
@@ -579,7 +483,7 @@
 .mljar-packages-manager-install-form-buttons {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
 }
 
 .mljar-packages-manager-install-actions {
@@ -588,97 +492,12 @@
   z-index: 2;
   padding-top: 10px;
   padding-bottom: 2px;
-  background: linear-gradient(
-    180deg,
-    rgb(248 250 252 / 0%) 0%,
-    rgb(248 250 252 / 96%) 34%
-  );
+  background: var(--surface);
+  border-top: 1px solid var(--border);
 }
 
 .mljar-packages-manager-result-actions {
   padding-top: 2px;
-}
-
-.mljar-packages-manager-install-submit-button,
-.mljar-packages-manager-install-close-button,
-.mljar-packages-manager-stop-button,
-.mljar-pypi-settings-edit,
-.mljar-pypi-settings-save,
-.mljar-pypi-settings-reset {
-  height: 34px;
-  padding: 0 14px;
-  border: 1px solid #d9e2ec;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgb(15 23 42 / 6%);
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  cursor: pointer;
-  transition:
-    border-color 0.15s ease,
-    color 0.15s ease,
-    background 0.15s ease,
-    transform 0.15s ease,
-    box-shadow 0.15s ease;
-}
-
-.mljar-packages-manager-install-submit-button,
-.mljar-pypi-settings-edit,
-.mljar-pypi-settings-save {
-  background: linear-gradient(180deg, #14b8ff 0%, #0284c7 100%);
-  border-color: #0284c7;
-  box-shadow: 0 6px 14px rgb(2 132 199 / 26%);
-  color: #fff;
-}
-
-.mljar-packages-manager-install-submit-button:disabled {
-  background: linear-gradient(180deg, #7dd3fc 0%, #38bdf8 100%);
-  border-color: #38bdf8;
-  box-shadow: none;
-  opacity: 0.85;
-  cursor: not-allowed;
-}
-
-.mljar-packages-manager-install-submit-button:hover:not(:disabled),
-.mljar-pypi-settings-edit:hover,
-.mljar-pypi-settings-save:hover {
-  background: linear-gradient(180deg, #1ac5ff 0%, #0a7ab2 100%);
-  border-color: #0a7ab2;
-  box-shadow: 0 8px 16px rgb(2 132 199 / 32%);
-  transform: translateY(-1px);
-}
-
-.mljar-packages-manager-install-close-button,
-.mljar-packages-manager-stop-button,
-.mljar-pypi-settings-reset {
-  background: linear-gradient(180deg, #fff 0%, #f8fafc 100%);
-  border-color: #d9e2ec;
-  color: #334155;
-}
-
-.mljar-packages-manager-install-close-button:hover,
-.mljar-pypi-settings-reset:hover {
-  background: linear-gradient(180deg, #f7fdff 0%, #ebf8ff 100%);
-  border-color: #7dd3fc;
-  color: #0f172a;
-  box-shadow: 0 6px 14px rgb(14 165 233 / 12%);
-  transform: translateY(-1px);
-}
-
-.mljar-packages-manager-stop-button {
-  background: linear-gradient(180deg, #fff1f2 0%, #ffe4e6 100%);
-  border-color: #fda4af;
-  color: #be123c;
-  box-shadow: 0 2px 6px rgb(190 24 93 / 10%);
-}
-
-.mljar-packages-manager-stop-button:hover {
-  background: linear-gradient(180deg, #ffe4e6 0%, #fecdd3 100%);
-  border-color: #fb7185;
-  color: #9f1239;
-  box-shadow: 0 6px 14px rgb(190 24 93 / 14%);
-  transform: translateY(-1px);
 }
 
 .mljar-packages-manager-result {
@@ -690,7 +509,7 @@
 
 .mljar-packages-manager-install-message {
   margin: 0;
-  font-family: var(--mono);
+  font-family: var(--sans);
   font-size: 12px;
   color: var(--green);
 }
@@ -700,7 +519,6 @@
 }
 
 .mljar-pypi-settings {
-  margin-right: 8px;
   padding: 12px;
   border: 1px solid var(--border);
   border-radius: 12px;
@@ -716,14 +534,14 @@
 
 .mljar-pypi-settings-row {
   display: grid;
-  grid-template-columns: 40px minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr);
   align-items: center;
   gap: 10px;
 }
 
 .mljar-pypi-settings-label {
   color: var(--muted);
-  font-family: var(--mono);
+  font-family: var(--sans);
   font-size: 11px;
   font-weight: 500;
 }
@@ -739,7 +557,7 @@
   white-space: nowrap;
   padding: 8px 10px;
   border: 1px solid var(--border);
-  border-radius: 9px;
+  border-radius: 10px;
   background: var(--surface2);
   color: var(--text);
   font-family: var(--mono);
@@ -759,14 +577,108 @@
   }
 }
 
-@keyframes fadein-row {
-  from {
-    opacity: 0;
-    transform: translateX(-4px);
-  }
+[data-jp-theme-light='false'] .mljar-packages-manager-sidebar-widget,
+[data-jp-theme-light='false'] .mljar-package-manager-modal-overlay {
+  --surface: var(--jp-layout-color1, #1f2937);
+  --surface2: #293548;
+  --border: #475569;
+  --border2: #94a3b8;
+  --text: #e2e8f0;
+  --muted: #cbd5e1;
+  --blue-dim: #193653;
+  --green: #86efac;
+  --rose: #fda4af;
+  --rose-dim: #482832;
+}
 
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+.mljar-packages-manager-sidebar-widget .mljar-package-button,
+.mljar-package-manager-modal-overlay .mljar-package-button {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  gap: 5px;
+  min-height: 30px;
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface2);
+  color: var(--muted);
+  font: 500 12px / 18px var(--sans);
+  cursor: pointer;
+  transition:
+    background-color 0.15s,
+    border-color 0.15s;
+}
+
+.mljar-package-button.mljar-package-primary {
+  padding: 5px 14px;
+  border-color: transparent;
+  background: #1976d2;
+  color: #fff;
+  font-size: 12.5px;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgb(25 118 210 / 28%);
+}
+
+.mljar-package-button:disabled {
+  opacity: 0.4;
+  cursor: default;
+  box-shadow: none;
+}
+
+.mljar-package-button:hover:not(:disabled) {
+  border-color: var(--border2);
+  color: var(--text);
+}
+
+.mljar-package-button.mljar-package-primary:hover:not(:disabled) {
+  background: #1669bb;
+  border-color: transparent;
+  color: #fff;
+}
+
+.mljar-package-button.mljar-package-danger {
+  color: var(--rose);
+  background: var(--rose-dim);
+  border-color: var(--rose-dim);
+}
+
+.mljar-package-button.mljar-package-danger:hover:not(:disabled) {
+  border-color: var(--rose);
+}
+
+.mljar-package-button.mljar-package-icon-button {
+  width: 30px;
+  padding: 5px;
+}
+
+.mljar-packages-manager-sidebar-widget button:focus-visible,
+.mljar-package-manager-modal-overlay button:focus-visible {
+  outline: 2px solid #1976d2;
+  outline-offset: 2px;
+}
+
+.mljar-packages-manager-header-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.mljar-package-button.mljar-package-manager-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.mljar-packages-manager-delete-button {
+  margin-left: auto;
+}
+
+.mljar-packages-manager-install-input-label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--text);
+  font-size: 12px;
 }

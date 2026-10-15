@@ -237,19 +237,22 @@ export const InstallForm: React.FC<InstallFormProps> = ({
           </div>
         </div>
       </div>
-      <input
-        type="text"
-        value={packageName}
-        onChange={e => setPackageName(e.target.value)}
-        placeholder={t('Enter package name...')}
-        className="mljar-packages-manager-install-input"
-        disabled={!!message || installing}
-        onKeyDown={e => {
-          if (e.key === 'Enter' && packageName.trim() !== '' && !installing) {
-            handleInstall();
-          }
-        }}
-      />
+      <label className="mljar-packages-manager-install-input-label">
+        {t('Package name')}
+        <input
+          type="text"
+          value={packageName}
+          onChange={e => setPackageName(e.target.value)}
+          placeholder={t('Enter package name...')}
+          className="mljar-packages-manager-install-input"
+          disabled={!!message || installing}
+          onKeyDown={e => {
+            if (e.key === 'Enter' && packageName.trim() !== '' && !installing) {
+              handleInstall();
+            }
+          }}
+        />
+      </label>
       {logs.length > 0 && (
         <div className="mljar-packages-manager-install-logs">
           {logs.map((line, idx) => (
@@ -261,7 +264,7 @@ export const InstallForm: React.FC<InstallFormProps> = ({
       {!message ? (
         <div className="mljar-packages-manager-install-form-buttons mljar-packages-manager-install-actions">
           <button
-            className="mljar-packages-manager-install-submit-button"
+            className="mljar-package-button mljar-package-primary mljar-packages-manager-install-submit-button"
             onClick={() => {
               handleInstall();
             }}
@@ -275,7 +278,7 @@ export const InstallForm: React.FC<InstallFormProps> = ({
           </button>
           {installing && (
             <button
-              className="mljar-packages-manager-stop-button"
+              className="mljar-package-button mljar-package-danger mljar-packages-manager-stop-button"
               onClick={handleStop}
             >
               Stop
@@ -291,7 +294,7 @@ export const InstallForm: React.FC<InstallFormProps> = ({
           </p>
           <div className="mljar-packages-manager-install-form-buttons mljar-packages-manager-result-actions">
             <button
-              className="mljar-packages-manager-install-submit-button"
+              className="mljar-package-button mljar-package-primary mljar-packages-manager-install-submit-button"
               onClick={() => {
                 resetForm();
               }}
@@ -299,7 +302,7 @@ export const InstallForm: React.FC<InstallFormProps> = ({
               {t('Install another package')}
             </button>
             <button
-              className="mljar-packages-manager-install-close-button"
+              className="mljar-package-button mljar-packages-manager-install-close-button"
               onClick={onClose}
             >
               {t('Close')}

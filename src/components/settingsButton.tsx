@@ -7,14 +7,13 @@ interface SettingsButtonProps {
   onClick: () => void;
 }
 
-export const SettingsButton: React.FC<SettingsButtonProps> = ({ 
-    onClick,
- }) => {
+export const SettingsButton: React.FC<SettingsButtonProps> = ({ onClick }) => {
   return (
     <button
-      className="mljar-packages-manager-settings-button"
+      className="mljar-package-button mljar-package-icon-button mljar-packages-manager-settings-button"
       onClick={onClick}
       title={t('Settings')}
+      aria-label={t('Settings')}
     >
       <settingsIcon.react className="mljar-packages-manager-settings-icon" />
     </button>
