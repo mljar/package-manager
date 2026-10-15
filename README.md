@@ -56,7 +56,8 @@ Enjoy a dark mode experience for more comfortable viewing in low-light environme
 
 ## Install extension
 
-It can also be installed in JupyterLab > 4. To install the extension, execute:
+It can also be installed with Python >= 3.9 and JupyterLab >= 4.2.0.
+To install the extension, execute:
 
 ```bash
 pip install jupyter_package_manager
