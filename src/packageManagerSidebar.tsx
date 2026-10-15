@@ -1,6 +1,6 @@
 import React from 'react';
 import { ReactWidget } from '@jupyterlab/ui-components';
-import { IStateDB } from '@jupyterlab/statedb';
+import { IKernelData } from '@mljar/kernel-data';
 import { CommandRegistry } from '@lumino/commands';
 import { packageManagerIcon } from './icons/packageManagerIcon';
 import { NotebookWatcher } from './watchers/notebookWatcher';
@@ -13,12 +13,12 @@ import { ISettingRegistry } from '@jupyterlab/settingregistry';
 
 class PackageManagerSidebarWidget extends ReactWidget {
   private notebookWatcher: NotebookWatcher;
-  private stateDB: IStateDB;
+  private kernelData: IKernelData;
   private commands: CommandRegistry;
   private settingRegistry: ISettingRegistry | null = null;
   constructor(
     notebookWatcher: NotebookWatcher,
-    stateDB: IStateDB,
+    kernelData: IKernelData,
     commands: CommandRegistry,
     settingRegisty: ISettingRegistry | null
   ) {
@@ -29,7 +29,7 @@ class PackageManagerSidebarWidget extends ReactWidget {
     this.title.icon = packageManagerIcon;
     this.title.caption = t('Package Manager');
     this.addClass('mljar-packages-manager-sidebar-widget');
-    this.stateDB = stateDB;
+    this.kernelData = kernelData;
     this.settingRegistry = settingRegisty;
   }
 
@@ -39,7 +39,7 @@ class PackageManagerSidebarWidget extends ReactWidget {
         <NotebookPanelContextProvider notebookWatcher={this.notebookWatcher}>
           <NotebookKernelContextProvider notebookWatcher={this.notebookWatcher}>
             <PackageContextProvider
-              stateDB={this.stateDB}
+              kernelData={this.kernelData}
               commands={this.commands}
             >
               <PackageListComponent settingRegistry={this.settingRegistry}/>
@@ -53,13 +53,13 @@ class PackageManagerSidebarWidget extends ReactWidget {
 
 export function createPackageManagerSidebar(
   notebookWatcher: NotebookWatcher,
-  stateDB: IStateDB,
+  kernelData: IKernelData,
   commands: CommandRegistry,
   settingRegistry: ISettingRegistry | null
 ): PackageManagerSidebarWidget {
   return new PackageManagerSidebarWidget(
     notebookWatcher,
-    stateDB,
+    kernelData,
     commands,
     settingRegistry
   );

@@ -4,7 +4,7 @@ import {
 } from '@jupyterlab/application';
 
 import { createPackageManagerSidebar } from './packageManagerSidebar';
-import { IStateDB } from '@jupyterlab/statedb';
+import { IKernelData } from '@mljar/kernel-data';
 import { ITranslator } from '@jupyterlab/translation';
 import { translator as trans } from './translator';
 import { NotebookWatcher } from './watchers/notebookWatcher';
@@ -23,10 +23,10 @@ const leftTab: JupyterFrontEndPlugin<void> = {
   description:
     'A JupyterLab extension to list, remove and install python packages from pip.',
   autoStart: true,
-  requires: [IStateDB, ITranslator, ISettingRegistry],
+  requires: [IKernelData, ITranslator, ISettingRegistry],
   activate: async (
     app: JupyterFrontEnd,
-    stateDB: IStateDB,
+    kernelData: IKernelData,
     translator: ITranslator,
     settingRegistry: ISettingRegistry | null
   ) => {
@@ -38,7 +38,7 @@ const leftTab: JupyterFrontEndPlugin<void> = {
 
     const widget = createPackageManagerSidebar(
       notebookWatcher,
-      stateDB,
+      kernelData,
       app.commands,
       settingRegistry
     );

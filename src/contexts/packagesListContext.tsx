@@ -8,7 +8,7 @@ import React, {
   useRef
 } from 'react';
 
-import { IStateDB } from '@jupyterlab/statedb';
+import { IKernelData } from '@mljar/kernel-data';
 import { CommandRegistry } from '@lumino/commands';
 import { useNotebookPanelContext } from './notebookPanelContext';
 import { useNotebookKernelContext } from './notebookKernelContext';
@@ -20,16 +20,7 @@ import {
   resetPackageManagerSubshell
 } from '../utils/packageManagerSubshell';
 
-// constants
-// StateDB keys
-export const STATE_DB_PACKAGES_LIST = 'mljarPackages';
-export const STATE_DB_PACKAGES_STATUS = 'mljarPackagesStatus';
-export const STATE_DB_PACKAGES_PANEL_ID = 'mljarPackagesPanelId';
-
-// Commands
-export const CMD_REFRESH_PIECE_OF_CODE = 'mljar-piece-of-code:refresh-packages'; // force refresh in Piece of Code
-export const CMD_REFRESH_AI_ASSISTANT = 'mljar-ai-assistant:refresh-packages'; // force refresh in AI Assistant
-export const CMD_REFRESH_PACKAGES_MANAGER = 'mljar-packages-manager-refresh'; // force refresh in this package
+export const CMD_REFRESH_PACKAGES_MANAGER = 'mljar-packages-manager-refresh';
 
 interface IPackageInfo {
   name: string;
@@ -49,194 +40,128 @@ const PackageContext = createContext<IPackageContextProps | undefined>(
   undefined
 );
 
-let kernelIdToPackagesList: Record<string, IPackageInfo[]> = {};
-
 export const PackageContextProvider: React.FC<{
   children: React.ReactNode;
-  stateDB: IStateDB;
+  kernelData: IKernelData;
   commands: CommandRegistry;
-}> = ({ children, stateDB, commands }) => {
+}> = ({ children, kernelData, commands }) => {
   const notebookPanel = useNotebookPanelContext();
   const kernel = useNotebookKernelContext();
   const [packages, setPackages] = useState<IPackageInfo[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const retryCountRef = useRef(0);
-
-  const setPackagesList = (pkgs: IPackageInfo[]) => {
-    setPackages(pkgs);
-    stateDB.save(STATE_DB_PACKAGES_LIST, JSON.stringify(pkgs));
-  };
-
-  const setPackagesStatus = (s: 'unknown' | 'loading' | 'loaded' | 'error') => {
-    stateDB.save(STATE_DB_PACKAGES_STATUS, s);
-    commands.execute(CMD_REFRESH_PIECE_OF_CODE).catch(err => {});
-    commands.execute(CMD_REFRESH_AI_ASSISTANT).catch(err => {});
-    if (s === 'loaded' && notebookPanel) {
-      stateDB.save(STATE_DB_PACKAGES_PANEL_ID, notebookPanel.id);
-    } else {
-      stateDB.save(STATE_DB_PACKAGES_PANEL_ID, '');
-    }
-  };
-
+  const activeRef = useRef(notebookPanel);
+  activeRef.current = notebookPanel;
   const executeCode = useCallback(async () => {
-    setPackagesList([] as IPackageInfo[]);
-    setLoading(true);
-    setPackagesStatus('loading');
-    setError(null);
-
-    if (!notebookPanel || !kernel) {
-      setLoading(false);
-      setPackagesStatus('unknown');
+    if (!notebookPanel || activeRef.current !== notebookPanel) {
       return;
     }
-
+    const session = notebookPanel.context.sessionContext;
+    kernelData.track(session);
+    await session.ready;
+    const sourceKernel = session.session?.kernel;
+    if (!sourceKernel) {
+      setPackages([]);
+      setLoading(false);
+      return;
+    }
+    const request = kernelData.begin(sourceKernel.id, 'packages');
+    const current = () =>
+      activeRef.current === notebookPanel &&
+      session.session?.kernel?.id === sourceKernel.id &&
+      kernelData.current(request);
+    setPackages([]);
+    setLoading(true);
+    setError(null);
     try {
-      const pmKernel = await providePackageManagerSubshellKernel(
-        notebookPanel.context.sessionContext?.session?.kernel
-      );
-
-      if (!pmKernel) {
-        setLoading(false);
-        setPackagesStatus('unknown');
+      const pmKernel = await providePackageManagerSubshellKernel(sourceKernel);
+      if (!current()) {
         return;
       }
-
-      const kernelId = pmKernel.id;
-
-      if (
-        kernelId !== undefined &&
-        kernelId !== null &&
-        kernelId in kernelIdToPackagesList
-      ) {
-        setPackagesList(kernelIdToPackagesList[kernelId]);
-        setLoading(false);
-        setPackagesStatus('loaded');
-        retryCountRef.current = 0;
-      } else {
-        const future = pmKernel.requestExecute({
-          code: listPackagesCode,
-          store_history: false
-        });
-
-        if (future) {
-          let runAgain = false;
-          future.onIOPub = (msg: KernelMessage.IIOPubMessage) => {
-            const msgType = msg.header.msg_type;
-            if (msgType === 'error') {
-              runAgain = true;
-              setLoading(false);
-              setPackagesStatus('error');
-              return;
-            }
-            if (
-              msgType === 'execute_result' ||
-              msgType === 'display_data' ||
-              msgType === 'update_display_data'
-            ) {
-              const content = msg.content as any;
-
-              const jsonData = content.data['application/json'];
-              const textData = content.data['text/plain'];
-
-              if (jsonData) {
-                if (Array.isArray(jsonData)) {
-                  setPackagesList(jsonData);
-                  setPackagesStatus('loaded');
-                  retryCountRef.current = 0;
-                } else {
-                  console.warn('Data is not JSON:', jsonData);
-                }
-                setLoading(false);
-              } else if (textData) {
-                try {
-                  const cleanedData = textData.replace(/^['"]|['"]$/g, '');
-                  const doubleQuotedData = cleanedData.replace(/'/g, '"');
-                  const parsedData: IPackageInfo[] =
-                    JSON.parse(doubleQuotedData);
-
-                  if (Array.isArray(parsedData)) {
-                    setPackagesList([]);
-                    setPackagesList(parsedData);
-                    setPackagesStatus('loaded');
-                    retryCountRef.current = 0;
-                    if (kernelId !== undefined && kernelId !== null) {
-                      kernelIdToPackagesList[kernelId] = parsedData;
-                    }
-                  } else {
-                    throw new Error('Error during parsing.');
-                  }
-                  setLoading(false);
-                } catch (err) {
-                  console.error(
-                    'Error during export JSON from text/plain:',
-                    err
-                  );
-                  setError('Error during export JSON');
-                  setLoading(false);
-                  setPackagesStatus('error');
-                }
-              }
-            }
-          };
-          await future.done;
-          if (runAgain) {
-            pmKernel.requestExecute({ code: 'pass' });
-            if (retryCountRef.current < 1) {
-              retryCountRef.current += 1;
-              setTimeout(executeCode, 100);
-            }
+      if (!pmKernel) {
+        throw new Error('No kernel available');
+      }
+      let received = false;
+      const future = pmKernel.requestExecute({
+        code: listPackagesCode,
+        store_history: false
+      });
+      future.onIOPub = (msg: KernelMessage.IIOPubMessage) => {
+        if (!current()) {
+          return;
+        }
+        if (msg.header.msg_type === 'error') {
+          kernelData.fail(request, 'Package inspection failed');
+          setError('Package inspection failed');
+          return;
+        }
+        if (
+          ['execute_result', 'display_data', 'update_display_data'].includes(
+            msg.header.msg_type
+          )
+        ) {
+          const data = (msg.content as any)?.data;
+          const items = data?.['application/json'];
+          if (Array.isArray(items)) {
+            received = true;
+            kernelData.publish(request, items);
+            setPackages(items);
           }
         }
+      };
+      await future.done;
+      if (current() && !received) {
+        throw new Error('Kernel returned no package snapshot');
       }
     } catch (err) {
-      console.error('Unexpected error:', err);
-      setError('Unexpected error');
-      setLoading(false);
-      setPackagesStatus('error');
+      if (current()) {
+        kernelData.fail(request, String(err));
+        setError('Package inspection failed');
+      }
+    } finally {
+      if (current()) {
+        setLoading(false);
+      }
     }
-  }, [notebookPanel, kernel]);
+  }, [notebookPanel, kernel?.id, kernelData]);
 
   useEffect(() => {
+    setPackages([]);
+    setLoading(false);
+    setError(null);
     if (!notebookPanel) {
       return;
     }
-
-    const sessionContext = notebookPanel.context.sessionContext;
-    if (!sessionContext) {
-      return;
-    }
-
-    const handleRestart = (_sender: any, status: string) => {
-      if (status === 'restarting') {
+    const session = notebookPanel.context.sessionContext;
+    kernelData.track(session);
+    const onStatus = (_: unknown, status: string) => {
+      if (
+        ['restarting', 'autorestarting', 'dead', 'terminating'].includes(status)
+      ) {
         resetPackageManagerSubshell();
-        kernelIdToPackagesList = {};
+        setPackages([]);
+      } else if (
+        status === 'idle' &&
+        kernelData.packages(session.session?.kernel?.id).status === 'unknown'
+      ) {
+        void executeCode();
       }
     };
-
-    sessionContext.statusChanged.connect(handleRestart);
-
+    session.statusChanged.connect(onStatus);
+    void executeCode();
     return () => {
-      sessionContext.statusChanged.disconnect(handleRestart);
+      session.statusChanged.disconnect(onStatus);
     };
-  }, [notebookPanel]);
+  }, [notebookPanel, executeCode, kernelData]);
 
   useEffect(() => {
-    if (kernel) {
-      executeCode();
-    }
-  }, [kernel]);
-
-  useEffect(() => {
-    commands.addCommand(CMD_REFRESH_PACKAGES_MANAGER, {
-      execute: () => {
-        kernelIdToPackagesList = {};
-        executeCode();
-      },
+    const registration = commands.addCommand(CMD_REFRESH_PACKAGES_MANAGER, {
+      execute: executeCode,
       label: t('Refresh packages in MLJAR Package Manager')
     });
-  }, [commands]);
+    return () => registration.dispose();
+  }, [commands, executeCode]);
 
   return (
     <PackageContext.Provider
@@ -246,11 +171,7 @@ export const PackageContextProvider: React.FC<{
         error,
         searchTerm,
         setSearchTerm,
-        refreshPackages: () => {
-          // clear all stored packages for all kernels
-          kernelIdToPackagesList = {};
-          executeCode();
-        }
+        refreshPackages: executeCode
       }}
     >
       {children}

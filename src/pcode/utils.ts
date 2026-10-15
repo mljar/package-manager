@@ -10,7 +10,9 @@ def __mljar__list_packages():
             pkgs.append({"name": name, "version": dist.version})
     return pkgs
 
-__mljar__list_packages();
+from IPython.display import display as __mljar__display
+__mljar__display({'application/json': __mljar__list_packages()}, raw=True)
+del __mljar__display, __mljar__list_packages
 `;
 
 export const killPipProcess = (pid: number): string => `
