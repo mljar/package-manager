@@ -42,7 +42,7 @@ const PackageContext = createContext<IPackageContextProps | undefined>(
 
 export const PackageContextProvider: React.FC<{
   children: React.ReactNode;
-  kernelData: IKernelData;
+  kernelData: IKernelData | null;
   commands: CommandRegistry;
 }> = ({ children, kernelData, commands }) => {
   const notebookPanel = useNotebookPanelContext();
@@ -51,6 +51,8 @@ export const PackageContextProvider: React.FC<{
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const requestGenerationRef = useRef(0);
+  const needsRefreshRef = useRef(true);
   const activeRef = useRef(notebookPanel);
   activeRef.current = notebookPanel;
   const executeCode = useCallback(async () => {
@@ -58,7 +60,7 @@ export const PackageContextProvider: React.FC<{
       return;
     }
     const session = notebookPanel.context.sessionContext;
-    kernelData.track(session);
+    kernelData?.track(session);
     await session.ready;
     const sourceKernel = session.session?.kernel;
     if (!sourceKernel) {
@@ -66,11 +68,14 @@ export const PackageContextProvider: React.FC<{
       setLoading(false);
       return;
     }
-    const request = kernelData.begin(sourceKernel.id, 'packages');
+    const generation = ++requestGenerationRef.current;
+    needsRefreshRef.current = false;
+    const request = kernelData?.begin(sourceKernel.id, 'packages');
     const current = () =>
       activeRef.current === notebookPanel &&
       session.session?.kernel?.id === sourceKernel.id &&
-      kernelData.current(request);
+      generation === requestGenerationRef.current &&
+      (!request || kernelData!.current(request));
     setPackages([]);
     setLoading(true);
     setError(null);
@@ -92,7 +97,9 @@ export const PackageContextProvider: React.FC<{
           return;
         }
         if (msg.header.msg_type === 'error') {
-          kernelData.fail(request, 'Package inspection failed');
+          if (request) {
+            kernelData!.fail(request, 'Package inspection failed');
+          }
           setError('Package inspection failed');
           return;
         }
@@ -105,7 +112,9 @@ export const PackageContextProvider: React.FC<{
           const items = data?.['application/json'];
           if (Array.isArray(items)) {
             received = true;
-            kernelData.publish(request, items);
+            if (request) {
+              kernelData!.publish(request, items);
+            }
             setPackages(items);
           }
         }
@@ -116,7 +125,9 @@ export const PackageContextProvider: React.FC<{
       }
     } catch (err) {
       if (current()) {
-        kernelData.fail(request, String(err));
+        if (request) {
+          kernelData!.fail(request, String(err));
+        }
         setError('Package inspection failed');
       }
     } finally {
@@ -134,24 +145,39 @@ export const PackageContextProvider: React.FC<{
       return;
     }
     const session = notebookPanel.context.sessionContext;
-    kernelData.track(session);
+    kernelData?.track(session);
     const onStatus = (_: unknown, status: string) => {
       if (
         ['restarting', 'autorestarting', 'dead', 'terminating'].includes(status)
       ) {
         resetPackageManagerSubshell();
+        requestGenerationRef.current++;
+        needsRefreshRef.current = true;
         setPackages([]);
+        setLoading(false);
       } else if (
         status === 'idle' &&
-        kernelData.packages(session.session?.kernel?.id).status === 'unknown'
+        (needsRefreshRef.current ||
+          kernelData?.packages(session.session?.kernel?.id).status ===
+            'unknown')
       ) {
         void executeCode();
       }
     };
+    const onConnectionStatus = (_: unknown, status: string) => {
+      // A restarted kernel may reconnect without becoming idle until code is
+      // executed. Refresh here as well, including when no shared service exists.
+      if (status === 'connected' && needsRefreshRef.current) {
+        void executeCode();
+      }
+    };
     session.statusChanged.connect(onStatus);
+    session.connectionStatusChanged.connect(onConnectionStatus);
     void executeCode();
     return () => {
+      requestGenerationRef.current++;
       session.statusChanged.disconnect(onStatus);
+      session.connectionStatusChanged.disconnect(onConnectionStatus);
     };
   }, [notebookPanel, executeCode, kernelData]);
 

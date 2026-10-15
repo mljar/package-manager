@@ -121,3 +121,7 @@ pip uninstall jupyter_package_manager
 In development mode, you will also need to remove the symlink created by `jupyter labextension develop`
 command. To find its location, you can run `jupyter labextension list` to figure out where the `labextensions`
 folder is located. Then you can remove the symlink named `jupyter-package-manager` within that folder.
+
+## Shared kernel data
+
+Variables Explorer optionally shares package information with other MLJAR extensions. Package Manager also works on its own; Variables Explorer is not required.

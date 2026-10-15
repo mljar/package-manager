@@ -12,7 +12,7 @@ import { ISettingRegistry } from '@jupyterlab/settingregistry';
 
 // constants
 export const MLJAR_PACKAGE_MANAGER_ID = 'jupyter-package-manager:plugin';
-export const pypiPathProperty = 'pathToPrivatePyPIRepository'
+export const pypiPathProperty = 'pathToPrivatePyPIRepository';
 const COMMAND_INSTALL = 'mljar-package-manager:install';
 const EVENT_INSTALL = 'mljar-packages-install';
 const TAB_RANK = 1999;
@@ -23,12 +23,13 @@ const leftTab: JupyterFrontEndPlugin<void> = {
   description:
     'A JupyterLab extension to list, remove and install python packages from pip.',
   autoStart: true,
-  requires: [IKernelData, ITranslator, ISettingRegistry],
+  requires: [ITranslator, ISettingRegistry],
+  optional: [IKernelData],
   activate: async (
     app: JupyterFrontEnd,
-    kernelData: IKernelData,
     translator: ITranslator,
-    settingRegistry: ISettingRegistry | null
+    settingRegistry: ISettingRegistry | null,
+    kernelData: IKernelData | null
   ) => {
     const lang = translator.languageCode;
     if (lang === 'pl-PL') {

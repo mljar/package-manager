@@ -13,12 +13,12 @@ import { ISettingRegistry } from '@jupyterlab/settingregistry';
 
 class PackageManagerSidebarWidget extends ReactWidget {
   private notebookWatcher: NotebookWatcher;
-  private kernelData: IKernelData;
+  private kernelData: IKernelData | null;
   private commands: CommandRegistry;
   private settingRegistry: ISettingRegistry | null = null;
   constructor(
     notebookWatcher: NotebookWatcher,
-    kernelData: IKernelData,
+    kernelData: IKernelData | null,
     commands: CommandRegistry,
     settingRegisty: ISettingRegistry | null
   ) {
@@ -42,7 +42,7 @@ class PackageManagerSidebarWidget extends ReactWidget {
               kernelData={this.kernelData}
               commands={this.commands}
             >
-              <PackageListComponent settingRegistry={this.settingRegistry}/>
+              <PackageListComponent settingRegistry={this.settingRegistry} />
             </PackageContextProvider>
           </NotebookKernelContextProvider>
         </NotebookPanelContextProvider>
@@ -53,7 +53,7 @@ class PackageManagerSidebarWidget extends ReactWidget {
 
 export function createPackageManagerSidebar(
   notebookWatcher: NotebookWatcher,
-  kernelData: IKernelData,
+  kernelData: IKernelData | null,
   commands: CommandRegistry,
   settingRegistry: ISettingRegistry | null
 ): PackageManagerSidebarWidget {
